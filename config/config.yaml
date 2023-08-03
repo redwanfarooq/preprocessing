@@ -1,0 +1,125 @@
+##########################################################################################
+# Configuration file for Snakemake pipeline
+# Author: Redwan Farooq
+# Complete ALL entries in sections marked 'REQUIRED'
+# Comment ('#') any unused entries in sections marked 'OPTIONAL'
+##########################################################################################
+
+
+# --------------------------------------------------
+# Module
+# --------------------------------------------------
+# REQUIRED
+# Pipeline module for sequencing protocol
+# Options:
+#   tea_seq: TEA-seq protocol
+#     Additional required configuration:
+#       - 'tags' (metadata files)
+#       - 'barcode_whitelist' (reference files)
+#   gex_atac: 10X multiome (GEX + ATAC) protocol
+module: tea_seq
+
+# --------------------------------------------------
+# Input/output directories
+# --------------------------------------------------
+# REQUIRED
+# Raw sequencing runs directory
+run_dir: /project/fuggerlab/shared/runs
+# Pipeline output directory
+output_dir: /project/fuggerlab/shared/project_name
+
+# OPTIONAL
+# If 'scripts_dir' not specified, defaults to
+# 'resources/scripts'
+# scripts_dir:
+# If 'metadata_dir' not specified, defaults to
+# 'metadata'
+# metadata_dir:
+
+
+# --------------------------------------------------
+# Metadata files
+# *** RELATIVE paths from 'metadata_dir' ***
+# --------------------------------------------------
+# REQUIRED
+# Runs summary table in CSV format
+# Required fields:
+#   run: run folder name
+#   lib_type: library type
+#   donor: donor ID
+#   hash: hash ID
+#   sample_index: EITHER index name OR i7 index sequence
+#   lane: EITHER lane number OR * (for all lanes)
+runs: runs.csv
+
+# OPTIONAL
+# BarCounter antibody tag list
+tags: barcounter/tags.csv
+
+
+# --------------------------------------------------
+# Reference files
+# *** ABSOLUTE paths ***
+# --------------------------------------------------
+# REQUIRED
+# Cell Ranger genome reference package
+cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0
+
+# OPTIONAL
+# If 'dual_index_kits' and 'single_index_kits' not
+# provided, index name parsing will not be performed
+# and all sample indexes in runs table will be
+# interpreted as literal i7 index sequences
+dual_index_kits:
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
+single_index_kits:
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
+# BarCounter cell barcode whitelist
+barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz
+
+
+# --------------------------------------------------
+# Script parameters
+# --------------------------------------------------
+# OPTIONAL
+# If 'reverse_complement' not provided, defaults to
+# False; set to True if sequencer workflow reads i5
+# index in reverse complement e.g.
+#   NovaSeq6000 with v1.0 reagent kits
+#   iSeq100
+#   MiniSeq with standard reagent kits
+#   NextSeq
+#   HiSeq X/4000/3000
+reverse_complement: True
+
+
+# --------------------------------------------------
+# Command line flags
+# --------------------------------------------------
+# OPTIONAL
+# If not specified, defaults to ''
+bcl2fastq_args: --create-fastq-for-index-reads --minimum-trimmed-read-length=6 --mask-short-adapter-reads=6 --ignore-missing-positions --ignore-missing-filter --ignore-missing-bcls
+# cellranger_args:
+fastqc_args: --noextract
+multiqc_args: -zfd --dirs-depth=1
+
+
+# --------------------------------------------------
+# Miscellaneous parameters
+# --------------------------------------------------
+# OPTIONAL
+# If 'bases_mask' not provided, defaults to read
+# type/length specified in RunInfo.xml file in
+# Illumina run folder
+bases_mask:
+  GEX: Y28n*,I10n*,I10n*,Y90n*
+  ATAC: Y50n*,I8n*,Y16n*,Y50n*
+  ADT: Y28n*,I6n*,n*,Y15n*
+  HTO: Y28n*,I8n*,n*,Y15n*

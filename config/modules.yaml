@@ -1,0 +1,21 @@
+##########################################################################################
+# Module rule specifications file for Snakemake preprocessing pipeline
+# Author: Redwan Farooq
+##########################################################################################
+
+# --------------------------------------------------
+# Modules
+# --------------------------------------------------
+# Available pipeline module names and lists of rule
+# names (as per *.smk file names) in each module
+tea_seq:
+  - bcl2fastq
+  - fastqc
+  - multiqc
+  - cellranger_arc
+  - barcounter
+gex_atac:
+  - bcl2fastq
+  - fastqc
+  - multiqc
+  - cellranger_arc
