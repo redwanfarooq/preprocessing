@@ -1,11 +1,11 @@
 # Description
 Snakemake pipeline for preprocessing sequencing data
-- Modularised workflow can be modified and/or extended for different sequencing protocolss
-- To add as a submodule in a bioinformatics project GitHub repository
+- Modularised workflow can be modified and/or extended for different sequencing protocols
+- Add as a submodule in a bioinformatics project GitHub repository
 ```
 git submodule add https://github.com/redwanfarooq/preprocessing preprocessing
 ```
-To update submodule to the latest version
+- Update submodule to the latest version
 ```
 git submodule update --remote
 ```
@@ -46,9 +46,9 @@ conda activate snakemake
 # Input
 Pipeline requires the following input files/folders:
 
-**REQUIRED:**
-
 ## General
+
+**REQUIRED:**
 
 1. Illumina sequencing run folder(s)
 - Folders should be named according to default convention for the system e.g. **YYYYMMDD_InstrumentID_RunNumber_FlowCellID**
@@ -85,8 +85,8 @@ Pipeline requires the following input files/folders:
 - Cell Ranger genome reference package
 - Cell barcode whitelist
 2. Antibody tag list in CSV format with the following required fields (without headers):
-- tag sequence (length 15nt)
-- tag name
+- Tag sequence (length 15nt)
+- Tag name
 
 # Output
 Output directory will be created in specified location with subfolders containing the output of each software tool specified in the module.
