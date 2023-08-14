@@ -1,6 +1,6 @@
 # Description
 Snakemake pipeline for preprocessing sequencing data
-- Modularised workflow can be modified and/or extended for different sequencing protocols
+- Modularised workflow can be modified and/or extended for different library preparation protocols
 - Add as a submodule in a bioinformatics project GitHub repository
 ```
 git submodule add https://github.com/redwanfarooq/preprocessing preprocessing
