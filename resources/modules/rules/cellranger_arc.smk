@@ -10,7 +10,7 @@
 rule cellranger_arc:
 	input: lambda wildcards: get_count_inputs(wildcards, lib_types={"GEX", "ATAC"}, info=info)
 	output: os.path.abspath("stamps/cellranger_arc/{sample}.stamp")
-	log: os.path.abspath("logs/gex_atac/{sample}.log")
+	log: os.path.abspath("logs/cellranger_arc/{sample}.log")
 	threads: 1
 	params: 
 		librarysheet_path = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), "cellranger_arc")),
