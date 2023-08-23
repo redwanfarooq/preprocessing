@@ -1,5 +1,5 @@
 ##########################################################################################
-# Snakemake module for preprocessing sequencing data
+# Snakemake module
 # Author: Redwan Farooq
 # Module name: $NAME
 ##########################################################################################
