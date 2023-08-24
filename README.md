@@ -13,10 +13,11 @@ git submodule update --remote
 # Required software
 1. Global environment
     - [Snakemake >=v7.31](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
-    - [docopt >=0.6](https://github.com/docopt/docopt)
-    - [pandas >=2.0](https://pandas.pydata.org/docs/getting_started/install.html)
+    - [docopt >v=0.6](https://github.com/docopt/docopt)
+    - [pandas >v=2.0](https://pandas.pydata.org/docs/getting_started/install.html)
 2. Specific modules
     - [bcl2fastq >=v2.20](https://sapac.support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html)
+    - [Cell Ranger >=v7.1](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
     - [Cell Ranger ARC >=v2.0](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/installation)
     - [BarCounter](https://github.com/AllenInstitute/BarCounter-release)
     - [FastQC >=v0.11](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
@@ -69,6 +70,14 @@ Pipeline requires the following input files/folders:
     - *Single index kits*: i7 sequence (additional fields if more than 1 sequence per index set)
 
 ## Module-specific
+
+### gex_fb: 10X feature barcoding (GEX + FB) protocol
+
+**REQUIRED:**
+
+1. Reference files:
+- Cell Ranger genome reference package
+2. Feature reference in CSV format - see [specifications](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref)
 
 ### gex_atac: 10X multiome (GEX + ATAC) protocol
 
