@@ -24,7 +24,7 @@ git submodule update --remote
     - [MultiQC >=v1.14](https://multiqc.info/docs/getting_started/installation/)
 
 # Setup
-1. Install software for global environment (requires requires Anaconda or Miniconda - see [installation instructions](https://conda.io/projects/conda/en/stable/user-guide/install/index.html))
+1. Install software for global environment (requires Anaconda or Miniconda - see [installation instructions](https://conda.io/projects/conda/en/stable/user-guide/install/index.html))
     - Download [environment YAML](/resources/envs/snakemake.yaml)
     - Create new conda environment from YAML
     ```
