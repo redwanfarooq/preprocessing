@@ -55,6 +55,7 @@ default-resources:
 # override defaults)
 set-threads:
   bcl2fastq: 16
+  cellranger: 48
   cellranger_arc: 48
   barcounter: 1
   fastqc: 6
@@ -78,6 +79,9 @@ set-resources:
   multiqc:
     mem: 1GiB
     runtime: 10m
+  cellranger:
+    mem: 150GiB
+    runtime: 4h
   cellranger_arc:
     mem: 150GiB
     runtime: 4h
