@@ -14,7 +14,7 @@ rule cellranger:
 	threads: 1
 	params: 
 		librarysheet_path = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), "cellranger")),
-		features = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), config["tags"])),
+		features = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), config["features"])),
 		reference = config["cellranger_reference"],
 		custom_flags = config.get("cellranger_args", ""),
 		output_path = os.path.join(config["output_dir"], "cellranger")
