@@ -30,8 +30,8 @@ def get_run_path(wildcards, info: dict, run_dir: str) -> str:
     Get path to run folder.
 
     Arguments:
-        ``wildcards``: Snakemake ``wildcards`` object.
-        ``info``: dictionary of sample/library info.
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``info``: dictionary of sample/library info.\n
         ``run_dir``: raw sequencing runs directory.
 
     Returns:
@@ -46,8 +46,8 @@ def get_bases_mask_flag(wildcards, bases_mask: dict | None, info: dict) -> str:
     Get bases mask flag for bcl2fastq.
 
     Arguments:
-        ``wildcards``: Snakemake ``wildcards`` object.
-        ``bases_mask``: dictionary of bases mask strings with library types as keys.
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``bases_mask``: dictionary of bases mask strings with library types as keys.\n
         ``info``: dictionary of sample/library info.
 
     Returns:
@@ -67,8 +67,8 @@ def get_count_inputs(wildcards, lib_types: set[str], info: dict) -> list[str]:
     Get path to bcl2fastq stamp files.
 
     Arguments:
-        ``wildcards``: Snakemake ``wildcards`` object.
-        ``lib_types``: set of library types.
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``lib_types``: set of library types (use * to match any library type).\n
         ``info``: dictionary of sample/library info.
 
     Returns:
@@ -78,7 +78,7 @@ def get_count_inputs(wildcards, lib_types: set[str], info: dict) -> list[str]:
     inputs = [
         f"stamps/bcl2fastq/{lib}.stamp"
         for lib in info[wildcards.sample].keys()
-        if any(libs[lib]["lib_type"] == x for x in lib_types)
+        if any(x in {libs[lib]["lib_type"], "*"} for x in lib_types)
     ]
     return [os.path.abspath(path) for path in inputs]
 
@@ -90,10 +90,10 @@ def get_count_fastqs(
     Get input FASTQ string for barcounter/CITE-seq-Count.
 
     Arguments:
-        ``wildcards``: Snakemake ``wildcards`` object.
-        ``lib_types``: set of library types.
-        ``read``: string specifying read number ('R1' or 'R2').
-        ``info``: dictionary of sample/library info.
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``lib_types``: set of library types (use * to match any library type).\n
+        ``read``: string specifying read number ('R1' or 'R2').\n
+        ``info``: dictionary of sample/library info.\n
         ``output_dir``: pipeline output directory.
 
     Returns:
@@ -103,7 +103,7 @@ def get_count_fastqs(
     fastqs = [
         fastq
         for lib in info[wildcards.sample].keys()
-        if any(libs[lib]["lib_type"] == x for x in lib_types)
+        if any(x in {libs[lib]["lib_type"], "*"} for x in lib_types)
         for fastq in glob.glob(
             os.path.join(
                 output_dir,
@@ -121,8 +121,8 @@ def get_fastqc_fastqs(wildcards, info: dict, output_dir: str) -> str:
     Get input FASTQ string for fastqc.
 
     Arguments:
-        ``wildcards``: Snakemake ``wildcards`` object.
-        ``info``: dictionary of sample/library info.
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``info``: dictionary of sample/library info.\n
         ``output_dir``: pipeline output directory.
 
     Returns:

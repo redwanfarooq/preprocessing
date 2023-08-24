@@ -1,7 +1,7 @@
 ##########################################################################################
 # Snakemake module
 # Author: Redwan Farooq
-# Module name: tea_seq
+# Module name: gex_fb
 ##########################################################################################
 
 
@@ -22,11 +22,10 @@ for key, value in parse_info(info).items():
 include: 'rules/bcl2fastq.smk'
 include: 'rules/fastqc.smk'
 include: 'rules/multiqc.smk'
-include: 'rules/cellranger_arc.smk'
-include: 'rules/barcounter.smk'
+include: 'rules/cellranger.smk'
 
 # Set targets
-targets = [x for rule in [bcl2fastq, fastqc, multiqc, cellranger_arc, barcounter] for x in rule]
+targets = [x for rule in [bcl2fastq, fastqc, multiqc, cellranger] for x in rule]
 # --------------------------------------------------
 
 

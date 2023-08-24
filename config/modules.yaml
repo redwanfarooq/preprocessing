@@ -19,3 +19,8 @@ gex_atac:
   - fastqc
   - multiqc
   - cellranger_arc
+gex_fb:
+  - bcl2fastq
+  - fastqc
+  - multiqc
+  - cellranger

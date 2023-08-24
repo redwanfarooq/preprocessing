@@ -1,5 +1,5 @@
 ##########################################################################################
-# Snakemake module for preprocessing sequencing data
+# Snakemake module
 # Author: Redwan Farooq
 # Module name: gex_atac
 ##########################################################################################
@@ -25,7 +25,7 @@ include: 'rules/multiqc.smk'
 include: 'rules/cellranger_arc.smk'
 
 # Set targets
-targets = [x for rule in (bcl2fastq, fastqc, multiqc, cellranger_arc) for x in rule]
+targets = [x for rule in [bcl2fastq, fastqc, multiqc, cellranger_arc] for x in rule]
 # --------------------------------------------------
 
 

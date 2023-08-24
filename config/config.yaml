@@ -17,7 +17,10 @@
 #       - 'tags' (metadata files)
 #       - 'barcode_whitelist' (reference files)
 #   gex_atac: 10X multiome (GEX + ATAC) protocol
-module: tea_seq
+#   gex_fb: 10X feature barcoding (GEX + FB) protocol
+#     Additional required configuration:
+#     - 'features' (metadata files)
+module: module
 
 # --------------------------------------------------
 # Input/output directories
@@ -55,6 +58,8 @@ runs: runs.csv
 # OPTIONAL
 # BarCounter antibody tag list
 tags: barcounter/tags.csv
+# Cell Ranger feature reference
+features: cellranger/features.csv
 
 
 # --------------------------------------------------
@@ -63,7 +68,8 @@ tags: barcounter/tags.csv
 # --------------------------------------------------
 # REQUIRED
 # Cell Ranger genome reference package
-cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0
+# cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
+# cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
 
 # OPTIONAL
 # If 'dual_index_kits' and 'single_index_kits' not
@@ -72,12 +78,12 @@ cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A
 # interpreted as literal i7 index sequences
 dual_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
-  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
-  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
-  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
-  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
 single_index_kits:
-  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
@@ -123,3 +129,4 @@ bases_mask:
   ATAC: Y50n*,I8n*,Y16n*,Y50n*
   ADT: Y28n*,I6n*,n*,Y15n*
   HTO: Y28n*,I8n*,n*,Y15n*
+  FB: Y28n*,I10n*,I10n*,Y90n*
