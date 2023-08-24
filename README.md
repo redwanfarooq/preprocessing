@@ -103,6 +103,7 @@ Output directory will be created in specified location with subfolders containin
 # Modules
 
 ## Available modules
+- gex_fb
 - gex_atac
 - tea_seq
 
