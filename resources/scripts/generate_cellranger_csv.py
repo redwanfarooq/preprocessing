@@ -104,7 +104,7 @@ def generate_library_sheet(
                 for lib_type in df.lib_type
             ],
         }
-    )
+    ).explode("library_type")
 
     if filename is not None:
         with open(file=filename, mode="w", encoding="UTF-8") as file:
