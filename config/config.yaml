@@ -20,7 +20,7 @@
 #   gex_fb: 10X feature barcoding (GEX + FB) protocol
 #     Additional required configuration:
 #     - 'features' (metadata files)
-module: 
+module: gex_fb
 
 # --------------------------------------------------
 # Input/output directories
@@ -29,7 +29,7 @@ module:
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/
+output_dir: /project/fuggerlab/shared/jurkat_crispri/gex_fb/test_01
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -57,7 +57,7 @@ runs: runs.csv
 
 # OPTIONAL
 # BarCounter antibody tag list
-tags: barcounter/tags.csv
+# tags: barcounter/tags.csv
 # Cell Ranger feature reference
 features: cellranger/features.csv
 
@@ -68,7 +68,7 @@ features: cellranger/features.csv
 # --------------------------------------------------
 # REQUIRED
 # Cell Ranger genome reference package
-# cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
+cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
 
 # OPTIONAL
@@ -78,17 +78,17 @@ features: cellranger/features.csv
 # interpreted as literal i7 index sequences
 dual_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
-single_index_kits:
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
+# single_index_kits:
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # BarCounter cell barcode whitelist
-barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz
+# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz
 
 
 # --------------------------------------------------
@@ -111,7 +111,7 @@ reverse_complement: True
 # --------------------------------------------------
 # OPTIONAL
 # If not specified, defaults to ''
-bcl2fastq_args: --create-fastq-for-index-reads --minimum-trimmed-read-length=6 --mask-short-adapter-reads=6 --ignore-missing-positions --ignore-missing-filter --ignore-missing-bcls
+bcl2fastq_args: --create-fastq-for-index-reads --minimum-trimmed-read-length=8 --mask-short-adapter-reads=8 --ignore-missing-positions --ignore-missing-filter --ignore-missing-bcls
 # cellranger_args:
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1
@@ -126,7 +126,7 @@ multiqc_args: -zfd --dirs-depth=1
 # Illumina run folder
 bases_mask:
   GEX: Y28n*,I10n*,I10n*,Y90n*
-  ATAC: Y50n*,I8n*,Y16n*,Y50n*
-  ADT: Y28n*,I6n*,n*,Y15n*
-  HTO: Y28n*,I8n*,n*,Y15n*
+  # ATAC: Y50n*,I8n*,Y16n*,Y50n*
+  # ADT: Y28n*,I6n*,n*,Y15n*
+  HTO: Y28n*,I10n*,I10n*,Y90n*
   CRISPR: Y28n*,I10n*,I10n*,Y90n*
