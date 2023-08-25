@@ -12,7 +12,6 @@ Runs preprocessing pipeline.
 import os
 import yaml
 import docopt
-import pandas as pd
 
 
 # ==============================
@@ -63,10 +62,6 @@ def _get_reverse_complement_flag(reverse_complement: bool) -> str:
     return "--reversecomplement" if reverse_complement else ""
 
 
-def _get_feature_args(df: pd.DataFrame):
-    return df.feature_type.unique().tolist()
-
-
 def _get_cmd(update: bool = False) -> list[str]:
     if update:
         cmd = _cmd(
@@ -112,16 +107,6 @@ def _get_cmd(update: bool = False) -> list[str]:
                 f"--md={RUNS_CSV}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
-                " ".join(
-                    [
-                        f"'{x}'"
-                        for x in _get_feature_args(
-                            df=pd.read_csv(
-                                os.path.join(METADATA_DIR, config["features"]), header=0
-                            )
-                        )
-                    ]
-                ),
                 message="Generating library sheet CSV files for cellranger count...",
             )
         cmd += _cmd(

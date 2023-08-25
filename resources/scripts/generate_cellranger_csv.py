@@ -30,13 +30,12 @@ DOC = """
 Generate CSV GEX and FB library sheets for use with cellranger count
 
 Usage:
-  generate_cellranger_csv.py --md=<md> --fastqdir=<fastqdir> --outdir=<outdir> [<feature>...] [options]
+  generate_cellranger_csv.py --md=<md> --fastqdir=<fastqdir> --outdir=<outdir> [options]
 
 Arguments:
   -m --md=<md>              Metadata CSV file (required)
   -f --fastqdir=<fastqdir>  FASTQ directory (required)
   -o --outdir=<outdir>      Output directory (required)
-  <feature>...              One or more 10X feature types (Antibody Capture, CRISPR Guide Capture or Custom) in feature barcoding libraries.
 
 Options:
   -h --help                 Show this screen
@@ -64,7 +63,6 @@ def _main(opt: dict) -> None:
         generate_library_sheet(
             df=md[md.sample_id == x],
             fastqdir=opt["--fastqdir"],
-            features=opt["<feature>"],
             filename=os.path.join(opt["--outdir"], f"{x}.csv"),
         )
 
@@ -72,7 +70,6 @@ def _main(opt: dict) -> None:
 def generate_library_sheet(
     df: pd.DataFrame,
     fastqdir: str,
-    features: list[str],
     filename: str | None = None,
 ) -> pd.DataFrame:
     """
@@ -81,7 +78,6 @@ def generate_library_sheet(
     Arguments:
         ``df``: DataFrame containing run metadata for a single sample.\n
         ``fastqdir``: FASTQ directory.\n
-        ``features``: List of 10X feature types (Antibody Capture, CRISPR Guide Capture or Custom) in feature barcoding libraries.\n
         ``filename``: Output file path or ``None``.
 
     Returns:
@@ -92,19 +88,17 @@ def generate_library_sheet(
             "fastqs": [os.path.join(fastqdir, lib_id) for lib_id in df.lib_id],
             "sample": df.sample_id.tolist(),
             "library_type": [
-                ["Gene Expression"]
+                "Gene Expression"
                 if lib_type == "GEX"
-                else features
-                if lib_type == "FB"
-                else ["Antibody Capture"]
-                if lib_type == "ADT"
-                else ["CRISPR Guide Capture"]
+                else "Antibody Capture"
+                if lib_type in {"ADT", "HTO"}
+                else "CRISPR Guide Capture"
                 if lib_type == "CRISPR"
-                else ["Custom"]
+                else "Custom"
                 for lib_type in df.lib_type
             ],
         }
-    ).explode("library_type")
+    )
 
     if filename is not None:
         with open(file=filename, mode="w", encoding="UTF-8") as file:
