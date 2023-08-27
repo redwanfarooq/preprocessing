@@ -80,7 +80,7 @@ set-resources:
     mem: 1GiB
     runtime: 10m
   cellranger:
-    mem: 150GiB
+    mem: 250GiB
     runtime: 4h
   cellranger_arc:
     mem: 150GiB
