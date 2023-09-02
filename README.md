@@ -20,6 +20,7 @@ git submodule update --remote
     - [Cell Ranger >=v7.1](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
     - [Cell Ranger ARC >=v2.0](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/installation)
     - [STAR >=v2.7.8a](https://github.com/alexdobin/STAR)
+    - [samtools >=v1.17](http://www.htslib.org)
     - [BarCounter](https://github.com/AllenInstitute/BarCounter-release)
     - [FastQC >=v0.11](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
     - [MultiQC >=v1.14](https://multiqc.info/docs/getting_started/installation/)
