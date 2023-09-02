@@ -15,7 +15,7 @@
 # environment modules and/or conda environments
 jobscript: jobscript.sh
 use-envmodules: true
-use-conda: false
+use-conda: true
 # ***
 local-cores: 1
 jobs: 100

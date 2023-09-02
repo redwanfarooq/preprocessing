@@ -19,7 +19,7 @@ rule starsolo:
 		whitelist = config["barcode_whitelist"],
 		custom_flags = config.get("starsolo_args", ""),
 		output_path = os.path.join(config["output_dir"], "starsolo")
-	conda: "STAR"
+	conda: "starsolo"
 	envmodules:
 		"STAR/2.7.8a",
 		"samtools/1.17"
