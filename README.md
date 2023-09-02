@@ -19,6 +19,7 @@ git submodule update --remote
     - [bcl2fastq >=v2.20](https://sapac.support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html)
     - [Cell Ranger >=v7.1](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
     - [Cell Ranger ARC >=v2.0](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/installation)
+    - [STAR >=v2.7.8a](https://github.com/alexdobin/STAR)
     - [BarCounter](https://github.com/AllenInstitute/BarCounter-release)
     - [FastQC >=v0.11](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
     - [MultiQC >=v1.14](https://multiqc.info/docs/getting_started/installation/)
@@ -86,7 +87,18 @@ Pipeline requires the following input files/folders:
 1. Reference files:
 - Cell Ranger genome reference package
 
-### tea_seq: TEA-seq protocol
+### cite_seq: CITE-seq protocol (TotalSeq-A antibodies)
+
+**REQUIRED:**
+
+1. Reference files:
+- STAR genome reference package
+- Cell barcode whitelist
+2. Antibody tag list in CSV format with the following required fields (without headers):
+- Tag sequence (length 15nt)
+- Tag name
+
+### tea_seq: TEA-seq protocol (TotalSeq-A antibodies)
 
 **REQUIRED:**
 
@@ -105,6 +117,7 @@ Output directory will be created in specified location with subfolders containin
 ## Available modules
 - gex_fb
 - gex_atac
+- cite_seq
 - tea_seq
 
 ## Adding new module
