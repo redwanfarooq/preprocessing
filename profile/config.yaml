@@ -14,14 +14,14 @@
 # Modifying this section may prevent loading of
 # environment modules and/or conda environments
 jobscript: jobscript.sh
-use-envmodules: True
-use-conda: True
+use-envmodules: true
+use-conda: false
 # ***
 local-cores: 1
 jobs: 100
 latency-wait: 60
-keep-going: True
-printshellcmds: True
+keep-going: true
+printshellcmds: true
 
 
 # --------------------------------------------------
@@ -49,14 +49,15 @@ jobname: '{rule}.{jobid}'
 default-resources:
   partition: short
   tasks: 1
-  disk_mb: None
-  mem_mib: None
+  disk_mb: null
+  mem_mib: null
 # Specified job resources for each rule (will
 # override defaults)
 set-threads:
   bcl2fastq: 16
   cellranger: 48
   cellranger_arc: 48
+  starsolo: 48
   barcounter: 1
   fastqc: 6
   multiqc: 1
@@ -85,6 +86,9 @@ set-resources:
   cellranger_arc:
     mem: 150GiB
     runtime: 4h
+  starsolo:
+    mem: 100GiB
+    runtime: 1h
   barcounter:
     mem: 50GiB
     runtime: 30m

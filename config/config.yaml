@@ -109,7 +109,7 @@ single_index_kits:
 #   MiniSeq with standard reagent kits
 #   NextSeq
 #   HiSeq X/4000/3000
-reverse_complement: True
+reverse_complement: true
 
 
 # --------------------------------------------------
