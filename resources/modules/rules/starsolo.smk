@@ -36,8 +36,8 @@ rule starsolo:
 			--outFileNamePrefix {params.output_path}/{wildcards.sample}/ \
 			{params.custom_flags} \
 			--runThreadN {threads} && \
-		find {params.output_path}/{wildcards.sample} -type f -name '*.bam' -exec samtools index -@ {threads} {} + && \
-		find {params.output_path}/{wildcards.sample}/Solo.out -type f -exec gzip {} + && \
+		find {params.output_path}/{wildcards.sample} -type f -name '*.bam' -exec samtools index -@ {threads} {{}} + && \
+		find {params.output_path}/{wildcards.sample}/Solo.out -type f -exec gzip {{}} + && \
 		touch {output} \
 		) > {log} 2>&1
 		"""
