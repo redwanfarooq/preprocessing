@@ -33,7 +33,7 @@ module: tea_seq
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/ocrelizumab_multiome/tea_seq/test_01
+output_dir: /project/fuggerlab/shared/ocrelizumab_multiome/tea_seq/test
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -94,7 +94,7 @@ single_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # Cell barcode whitelist
 # barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
-# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1
+barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1
 
 
 # --------------------------------------------------
