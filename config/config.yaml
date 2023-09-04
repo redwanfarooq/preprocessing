@@ -10,7 +10,7 @@
 # Module
 # --------------------------------------------------
 # REQUIRED
-# Pipeline module for sequencing protocol
+# Pipeline module for library preparation protocol
 # Options:
 #   tea_seq: TEA-seq protocol
 #     Additional required configuration:
