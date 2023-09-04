@@ -16,6 +16,10 @@
 #     Additional required configuration:
 #       - 'tags' (metadata files)
 #       - 'barcode_whitelist' (reference files)
+#   cite_seq: CITE-seq protocol
+#     Additional required configuration:
+#       - 'tags' (metadata files)
+#       - 'barcode_whitelist' (reference files)
 #   gex_atac: 10X multiome (GEX + ATAC) protocol
 #   gex_fb: 10X feature barcoding (GEX + FB) protocol
 #     Additional required configuration:
@@ -67,9 +71,10 @@ tags: barcounter/tags.csv
 # *** ABSOLUTE paths ***
 # --------------------------------------------------
 # REQUIRED
-# Cell Ranger genome reference package
+# Cell Ranger/STARsolo genome reference package
 # cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
+# starsolo_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A/star # STARsolo
 
 # OPTIONAL
 # If 'dual_index_kits' and 'single_index_kits' not
@@ -87,8 +92,9 @@ single_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
-# BarCounter cell barcode whitelist
-barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz
+# Cell barcode whitelist
+# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
+# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1
 
 
 # --------------------------------------------------
@@ -103,7 +109,7 @@ barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1
 #   MiniSeq with standard reagent kits
 #   NextSeq
 #   HiSeq X/4000/3000
-reverse_complement: True
+reverse_complement: true
 
 
 # --------------------------------------------------
@@ -111,8 +117,31 @@ reverse_complement: True
 # --------------------------------------------------
 # OPTIONAL
 # If not specified, defaults to ''
-bcl2fastq_args: --create-fastq-for-index-reads --minimum-trimmed-read-length=6 --mask-short-adapter-reads=6 --ignore-missing-positions --ignore-missing-filter --ignore-missing-bcls
+bcl2fastq_args: >-
+  --create-fastq-for-index-reads
+  --minimum-trimmed-read-length=6
+  --mask-short-adapter-reads=6
+  --ignore-missing-positions
+  --ignore-missing-filter
+  --ignore-missing-bcls
 # cellranger_args:
+starsolo_args: >-
+  --sysShell /bin/bash
+  --readFilesCommand zcat
+  --clipAdapterType CellRanger4
+  --outFilterScoreMin 30
+  --outSAMtype BAM SortedByCoordinate
+  --soloType CB_UMI_Simple
+  --soloCellFilter None
+  --soloFeatures GeneFull
+  --soloStrand Forward
+  --soloCBstart 1
+  --soloCBlen 16
+  --soloUMIstart 17
+  --soloUMIlen 12
+  --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
+  --soloUMIfiltering MultiGeneUMI_CR
+  --soloUMIdedup 1MM_CR  
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1
 
