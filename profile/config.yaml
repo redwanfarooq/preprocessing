@@ -73,22 +73,22 @@ set-threads:
 set-resources:
   bcl2fastq:
     mem: 20GiB
-    runtime: 30m
+    runtime: 1h
   fastqc:
     mem: 2GiB
-    runtime: 30m
+    runtime: 1h
   multiqc:
     mem: 1GiB
-    runtime: 10m
+    runtime: 1h
   cellranger:
     mem: 250GiB
-    runtime: 4h
+    runtime: 6h
   cellranger_arc:
-    mem: 150GiB
-    runtime: 4h
+    mem: 250GiB
+    runtime: 6h
   starsolo:
     mem: 100GiB
-    runtime: 1h
+    runtime: 3h
   barcounter:
     mem: 50GiB
-    runtime: 30m
+    runtime: 1h
