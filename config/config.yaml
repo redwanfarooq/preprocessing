@@ -143,7 +143,7 @@ starsolo_args: >-
   --soloUMIfiltering MultiGeneUMI_CR
   --soloUMIdedup 1MM_CR  
 fastqc_args: --noextract
-multiqc_args: -zfd --dirs-depth=1
+multiqc_args: -zfd --dirs-depth=1 --interactive
 
 
 # --------------------------------------------------
