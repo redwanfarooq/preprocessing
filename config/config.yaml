@@ -10,7 +10,7 @@
 # Module
 # --------------------------------------------------
 # REQUIRED
-# Pipeline module for sequencing protocol
+# Pipeline module for library preparation protocol
 # Options:
 #   tea_seq: TEA-seq protocol
 #     Additional required configuration:
@@ -71,10 +71,9 @@ tags: barcounter/tags.csv
 # *** ABSOLUTE paths ***
 # --------------------------------------------------
 # REQUIRED
-# Cell Ranger/STARsolo genome reference package
+# Cell Ranger genome reference package
 # cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
-# starsolo_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A/star # STARsolo
 
 # OPTIONAL
 # If 'dual_index_kits' and 'single_index_kits' not
