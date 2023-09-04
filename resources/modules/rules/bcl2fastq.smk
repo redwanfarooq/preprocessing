@@ -15,8 +15,7 @@ rule bcl2fastq:
 		samplesheet_path = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), "bcl2fastq")),
 		bases_mask_flag = lambda wildcards: get_bases_mask_flag(wildcards, bases_mask=config.get("bases_mask", None), info=info),
 		custom_flags = config.get("bcl2fastq_args", ""),
-		output_path = os.path.join(config["output_dir"], "fastqs"), # DO NOT CHANGE - downstream rules will search for FASTQs in this directory
-		files_to_delete = "-type f -name 'Undetermined_S0_*.fastq.gz' -exec rm -rf {} +"
+		output_path = os.path.join(config["output_dir"], "fastqs") # DO NOT CHANGE - downstream rules will search for FASTQs in this directory
 	conda: "bcl2fastq"
 	envmodules: "bcl2fastq/2.20.0.422"
 	message: "Making FASTQ files for {wildcards.lib}"
@@ -31,7 +30,7 @@ rule bcl2fastq:
 			--processing-threads={threads} \
 			{params.bases_mask_flag} {params.custom_flags} \
 			--output-dir={params.output_path}/{wildcards.lib} && \
-		find {params.output_path}/{wildcards.lib} {params.files_to_delete} && \
+		find {params.output_path}/{wildcards.lib} -type f -name 'Undetermined_S0_*.fastq.gz' -exec rm -rf {{}} + && \
 		touch {output} \
 		) > {log} 2>&1
 		"""
