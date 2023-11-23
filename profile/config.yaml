@@ -57,7 +57,7 @@ set-threads:
   bcl2fastq: 16
   cellranger: 48
   cellranger_arc: 48
-  starsolo: 48
+  starsolo: 16
   barcounter: 1
   fastqc: 6
   multiqc: 1
@@ -87,8 +87,8 @@ set-resources:
     mem: 250GiB
     runtime: 6h
   starsolo:
-    mem: 100GiB
-    runtime: 3h
+    mem: 50GiB
+    runtime: 1h
   barcounter:
     mem: 50GiB
     runtime: 1h

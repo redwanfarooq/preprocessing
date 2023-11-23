@@ -21,7 +21,7 @@ rule starsolo:
 		output_path = os.path.join(config["output_dir"], "starsolo")
 	conda: "starsolo"
 	envmodules:
-		"STAR/2.7.8a",
+		"STAR/2.7.11a",
 		"samtools/1.17"
 	message: "Making GEX count matrix for {wildcards.sample}"
 	shell:
@@ -37,7 +37,9 @@ rule starsolo:
 			{params.custom_flags} \
 			--runThreadN {threads} && \
 		find {params.output_path}/{wildcards.sample} -type f -name '*.bam' -exec samtools index -@ {threads} {{}} + && \
-		find {params.output_path}/{wildcards.sample}/Solo.out -type f -exec gzip {{}} + && \
+		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'barcodes.tsv' -exec gzip {{}} + && \
+		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'features.tsv' -exec gzip {{}} + && \
+		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'matrix.mtx' -exec gzip {{}} + && \
 		touch {output} \
 		) > {log} 2>&1
 		"""

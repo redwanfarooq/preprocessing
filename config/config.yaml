@@ -74,7 +74,7 @@ features: cellranger/features.csv
 # Cell Ranger/STARsolo genome reference package
 cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
-# starsolo_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A/star # STARsolo
+# starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
 
 # OPTIONAL
 # If 'dual_index_kits' and 'single_index_kits' not
@@ -125,23 +125,23 @@ bcl2fastq_args: >-
   --ignore-missing-filter
   --ignore-missing-bcls
 # cellranger_args:
-# starsolo_args: >-
-#   --sysShell /bin/bash
-#   --readFilesCommand zcat
-#   --clipAdapterType CellRanger4
-#   --outFilterScoreMin 30
-#   --outSAMtype BAM SortedByCoordinate
-#   --soloType CB_UMI_Simple
-#   --soloCellFilter None
-#   --soloFeatures GeneFull
-#   --soloStrand Forward
-#   --soloCBstart 1
-#   --soloCBlen 16
-#   --soloUMIstart 17
-#   --soloUMIlen 12
-#   --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
-#   --soloUMIfiltering MultiGeneUMI_CR
-#   --soloUMIdedup 1MM_CR  
+starsolo_args: >-
+  --sysShell /bin/bash
+  --readFilesCommand zcat
+  --clipAdapterType CellRanger4
+  --outFilterScoreMin 30
+  --outSAMtype BAM SortedByCoordinate
+  --soloType CB_UMI_Simple
+  --soloCellFilter None
+  --soloFeatures GeneFull_Ex50pAS
+  --soloStrand Forward
+  --soloCBstart 1
+  --soloCBlen 16
+  --soloUMIstart 17
+  --soloUMIlen 12
+  --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
+  --soloUMIfiltering MultiGeneUMI_CR
+  --soloUMIdedup 1MM_CR  
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
 
