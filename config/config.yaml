@@ -33,7 +33,7 @@ module: gex_fb
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/jurkat_crispri/gex_fb/test_01
+output_dir: /project/fuggerlab/shared/jurkat_crispri/gex_fb/test_02
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -119,29 +119,29 @@ reverse_complement: true
 # If not specified, defaults to ''
 bcl2fastq_args: >-
   --create-fastq-for-index-reads
-  --minimum-trimmed-read-length=8
-  --mask-short-adapter-reads=8
+  --minimum-trimmed-read-length=6
+  --mask-short-adapter-reads=6
   --ignore-missing-positions
   --ignore-missing-filter
   --ignore-missing-bcls
-# cellranger_args:
-starsolo_args: >-
-  --sysShell /bin/bash
-  --readFilesCommand zcat
-  --clipAdapterType CellRanger4
-  --outFilterScoreMin 30
-  --outSAMtype BAM SortedByCoordinate
-  --soloType CB_UMI_Simple
-  --soloCellFilter None
-  --soloFeatures GeneFull_Ex50pAS
-  --soloStrand Forward
-  --soloCBstart 1
-  --soloCBlen 16
-  --soloUMIstart 17
-  --soloUMIlen 12
-  --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
-  --soloUMIfiltering MultiGeneUMI_CR
-  --soloUMIdedup 1MM_CR  
+cellranger_args: --nosecondary --disable-ui
+# starsolo_args: >-
+#   --sysShell /bin/bash
+#   --readFilesCommand zcat
+#   --clipAdapterType CellRanger4
+#   --outFilterScoreMin 30
+#   --outSAMtype BAM SortedByCoordinate
+#   --soloType CB_UMI_Simple
+#   --soloCellFilter None
+#   --soloFeatures GeneFull_Ex50pAS
+#   --soloStrand Forward
+#   --soloCBstart 1
+#   --soloCBlen 16
+#   --soloUMIstart 17
+#   --soloUMIlen 12
+#   --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
+#   --soloUMIfiltering MultiGeneUMI_CR
+#   --soloUMIdedup 1MM_CR  
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
 
@@ -157,5 +157,5 @@ bases_mask:
   GEX: Y28n*,I10n*,I10n*,Y90n*
   # ATAC: Y50n*,I8n*,Y16n*,Y50n*
   # ADT: Y28n*,I6n*,n*,Y15n*
-  HTO: Y28n*,I10n*,I10n*,Y90n*
+  HTO: Y28n*,I6n*,n*,Y15n*
   CRISPR: Y28n*,I10n*,I10n*,Y90n*
