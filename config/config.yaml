@@ -21,6 +21,7 @@
 #       - 'tags' (metadata files)
 #       - 'barcode_whitelist' (reference files)
 #   gex_atac: 10X multiome (GEX + ATAC) protocol
+#       - 'barcode_whitelist' (reference files)
 #   gex_fb: 10X feature barcoding (GEX + FB) protocol
 #     Additional required configuration:
 #     - 'features' (metadata files)
@@ -71,10 +72,12 @@ features: cellranger/features.csv
 # *** ABSOLUTE paths ***
 # --------------------------------------------------
 # REQUIRED
-# Cell Ranger/STARsolo genome reference package
+# Cell Ranger/STARsolo/chromap genome reference package
 # cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
 # starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
+# chromap_reference: /databank/igenomes/Homo_sapiens/Ensembl/GRCh38/Sequence/WholeGenomeFasta/genome.fasta # chromap
+# chromap_index: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/chromap/index # chromap
 
 # OPTIONAL
 # If 'dual_index_kits' and 'single_index_kits' not
@@ -94,8 +97,8 @@ single_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # Cell barcode whitelist
 # barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
-# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1
-
+# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1 (GEX)
+# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_atac.txt.gz # 10x multiome v1 (ATAC)
 
 # --------------------------------------------------
 # Script parameters
@@ -142,6 +145,17 @@ starsolo_args: >-
   --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
   --soloUMIfiltering MultiGeneUMI_CR
   --soloUMIdedup 1MM_CR  
+chromap_args: >-
+  --preset atac
+  --read-format bc:8:-1:-
+  --barcode-translate /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_translation.tsv
+macs2_args: >-
+  -f BED
+  -g hs
+  --nomodel
+  --extsize 200
+  --shift -100
+  --keep-dup all
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
 

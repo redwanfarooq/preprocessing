@@ -49,7 +49,7 @@ Arguments:
 
 Options:
   -r --reversecomplement    Use reverse complement of i5 index
-  -h --help  
+  -h --help                 Show this screen
 """
 
 

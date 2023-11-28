@@ -58,6 +58,8 @@ set-threads:
   cellranger: 48
   cellranger_arc: 48
   starsolo: 16
+  chromap: 16
+  macs2: 16
   barcounter: 1
   fastqc: 6
   multiqc: 1
@@ -87,6 +89,12 @@ set-resources:
     mem: 250GiB
     runtime: 6h
   starsolo:
+    mem: 50GiB
+    runtime: 1h
+  chromap:
+    mem: 50GiB
+    runtime: 1h
+  macs2:
     mem: 50GiB
     runtime: 1h
   barcounter:

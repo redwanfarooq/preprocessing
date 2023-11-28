@@ -22,11 +22,13 @@ for key, value in parse_info(info).items():
 include: 'rules/bcl2fastq.smk'
 include: 'rules/fastqc.smk'
 include: 'rules/multiqc.smk'
-include: 'rules/cellranger_arc.smk'
+include: 'rules/starsolo.smk'
+include: 'rules/chromap.smk'
+include: 'rules/macs2.smk'
 include: 'rules/barcounter.smk'
 
 # Set targets
-targets = [x for rule in [bcl2fastq, fastqc, multiqc, cellranger_arc, barcounter] for x in rule]
+targets = [x for rule in [bcl2fastq, fastqc, multiqc, starsolo, chromap, macs2, barcounter] for x in rule]
 # --------------------------------------------------
 
 
