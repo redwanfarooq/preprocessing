@@ -17,7 +17,7 @@ rule chromap:
 		R3_fastqs = lambda wildcards: get_count_fastqs(wildcards, lib_types={"ATAC"}, read="R3", info=info, output_dir=config["output_dir"]),
 		index = config["chromap_index"],
 		reference = config["chromap_reference"],
-		whitelist = config["barcode_whitelist"],
+		whitelist = config["atac_barcode_whitelist"],
 		custom_flags = config.get("chromap_args", ""),
 		output_path = os.path.join(config["output_dir"], "chromap_macs2") # DO NOT CHANGE - downstream rules will search for fragment files in this directory
 	conda: "chromap"

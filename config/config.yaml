@@ -15,13 +15,15 @@
 #   tea_seq: TEA-seq protocol
 #     Additional required configuration:
 #       - 'tags' (metadata files)
-#       - 'barcode_whitelist' (reference files)
+#       - 'gex_barcode_whitelist' (reference files)
+#       - 'atac_barcode_whitelist' (reference files)
 #   cite_seq: CITE-seq protocol
 #     Additional required configuration:
 #       - 'tags' (metadata files)
-#       - 'barcode_whitelist' (reference files)
+#       - 'gex_barcode_whitelist' (reference files)
 #   gex_atac: 10X multiome (GEX + ATAC) protocol
-#       - 'barcode_whitelist' (reference files)
+#       - 'gex_barcode_whitelist' (reference files)
+#       - 'atac_barcode_whitelist' (reference files)
 #   gex_fb: 10X feature barcoding (GEX + FB) protocol
 #     Additional required configuration:
 #     - 'features' (metadata files)
@@ -96,9 +98,9 @@ single_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # Cell barcode whitelist
-# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
-# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1 (GEX)
-# barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_atac.txt.gz # 10x multiome v1 (ATAC)
+# gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
+# gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1 (GEX)
+# atac_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_atac.txt.gz # 10x multiome v1 (ATAC)
 
 # --------------------------------------------------
 # Script parameters
@@ -127,7 +129,9 @@ bcl2fastq_args: >-
   --ignore-missing-positions
   --ignore-missing-filter
   --ignore-missing-bcls
-# cellranger_args:
+cellranger_args: >-
+  --nosecondary
+  --disable-ui
 starsolo_args: >-
   --sysShell /bin/bash
   --readFilesCommand zcat

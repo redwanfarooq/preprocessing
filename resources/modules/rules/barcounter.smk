@@ -16,7 +16,7 @@ rule barcounter:
 		R1_fastqs = lambda wildcards: get_count_fastqs(wildcards, lib_types={"ADT", "HTO"}, read="R1", info=info, output_dir=config["output_dir"]),
 		R2_fastqs = lambda wildcards: get_count_fastqs(wildcards, lib_types={"ADT", "HTO"}, read="R2", info=info, output_dir=config["output_dir"]),
 		tags = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), config["tags"])),
-		whitelist = config["barcode_whitelist"],
+		whitelist = config["gex_barcode_whitelist"],
 		output_path = os.path.join(config["output_dir"], "barcounter")
 	envmodules: "barcounter"
 	message: "Making ADT and HTO count matrix for {wildcards.sample}"
