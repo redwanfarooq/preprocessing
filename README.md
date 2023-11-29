@@ -93,7 +93,8 @@ Pipeline requires the following input files/folders:
 1. Reference files:
 - STAR genome reference package
 - chromap genome reference and index
-- Cell barcode whitelist
+- Cell barcode whitelist (GEX)
+- Cell barcode whitelist (ATAC)
 
 ### cite_seq: CITE-seq protocol (TotalSeq-A antibodies)
 
@@ -101,7 +102,7 @@ Pipeline requires the following input files/folders:
 
 1. Reference files:
 - STAR genome reference package
-- Cell barcode whitelist
+- Cell barcode whitelist (GEX)
 2. Antibody tag list in CSV format with the following required fields (without headers):
 - Tag sequence (length 15nt)
 - Tag name
@@ -113,7 +114,8 @@ Pipeline requires the following input files/folders:
 1. Reference files:
 - STAR genome reference package
 - chromap genome reference and index
-- Cell barcode whitelist
+- Cell barcode whitelist (GEX)
+- Cell barcode whitelist (ATAC)
 2. Antibody tag list in CSV format with the following required fields (without headers):
 - Tag sequence (length 15nt)
 - Tag name

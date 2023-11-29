@@ -16,7 +16,7 @@ rule starsolo:
 		R1_fastqs = lambda wildcards: get_count_fastqs(wildcards, lib_types={"GEX"}, read="R1", info=info, output_dir=config["output_dir"]),
 		R2_fastqs = lambda wildcards: get_count_fastqs(wildcards, lib_types={"GEX"}, read="R2", info=info, output_dir=config["output_dir"]),
 		reference = config["starsolo_reference"],
-		whitelist = config["barcode_whitelist"],
+		whitelist = config["gex_barcode_whitelist"],
 		custom_flags = config.get("starsolo_args", ""),
 		output_path = os.path.join(config["output_dir"], "starsolo")
 	conda: "starsolo"
