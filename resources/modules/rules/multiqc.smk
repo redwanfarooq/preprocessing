@@ -8,7 +8,7 @@
 
 # Define rule
 rule multiqc:
-	input: [os.path.abspath(path) for path in expand("stamps/fastqc/{lib}.stamp", lib=libs.keys())]
+	input: [os.path.abspath(x) for x in targets.remove("stamps/multiqc/multiqc.stamp")]
 	output: os.path.abspath("stamps/multiqc/multiqc.stamp")
 	log: os.path.abspath("logs/multiqc/multiqc.log")
 	threads: 1
