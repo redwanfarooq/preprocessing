@@ -27,7 +27,7 @@
 #   gex_fb: 10X feature barcoding (GEX + FB) protocol
 #     Additional required configuration:
 #     - 'features' (metadata files)
-module: cite_seq
+module: tea_seq
 
 # --------------------------------------------------
 # Input/output directories
@@ -36,7 +36,7 @@ module: cite_seq
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/ocrelizumab_multiome/cite_seq/test
+output_dir: /project/fuggerlab/shared/ocrelizumab_multiome/tea_seq/test_02
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -77,9 +77,9 @@ tags: barcounter/tags.csv
 # Cell Ranger/STARsolo/chromap genome reference package
 # cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
-# starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
-# chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
-# chromap_index: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/chromap/index # chromap
+starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
+chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
+chromap_index: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/chromap/index # chromap
 
 # OPTIONAL
 # If 'dual_index_kits' and 'single_index_kits' not
@@ -94,13 +94,13 @@ dual_index_kits:
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
 single_index_kits:
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
-  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # Cell barcode whitelist
 # gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
-# gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1 (GEX)
-# atac_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_atac.txt.gz # 10x multiome v1 (ATAC)
+gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1 (GEX)
+atac_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_atac.txt.gz # 10x multiome v1 (ATAC)
 
 # --------------------------------------------------
 # Script parameters
@@ -129,9 +129,10 @@ bcl2fastq_args: >-
   --ignore-missing-positions
   --ignore-missing-filter
   --ignore-missing-bcls
-cellranger_args: >-
-  --nosecondary
-  --disable-ui
+  --no-lane-splitting
+# cellranger_args: >-
+#   --nosecondary
+#   --disable-ui
 starsolo_args: >-
   --sysShell /bin/bash
   --readFilesCommand zcat
@@ -173,7 +174,7 @@ multiqc_args: -zfd --dirs-depth=1 --interactive
 # Illumina run folder
 bases_mask:
   GEX: Y28n*,I10n*,I10n*,Y90n*
-  # ATAC: Y50n*,I8n*,Y16n*,Y50n*
-  ADT: Y28n*,I6n*,Y15n*
+  ATAC: Y50n*,I8n*,Y16n*,Y50n*
+  ADT: Y28n*,I6n*,n*,Y15n*
   HTO: Y28n*,I8n*,Y15n*
   # CRISPR: Y28n*,I10n*,I10n*,Y90n*

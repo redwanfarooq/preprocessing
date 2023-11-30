@@ -20,9 +20,9 @@ rule macs2:
 		script_path = scripts_dir if os.path.isabs(scripts_dir) else os.path.join(workflow.basedir, scripts_dir),
 		output_path = os.path.join(config["output_dir"], "chromap_macs2")
 	conda: "macs2"
-	envmodules:
-		"MACS2/2.2.9.1",
-		"R-cbrg"
+	# envmodules:
+	# 	"MACS2/2.2.9.1",
+	# 	"R-cbrg"
 	message: "Making ATAC count matrix for {wildcards.sample}"
 	shell:
 		"""

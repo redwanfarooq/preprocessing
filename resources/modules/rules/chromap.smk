@@ -21,9 +21,9 @@ rule chromap:
 		custom_flags = config.get("chromap_args", ""),
 		output_path = os.path.join(config["output_dir"], "chromap_macs2") # DO NOT CHANGE - downstream rules will search for fragment files in this directory
 	conda: "chromap"
-	envmodules:
-		"chromap/0.2.5",
-		"htslib/1.18"
+	# envmodules:
+	# 	"chromap/0.2.5",
+	# 	"htslib/1.18"
 	message: "Making ATAC fragments file for {wildcards.sample}"
 	shell:
 		"""
