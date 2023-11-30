@@ -129,7 +129,6 @@ bcl2fastq_args: >-
   --ignore-missing-positions
   --ignore-missing-filter
   --ignore-missing-bcls
-  --no-lane-splitting
 # cellranger_args: >-
 #   --nosecondary
 #   --disable-ui

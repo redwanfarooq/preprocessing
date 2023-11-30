@@ -19,7 +19,7 @@ rule chromap:
 		reference = config["chromap_reference"],
 		whitelist = config["atac_barcode_whitelist"],
 		custom_flags = config.get("chromap_args", ""),
-		output_path = os.path.join(config["output_dir"], "chromap_macs2") # DO NOT CHANGE - downstream rules will search for fragment files in this directory
+		output_path = os.path.join(config["output_dir"], "chromap_macs2")
 	conda: "chromap"
 	# envmodules:
 	# 	"chromap/0.2.5",
@@ -39,12 +39,12 @@ rule chromap:
 			--barcode-whitelist <(zcat {params.whitelist}) \
 			-o {params.output_path}/{wildcards.sample}/fragments.tsv \
 			{params.custom_flags} \
-			-t {threads} \
-			| tee -i {params.output_path}/{wildcards.sample}/chromap.out && \
+			-t {threads} && \
 		bgzip -@ {threads} {params.output_path}/{wildcards.sample}/fragments.tsv && \
 		tabix -p bed {params.output_path}/{wildcards.sample}/fragments.tsv.gz && \
 		touch {output} \
 		) > {log} 2>&1
+		cp {log} {params.output_path}/{wildcards.sample}/chromap.out
 		"""
 
 
