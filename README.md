@@ -13,17 +13,22 @@ git submodule update --remote
 # Required software
 1. Global environment
     - [Snakemake >=v7.31](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
-    - [docopt >v=0.6](https://github.com/docopt/docopt)
-    - [pandas >v=2.0](https://pandas.pydata.org/docs/getting_started/install.html)
+    - [docopt >=v0.6](https://github.com/docopt/docopt)
+    - [pandas >=v2.0](https://pandas.pydata.org/docs/getting_started/install.html)
 2. Specific modules
     - [bcl2fastq >=v2.20](https://sapac.support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html)
     - [Cell Ranger >=v7.1](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
     - [Cell Ranger ARC >=v2.0](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/installation)
-    - [STAR >=v2.7.8a](https://github.com/alexdobin/STAR)
+    - [STAR >=v2.7.11a](https://github.com/alexdobin/STAR)
     - [samtools >=v1.17](http://www.htslib.org)
+    - [chromap >=v0.2.5](https://github.com/haowenz/chromap)
+    - [htslib >=v1.18](http://www.htslib.org)
+    - [MACS2 >=v2.2.9](https://github.com/macs3-project/MACS/wiki/Install-macs2)
     - [BarCounter](https://github.com/AllenInstitute/BarCounter-release)
     - [FastQC >=v0.11](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
     - [MultiQC >=v1.14](https://multiqc.info/docs/getting_started/installation/)
+    - [R >=v4.3](https://cran.r-project.org)
+        * [Signac v1.10.0](https://CRAN.R-project.org/package=Signac)
 
 # Setup
 1. Install software for global environment (requires Anaconda or Miniconda - see [installation instructions](https://conda.io/projects/conda/en/stable/user-guide/install/index.html))
@@ -86,7 +91,10 @@ Pipeline requires the following input files/folders:
 **REQUIRED:**
 
 1. Reference files:
-- Cell Ranger genome reference package
+- STAR genome reference package
+- chromap genome reference and index
+- Cell barcode whitelist (GEX)
+- Cell barcode whitelist (ATAC)
 
 ### cite_seq: CITE-seq protocol (TotalSeq-A antibodies)
 
@@ -94,7 +102,7 @@ Pipeline requires the following input files/folders:
 
 1. Reference files:
 - STAR genome reference package
-- Cell barcode whitelist
+- Cell barcode whitelist (GEX)
 2. Antibody tag list in CSV format with the following required fields (without headers):
 - Tag sequence (length 15nt)
 - Tag name
@@ -104,8 +112,10 @@ Pipeline requires the following input files/folders:
 **REQUIRED:**
 
 1. Reference files:
-- Cell Ranger genome reference package
-- Cell barcode whitelist
+- STAR genome reference package
+- chromap genome reference and index
+- Cell barcode whitelist (GEX)
+- Cell barcode whitelist (ATAC)
 2. Antibody tag list in CSV format with the following required fields (without headers):
 - Tag sequence (length 15nt)
 - Tag name
