@@ -9,16 +9,14 @@ scripts_dir = config.get("scripts_dir", "resources/scripts")
 
 # Define rule
 rule macs2:
-	input:
-		os.path.join(config["output_dir"], "chromap_macs2/{sample}/fragments.tsv.gz"),
-		os.path.join(config["output_dir"], "chromap_macs2/{sample}/fragments.tsv.gz.tbi")
+	input: os.path.abspath("stamps/chromap/{sample}.stamp")
 	output: os.path.abspath("stamps/macs2/{sample}.stamp")
 	log: os.path.abspath("logs/macs2/{sample}.log")
 	threads: 1
 	params:
 		custom_flags = config.get("macs2_args", ""),
 		script_path = scripts_dir if os.path.isabs(scripts_dir) else os.path.join(workflow.basedir, scripts_dir),
-		output_path = os.path.join(config["output_dir"], "chromap_macs2")
+		output_path = os.path.join(config["output_dir"], "chromap_macs2") # DO NOT CHANGE - downstream rules will search for fragment files in this directory
 	conda: "macs2"
 	envmodules:
 		"MACS2/2.2.9.1",
@@ -30,12 +28,12 @@ rule macs2:
 		mkdir -p stamps/macs2 && \
 		mkdir -p {params.output_path}/{wildcards.sample} && \
 		macs2 callpeak \
-			-t {input[0]} \
+			-t {params.output_path}/{wildcards.sample}/fragments.tsv.gz \
 			-n macs2 \
 			--outdir {params.output_path}/{wildcards.sample} \
 			{params.custom_flags} && \
 		{params.script_path}/count_peaks.R \
-			--fragments {input[0]} \
+			--fragments {params.output_path}/{wildcards.sample}/fragments.tsv.gz \
 			--peaks {params.output_path}/{wildcards.sample}/macs2_peaks.narrowPeak \
 			--threads {threads} && \
 		find {params.output_path}/{wildcards.sample}/raw_feature_bc_matrix -type f -exec gzip {{}} + && \

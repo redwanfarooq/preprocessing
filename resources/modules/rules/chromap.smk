@@ -39,12 +39,12 @@ rule chromap:
 			--barcode-whitelist <(zcat {params.whitelist}) \
 			-o {params.output_path}/{wildcards.sample}/fragments.tsv \
 			{params.custom_flags} \
-			-t {threads} \
-			| tee -i {params.output_path}/{wildcards.sample}/chromap.out && \
+			-t {threads} && \
 		bgzip -@ {threads} {params.output_path}/{wildcards.sample}/fragments.tsv && \
 		tabix -p bed {params.output_path}/{wildcards.sample}/fragments.tsv.gz && \
 		touch {output} \
 		) > {log} 2>&1
+		cp {log} {params.output_path}/{wildcards.sample}/chromap.out
 		"""
 
 
