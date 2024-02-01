@@ -1,7 +1,7 @@
 ##########################################################################################
 # Snakemake module
 # Author: Redwan Farooq
-# Module name: gex_atac
+# Module name: gex_atac_cellranger_arc
 ##########################################################################################
 
 
@@ -22,12 +22,10 @@ for key, value in parse_info(info).items():
 include: 'rules/bcl2fastq.smk'
 include: 'rules/fastqc.smk'
 include: 'rules/multiqc.smk'
-include: 'rules/starsolo.smk'
-include: 'rules/chromap.smk'
-include: 'rules/macs2.smk'
+include: 'rules/cellranger_arc.smk'
 
 # Set targets
-targets = [x for rule in [bcl2fastq, fastqc, multiqc, starsolo, chromap, macs2] for x in rule]
+targets = [x for rule in [bcl2fastq, fastqc, multiqc, cellranger_arc] for x in rule]
 # --------------------------------------------------
 
 

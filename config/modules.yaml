@@ -16,6 +16,12 @@ tea_seq:
   - chromap
   - macs2
   - barcounter
+tea_seq_cellranger_arc:
+  - bcl2fastq
+  - fastqc
+  - multiqc
+  - cellranger_arc
+  - barcounter
 cite_seq:
   - bcl2fastq
   - fastqc
@@ -26,8 +32,14 @@ gex_atac:
   - bcl2fastq
   - fastqc
   - multiqc
+  - starsolo
   - chromap
   - macs2
+gex_atac_cellranger_arc:
+  - bcl2fastq
+  - fastqc
+  - multiqc
+  - cellranger_arc
 gex_fb:
   - bcl2fastq
   - fastqc
