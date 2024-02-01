@@ -43,10 +43,10 @@ plan(multicore, workers = as.integer(opt[["--threads"]]))
 # ==============================
 # SCRIPT
 # ==============================
-cat("Loading fragments...", "\n")
+message("Loading fragments...")
 fragments <- CreateFragmentObject(opt[["--fragments"]])
 
-cat("Loading peaks...", "\n")
+message("Loading peaks...")
 features <- read.table(
   file = opt[["--peaks"]],
   header = FALSE,
@@ -64,12 +64,12 @@ features <- read.table(
   select(id, symbol, type, chr, start, stop)
 peaks <- makeGRangesFromDataFrame(features)
 
-cat("Counting fragments in peaks per cell...", "\n")
+message("Counting fragments in peaks per cell...")
 peaks.mat <- FeatureMatrix(fragments, peaks)
 
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
 
-cat("Saving features.tsv...", "\n")
+message("Saving features.tsv...")
 write.table(
   features,
   file = file.path(outdir, "features.tsv"),
@@ -79,7 +79,7 @@ write.table(
   col.names = FALSE
 )
 
-cat("Saving barcodes.tsv...", "\n")
+message("Saving barcodes.tsv...")
 write.table(
   data.frame(barcodes = colnames(peaks.mat)),
   file = file.path(outdir, "barcodes.tsv"),
@@ -89,10 +89,10 @@ write.table(
   col.names = FALSE
 )
 
-cat("Saving matrix.mtx...", "\n")
+message("Saving matrix.mtx...")
 writeMM(
   peaks.mat,
   file = file.path(outdir, "matrix.mtx")
-)
+) %>% invisible()
 
-cat("Done.")
+message("Done.")
