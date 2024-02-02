@@ -25,7 +25,7 @@ dependencies:
   - bwidget=1.9.14
   - bzip2=1.0.8
   - c-ares=1.22.1
-  - ca-certificates=2023.11.17
+  - ca-certificates=2024.2.2
   - cairo=1.18.0
   - curl=8.4.0
   - expat=2.5.0
@@ -87,7 +87,7 @@ dependencies:
   - make=4.3
   - ncurses=6.4
   - numpy=1.26.2
-  - openssl=3.2.0
+  - openssl=3.2.1
   - pango=1.50.14
   - pcre2=10.42
   - pip=23.3.1
@@ -130,6 +130,7 @@ dependencies:
   - r-lattice=0.22_5
   - r-lifecycle=1.0.4
   - r-listenv=0.9.0
+  - r-logger=0.2.2
   - r-magrittr=2.0.3
   - r-mass=7.3_60
   - r-matrix=1.6_3
