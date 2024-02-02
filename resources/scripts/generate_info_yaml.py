@@ -18,6 +18,7 @@ Requires:
 import os
 import yaml
 import docopt
+from loguru import logger
 import pandas as pd
 from id import sample_id, lib_id
 
@@ -44,6 +45,7 @@ Options:
 # ==============================
 # FUNCTIONS
 # ==============================
+@logger.catch
 def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0)
@@ -58,10 +60,12 @@ def _main(opt: dict) -> None:
     )
 
     # Generate info YAML
+    logger.info("Generating info YAML")
     generate_info_yaml(
         df=md[["sample_id", "lib_id", "lib_type", "run"]],
         filename=os.path.join(opt["--outdir"], "info.yaml"),
     )
+    logger.success("Output file: {}", os.path.abspath(os.path.join(opt["--outdir"], "info.yaml")))
 
 
 def generate_info_yaml(df: pd.DataFrame, filename: str | None = None) -> dict:
