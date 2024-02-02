@@ -32,17 +32,13 @@ Options:
 
 
 # ==============================
-# GLOBAL VARIABLES
-# ==============================
-CONSOLE_LOG = "echo $(date '+[%Y-%m-%d%t%H:%M:%S]') {}"
-
-
-# ==============================
 # FUNCTIONS
 # ==============================
-@logger.catch
+@logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Get and execute shell command
+    if not opt["--update"]:
+        logger.info("Starting pipeline using module {}", MODULE)
     cmd = _get_cmd(update=opt["--update"])
     os.system(" && ".join(cmd))
 
@@ -73,7 +69,6 @@ def _get_cmd(update: bool = False) -> list[str]:
             "--outdir=resources/modules",
         )
     else:
-        logger.info("Starting pipeline using module {}", MODULE)
         cmd = _cmd(
             f"{SCRIPTS_DIR}/generate_wrapper.py",
             f"--module={MODULE}",
@@ -131,14 +126,16 @@ with open(file="config/config.yaml", mode="r", encoding="UTF-8") as file:
         OUTPUT_DIR = config["output_dir"]
         MODULE = config["module"]
     except KeyError as err:
-        raise KeyError(f"{err} not specified in '{file.name}'") from err
+        logger.exception("{} not specified in {}", err, file.name)
+        raise KeyError from err
 
 
 with open(file="config/modules.yaml", mode="r", encoding="UTF-8") as file:
     try:
         RULES = yaml.load(stream=file, Loader=yaml.SafeLoader)[MODULE]
     except KeyError as err:
-        raise KeyError(f"Module {err} not specified in '{file.name}'") from err
+        logger.exception("Module {} not specified in {}", err, file.name)
+        raise KeyError from err
 
 if __name__ == "__main__":
     _main(opt=docopt.docopt(DOC))

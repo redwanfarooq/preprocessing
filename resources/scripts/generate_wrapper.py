@@ -50,7 +50,7 @@ use rule * from {0} as *"""
 # ==============================
 # FUNCTIONS
 # ==============================
-@logger.catch
+@logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Generate wrapper script
     logger.info("Generating pipeline wrapper script")

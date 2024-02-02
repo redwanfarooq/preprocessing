@@ -46,7 +46,7 @@ Options:
 # ==============================
 # FUNCTIONS
 # ==============================
-@logger.catch
+@logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0)
