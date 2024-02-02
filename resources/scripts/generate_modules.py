@@ -50,7 +50,7 @@ RULES = "{}"
 # ==============================
 # FUNCTIONS
 # ==============================
-@logger.catch
+@logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Read input YAML
     with open(file=opt["--modules"], mode="r", encoding="UTF-8") as file:
