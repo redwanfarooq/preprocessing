@@ -18,6 +18,7 @@ Requires:
 # ==============================
 import os
 import docopt
+from loguru import logger
 import pandas as pd
 from id import lib_id, sample_id
 
@@ -45,6 +46,7 @@ Options:
 # ==============================
 # FUNCTIONS
 # ==============================
+@logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0)
@@ -59,11 +61,16 @@ def _main(opt: dict) -> None:
     )
 
     # Generate library sheets
+    logger.info("Generating library sheets for cellranger count")
     for x in md.sample_id.unique():
         generate_library_sheet(
             df=md[md.sample_id == x],
             fastqdir=opt["--fastqdir"],
             filename=os.path.join(opt["--outdir"], f"{x}.csv"),
+        )
+        logger.success(
+            "Output file: {}",
+            os.path.abspath(os.path.join(opt["--outdir"], f"{x}.csv"))
         )
 
 

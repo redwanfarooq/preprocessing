@@ -12,6 +12,7 @@ Runs preprocessing pipeline.
 import os
 import yaml
 import docopt
+from loguru import logger
 
 
 # ==============================
@@ -31,24 +32,21 @@ Options:
 
 
 # ==============================
-# GLOBAL VARIABLES
-# ==============================
-CONSOLE_LOG = "echo $(date '+[%Y-%m-%d%t%H:%M:%S]') {}"
-
-
-# ==============================
 # FUNCTIONS
 # ==============================
+@logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Get and execute shell command
+    if not opt["--update"]:
+        logger.info("Starting pipeline using module {}", MODULE)
     cmd = _get_cmd(update=opt["--update"])
     os.system(" && ".join(cmd))
 
 
-def _cmd(*args, message: str):
+def _cmd(*args):
     cmd = [" ".join(args)]
-    cmd.insert(0, CONSOLE_LOG.format(message))
-    cmd.append(CONSOLE_LOG.format("Done."))
+    # cmd.insert(0, CONSOLE_LOG.format(message))
+    # cmd.append(CONSOLE_LOG.format("Done."))
     return cmd
 
 
@@ -69,14 +67,12 @@ def _get_cmd(update: bool = False) -> list[str]:
             "--modules=config/modules.yaml",
             "--template=resources/templates/module.template",
             "--outdir=resources/modules",
-            message="Updating module scripts...",
         )
     else:
         cmd = _cmd(
             f"{SCRIPTS_DIR}/generate_wrapper.py",
             f"--module={MODULE}",
             "--template=resources/templates/wrapper.template",
-            message="Generating wrapper script...",
         )
         if "bcl2fastq" in RULES:
             cmd += _cmd(
@@ -89,7 +85,6 @@ def _get_cmd(update: bool = False) -> list[str]:
                     single=SINGLE,
                 ),
                 _get_reverse_complement_flag(reverse_complement=REVERSE_COMPLEMENT),
-                message="Generating sample sheet CSV files for bcl2fastq...",
             )
         if "cellranger_arc" in RULES:
             cmd += _cmd(
@@ -98,7 +93,6 @@ def _get_cmd(update: bool = False) -> list[str]:
                 f"--md={RUNS_CSV}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger_arc')}",
-                message="Generating library sheet CSV files for cellranger-arc count...",
             )
         if "cellranger" in RULES:
             cmd += _cmd(
@@ -107,18 +101,13 @@ def _get_cmd(update: bool = False) -> list[str]:
                 f"--md={RUNS_CSV}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
-                message="Generating library sheet CSV files for cellranger count...",
             )
         cmd += _cmd(
             f"{SCRIPTS_DIR}/generate_info_yaml.py",
             f"--md={RUNS_CSV}",
             f"--outdir={METADATA_DIR}",
-            message="Generating info YAML file...",
         )
-        cmd += _cmd(
-            "snakemake --profile=profile",
-            message="Starting preprocessing pipeline...",
-        )
+        cmd += _cmd("snakemake --profile=profile")
     return cmd
 
 
@@ -137,14 +126,16 @@ with open(file="config/config.yaml", mode="r", encoding="UTF-8") as file:
         OUTPUT_DIR = config["output_dir"]
         MODULE = config["module"]
     except KeyError as err:
-        raise KeyError(f"{err} not specified in '{file.name}'") from err
+        logger.exception("{} not specified in {}", err, file.name)
+        raise KeyError from err
 
 
 with open(file="config/modules.yaml", mode="r", encoding="UTF-8") as file:
     try:
         RULES = yaml.load(stream=file, Loader=yaml.SafeLoader)[MODULE]
     except KeyError as err:
-        raise KeyError(f"Module {err} not specified in '{file.name}'") from err
+        logger.exception("Module {} not specified in {}", err, file.name)
+        raise KeyError from err
 
 if __name__ == "__main__":
     _main(opt=docopt.docopt(DOC))
