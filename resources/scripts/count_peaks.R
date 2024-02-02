@@ -1,17 +1,9 @@
 #!/bin/env -S Rscript --vanilla
 
 
-# ==============================
-# PACKAGES
-# ==============================
-suppressPackageStartupMessages({
-  library(docopt)
-  library(future)
-  library(dplyr)
-  library(Signac)
-  library(GenomicRanges)
-  library(Matrix)
-})
+# Logging options
+logger::log_layout(logger::layout_glue_colors)
+logger::log_errors()
 
 
 # ==============================
@@ -34,19 +26,36 @@ Options:
 "
 
 # Parse options
-opt <- docopt(DOC)
+opt <- docopt::docopt(DOC)
 outdir <- file.path(dirname(opt[["--fragments"]]), "raw_feature_bc_matrix")
-plan(multicore, workers = as.integer(opt[["--threads"]]))
 
+
+# ==============================
+# SETUP
+# ==============================
+logger::log_info("Initialising")
+
+
+suppressPackageStartupMessages({
+  library(future)
+  library(dplyr)
+  library(Signac)
+  library(GenomicRanges)
+  library(Matrix)
+})
+
+
+logger::log_info("Running with {as.integer(opt[['--threads']])} threads")
+plan(multicore, workers = as.integer(opt[["--threads"]]))
 
 
 # ==============================
 # SCRIPT
 # ==============================
-message("Loading fragments...")
+logger::log_info("Loading fragments: {opt[['--fragments']]}")
 fragments <- CreateFragmentObject(opt[["--fragments"]])
 
-message("Loading peaks...")
+logger::log_info("Loading peaks: {opt[['--peaks']]}")
 features <- read.table(
   file = opt[["--peaks"]],
   header = FALSE,
@@ -64,12 +73,11 @@ features <- read.table(
   select(id, symbol, type, chr, start, stop)
 peaks <- makeGRangesFromDataFrame(features)
 
-message("Counting fragments in peaks per cell...")
+logger::log_info("Counting fragments in peaks per cell")
 peaks.mat <- FeatureMatrix(fragments, peaks)
 
+logger::log_info("Saving output")
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE)
-
-message("Saving features.tsv...")
 write.table(
   features,
   file = file.path(outdir, "features.tsv"),
@@ -79,7 +87,6 @@ write.table(
   col.names = FALSE
 )
 
-message("Saving barcodes.tsv...")
 write.table(
   data.frame(barcodes = colnames(peaks.mat)),
   file = file.path(outdir, "barcodes.tsv"),
@@ -89,10 +96,8 @@ write.table(
   col.names = FALSE
 )
 
-message("Saving matrix.mtx...")
 writeMM(
   peaks.mat,
   file = file.path(outdir, "matrix.mtx")
 ) %>% invisible()
-
-message("Done.")
+logger::log_success("Output path: {outdir}")
