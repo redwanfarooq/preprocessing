@@ -12,6 +12,7 @@ Runs preprocessing pipeline.
 import os
 import yaml
 import docopt
+from loguru import logger
 
 
 # ==============================
@@ -39,16 +40,17 @@ CONSOLE_LOG = "echo $(date '+[%Y-%m-%d%t%H:%M:%S]') {}"
 # ==============================
 # FUNCTIONS
 # ==============================
+@logger.catch
 def _main(opt: dict) -> None:
     # Get and execute shell command
     cmd = _get_cmd(update=opt["--update"])
     os.system(" && ".join(cmd))
 
 
-def _cmd(*args, message: str):
+def _cmd(*args):
     cmd = [" ".join(args)]
-    cmd.insert(0, CONSOLE_LOG.format(message))
-    cmd.append(CONSOLE_LOG.format("Done."))
+    # cmd.insert(0, CONSOLE_LOG.format(message))
+    # cmd.append(CONSOLE_LOG.format("Done."))
     return cmd
 
 
@@ -69,14 +71,13 @@ def _get_cmd(update: bool = False) -> list[str]:
             "--modules=config/modules.yaml",
             "--template=resources/templates/module.template",
             "--outdir=resources/modules",
-            message="Updating module scripts...",
         )
     else:
+        logger.info("Starting pipeline using module {}", MODULE)
         cmd = _cmd(
             f"{SCRIPTS_DIR}/generate_wrapper.py",
             f"--module={MODULE}",
             "--template=resources/templates/wrapper.template",
-            message="Generating wrapper script...",
         )
         if "bcl2fastq" in RULES:
             cmd += _cmd(
@@ -89,7 +90,6 @@ def _get_cmd(update: bool = False) -> list[str]:
                     single=SINGLE,
                 ),
                 _get_reverse_complement_flag(reverse_complement=REVERSE_COMPLEMENT),
-                message="Generating sample sheet CSV files for bcl2fastq...",
             )
         if "cellranger_arc" in RULES:
             cmd += _cmd(
@@ -98,7 +98,6 @@ def _get_cmd(update: bool = False) -> list[str]:
                 f"--md={RUNS_CSV}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger_arc')}",
-                message="Generating library sheet CSV files for cellranger-arc count...",
             )
         if "cellranger" in RULES:
             cmd += _cmd(
@@ -107,18 +106,13 @@ def _get_cmd(update: bool = False) -> list[str]:
                 f"--md={RUNS_CSV}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
-                message="Generating library sheet CSV files for cellranger count...",
             )
         cmd += _cmd(
             f"{SCRIPTS_DIR}/generate_info_yaml.py",
             f"--md={RUNS_CSV}",
             f"--outdir={METADATA_DIR}",
-            message="Generating info YAML file...",
         )
-        cmd += _cmd(
-            "snakemake --profile=profile",
-            message="Starting preprocessing pipeline...",
-        )
+        cmd += _cmd("snakemake --profile=profile")
     return cmd
 
 

@@ -26,6 +26,7 @@ Optional:
 import os
 import csv
 import docopt
+from loguru import logger
 import pandas as pd
 from classes import IndexKit
 from id import lib_id, sample_id
@@ -56,6 +57,7 @@ Options:
 # ==============================
 # FUNCTIONS
 # ==============================
+@logger.catch
 def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0)
@@ -109,11 +111,16 @@ def _main(opt: dict) -> None:
     )
 
     # Generate sample sheets
+    logger.info("Generating sample sheets for bcl2fastq")
     for x in md.lib_id.unique():
         generate_sample_sheet(
             df=md[md.lib_id == x],
             index_kits=kits,
             filename=os.path.join(opt["--outdir"], f"{x}.csv"),
+        )
+        logger.success(
+            "Output file: {}",
+            os.path.abspath(os.path.join(opt["--outdir"], f"{x}.csv"))
         )
 
 
