@@ -45,8 +45,6 @@ def _main(opt: dict) -> None:
 
 def _cmd(*args):
     cmd = [" ".join(args)]
-    # cmd.insert(0, CONSOLE_LOG.format(message))
-    # cmd.append(CONSOLE_LOG.format("Done."))
     return cmd
 
 
