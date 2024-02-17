@@ -64,7 +64,7 @@ Pipeline requires the following input files/folders:
 - **run**: run folder name
 - **lib_type**: library type
 - **donor**: donor ID
-- **hash**: hash ID
+- **pool**: pool ID
 - **sample_index**: *either* index name *or* i7 index sequence
 - **lane**: *either* lane number *or* * (for all lanes)
 

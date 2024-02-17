@@ -9,7 +9,7 @@ Requires:
     run: run folder name
     lib_type: library type
     donor: donor ID
-    hash: hash ID
+    pool: pool ID
 """
 
 
@@ -51,13 +51,13 @@ def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0)
     assert set(md.columns).issuperset(
-        {"run", "lib_type", "donor", "hash"}
+        {"run", "lib_type", "donor", "pool"}
     ), "Invalid metadata CSV file."
 
     # Add unique library ID and unique sample ID
     md = md.assign(
         lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
-        sample_id=lambda x: sample_id(x.donor.tolist(), x.hash.tolist()),
+        sample_id=lambda x: sample_id(x.donor.tolist(), x.pool.tolist()),
     )
 
     # Generate library sheets
@@ -70,7 +70,7 @@ def _main(opt: dict) -> None:
         )
         logger.success(
             "Output file: {}",
-            os.path.abspath(os.path.join(opt["--outdir"], f"{x}.csv"))
+            os.path.abspath(os.path.join(opt["--outdir"], f"{x}.csv")),
         )
 
 
@@ -95,13 +95,17 @@ def generate_library_sheet(
             "fastqs": [os.path.join(fastqdir, lib_id) for lib_id in df.lib_id],
             "sample": df.sample_id.tolist(),
             "library_type": [
-                "Gene Expression"
-                if lib_type == "GEX"
-                else "Antibody Capture"
-                if lib_type in {"ADT", "HTO"}
-                else "CRISPR Guide Capture"
-                if lib_type == "CRISPR"
-                else "Custom"
+                (
+                    "Gene Expression"
+                    if lib_type == "GEX"
+                    else (
+                        "Antibody Capture"
+                        if lib_type in {"ADT", "HTO"}
+                        else (
+                            "CRISPR Guide Capture" if lib_type == "CRISPR" else "Custom"
+                        )
+                    )
+                )
                 for lib_type in df.lib_type
             ],
         }
