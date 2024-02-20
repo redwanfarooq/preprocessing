@@ -1,11 +1,6 @@
 #!/bin/env -S Rscript --vanilla
 
 
-# Logging options
-logger::log_layout(logger::layout_glue_colors)
-logger::log_errors()
-
-
 # ==============================
 # COMMAND LINE OPTIONS
 # ==============================
@@ -29,12 +24,16 @@ Options:
 opt <- docopt::docopt(DOC)
 outdir <- file.path(dirname(opt[["--fragments"]]), "raw_feature_bc_matrix")
 
+# Logging options
+logger::log_layout(logger::layout_glue)
+logger::log_warnings()
+logger::log_errors()
+
 
 # ==============================
 # SETUP
 # ==============================
 logger::log_info("Initialising")
-
 
 suppressPackageStartupMessages({
   library(future)
@@ -43,7 +42,6 @@ suppressPackageStartupMessages({
   library(GenomicRanges)
   library(Matrix)
 })
-
 
 logger::log_info("Running with {as.integer(opt[['--threads']])} threads")
 plan(multicore, workers = as.integer(opt[["--threads"]]))
@@ -100,4 +98,5 @@ writeMM(
   peaks.mat,
   file = file.path(outdir, "matrix.mtx")
 ) %>% invisible()
+
 logger::log_success("Output path: {outdir}")
