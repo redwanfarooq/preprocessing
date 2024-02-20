@@ -152,7 +152,7 @@ starsolo_args: >-
   --soloUMIdedup 1MM_CR  
 chromap_args: >-
   --preset atac
-  --read-format bc:8:-1:-
+  --read-format bc:0:-1:-
   --barcode-translate /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_translation.tsv
 macs2_args: >-
   -f BED
