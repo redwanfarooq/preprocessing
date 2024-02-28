@@ -4,6 +4,7 @@ Functions for use in Snakemake rule definitions.
 
 import os
 import glob
+import xml.etree.ElementTree as ET
 
 
 def parse_info(info: dict) -> dict:
@@ -41,25 +42,39 @@ def get_run_path(wildcards, info: dict, run_dir: str) -> str:
     return os.path.join(run_dir, libs[wildcards.lib]["run"])
 
 
-def get_bases_mask_flag(wildcards, bases_mask: dict | None, info: dict) -> str:
+def get_bases_mask_flag(
+    wildcards, bases_mask: dict | None, info: dict, run_dir: str
+) -> str:
     """
     Get bases mask flag for bcl2fastq.
 
     Arguments:
         ``wildcards``: Snakemake ``wildcards`` object.\n
         ``bases_mask``: dictionary of bases mask strings with library types as keys.\n
-        ``info``: dictionary of sample/library info.
+        ``info``: dictionary of sample/library info.\n
+        ``run_dir``: raw sequencing runs directory.
 
     Returns:
         String containing bases mask flag to be inserted into shell command.
     """
     libs = parse_info(info)["libs"]
+    n_reads = sum(
+        1
+        for _ in ET.parse(
+            os.path.join(run_dir, libs[wildcards.lib]["run"], "RunInfo.xml")
+        )
+        .getroot()
+        .iter("Read")
+    )
     mask = (
-        bases_mask.get(libs[wildcards.lib]["lib_type"], None)
+        bases_mask.get(libs[wildcards.lib]["lib_type"], None).split(",")
         if bases_mask is not None
         else None
     )
-    return f"--use-bases-mask={mask}" if mask is not None else ""
+    if mask is not None:
+        if len(mask) == 4 and n_reads == 3:
+            mask.pop(2)
+    return f"--use-bases-mask={','.join(mask)}" if mask is not None else ""
 
 
 def get_count_inputs(wildcards, lib_types: set[str], info: dict) -> list[str]:
