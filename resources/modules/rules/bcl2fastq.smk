@@ -13,7 +13,7 @@ rule bcl2fastq:
 	params:
 		run_path = lambda wildcards: get_run_path(wildcards, info=info, run_dir=config["run_dir"]),
 		samplesheet_path = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), "bcl2fastq")),
-		bases_mask_flag = lambda wildcards: get_bases_mask_flag(wildcards, bases_mask=config.get("bases_mask", None), info=info),
+		bases_mask_flag = lambda wildcards: get_bases_mask_flag(wildcards, bases_mask=config.get("bases_mask", None), info=info, run_dir=config["run_dir"]),
 		custom_flags = config.get("bcl2fastq_args", ""),
 		output_path = os.path.join(config["output_dir"], "fastqs") # DO NOT CHANGE - downstream rules will search for FASTQs in this directory
 	conda: "bcl2fastq"
