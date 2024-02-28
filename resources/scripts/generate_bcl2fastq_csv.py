@@ -8,7 +8,7 @@ Requires:
     run: run folder name
     lib_type: library type
     donor: donor ID
-    hash: hash ID
+    pool: pool ID
     sample_index: EITHER index set name OR i7 index sequence
     lane: EITHER lane number OR * (for all lanes)
 Optional:
@@ -62,7 +62,7 @@ def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0)
     assert set(md.columns).issuperset(
-        {"run", "lib_type", "donor", "hash", "sample_index", "lane"}
+        {"run", "lib_type", "donor", "pool", "sample_index", "lane"}
     ), "Invalid metadata CSV file."
     dual = (
         (
@@ -107,7 +107,7 @@ def _main(opt: dict) -> None:
     md = md.assign(
         lane=lambda x: ["" if lane == "*" else lane for lane in x.lane],
         lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
-        sample_id=lambda x: sample_id(x.donor.tolist(), x.hash.tolist()),
+        sample_id=lambda x: sample_id(x.donor.tolist(), x.pool.tolist()),
     )
 
     # Generate sample sheets
@@ -120,7 +120,7 @@ def _main(opt: dict) -> None:
         )
         logger.success(
             "Output file: {}",
-            os.path.abspath(os.path.join(opt["--outdir"], f"{x}.csv"))
+            os.path.abspath(os.path.join(opt["--outdir"], f"{x}.csv")),
         )
 
 
