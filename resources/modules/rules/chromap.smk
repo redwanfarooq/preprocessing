@@ -38,6 +38,7 @@ rule chromap:
 			-r {params.reference} \
 			--barcode-whitelist <(zcat {params.whitelist}) \
 			-o {params.output_path}/{wildcards.sample}/fragments.tsv \
+			--summary {params.output_path}/{wildcards.sample}/chromap_summary.csv \
 			{params.custom_flags} \
 			-t {threads} && \
 		bgzip -@ {threads} {params.output_path}/{wildcards.sample}/fragments.tsv && \
