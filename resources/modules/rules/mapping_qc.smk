@@ -13,7 +13,7 @@ scripts_dir = config.get("scripts_dir", "resources/scripts")
 
 # Define rule
 rule mapping_qc:
-	input: expand("stamps/{rule}/{sample}.stamp", rule=[x for x in rules if x in {"starsolo", "barcounter", "chromap", "macs2"}], sample=samples.keys())
+	input: expand("stamps/{rule}/{sample}.stamp", rule=[rule for rule in module_rules if rule in {"starsolo", "barcounter", "chromap", "macs2"}], sample=samples.keys())
 	output: os.path.abspath("stamps/mapping_qc/mapping_qc.stamp")
 	log: os.path.abspath("logs/mapping_qc/mapping_qc.log")
 	threads: 1

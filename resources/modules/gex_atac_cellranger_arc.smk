@@ -24,8 +24,8 @@ include: 'rules/fastqc.smk'
 include: 'rules/multiqc.smk'
 include: 'rules/cellranger_arc.smk'
 
-# Set rules list
-rules = ['bcl2fastq', 'fastqc', 'multiqc', 'cellranger_arc']
+# Set module rules list
+module_rules = ['bcl2fastq', 'fastqc', 'multiqc', 'cellranger_arc']
 
 # Set targets list
 targets = [x for rule in [bcl2fastq, fastqc, multiqc, cellranger_arc] for x in rule]
