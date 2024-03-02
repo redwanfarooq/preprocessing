@@ -22,6 +22,7 @@
 #       - 'tags' (metadata files)
 #       - 'gex_barcode_whitelist' (reference files)
 #   gex_atac: 10X multiome (GEX + ATAC) protocol
+#     Additional required configuration:
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'atac_barcode_whitelist' (reference files)
 #   gex_fb: 10X feature barcoding (GEX + FB) protocol
@@ -57,7 +58,7 @@ output_dir: /project/fuggerlab/shared/jurkat_crispri/gex_fb/test_02
 #   run: run folder name
 #   lib_type: library type
 #   donor: donor ID
-#   hash: hash ID
+#   pool: pool ID
 #   sample_index: EITHER index name OR i7 index sequence
 #   lane: EITHER lane number OR * (for all lanes)
 runs: runs.csv

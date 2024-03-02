@@ -44,7 +44,8 @@ Options:
 # GLOBAL VARIABLES
 # ==============================
 LOAD = "include: 'rules/{}.smk'"
-RULES = "{}"
+QUO = "'{}'"
+UNQUO = "{}"
 
 
 # ==============================
@@ -68,7 +69,7 @@ def _main(opt: dict) -> None:
         )
         logger.success(
             "Output file: {}",
-            os.path.abspath(os.path.join(opt["--outdir"], f"{name}.smk"))
+            os.path.abspath(os.path.join(opt["--outdir"], f"{name}.smk")),
         )
 
 
@@ -92,7 +93,8 @@ def generate_module(
     out = template.substitute(
         NAME=f"{name}",
         LOAD="\n".join([LOAD.format(x) for x in rules]),
-        RULES=", ".join([RULES.format(x) for x in rules]),
+        RULES_TO_STR=", ".join([QUO.format(x) for x in rules]),
+        RULES_TO_VAR=", ".join([UNQUO.format(x) for x in rules]),
     )
 
     if filename is not None:
