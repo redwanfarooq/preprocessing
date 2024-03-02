@@ -24,9 +24,13 @@ include: 'rules/fastqc.smk'
 include: 'rules/multiqc.smk'
 include: 'rules/starsolo.smk'
 include: 'rules/barcounter.smk'
+include: 'rules/mapping_qc.smk'
 
-# Set targets
-targets = [x for rule in [bcl2fastq, fastqc, multiqc, starsolo, barcounter] for x in rule]
+# Set rules list
+rules = ['bcl2fastq', 'fastqc', 'multiqc', 'starsolo', 'barcounter', 'mapping_qc']
+
+# Set targets list
+targets = [x for rule in [bcl2fastq, fastqc, multiqc, starsolo, barcounter, mapping_qc] for x in rule]
 # --------------------------------------------------
 
 
