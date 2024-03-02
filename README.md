@@ -27,6 +27,8 @@ git submodule update --remote
     - [BarCounter](https://github.com/AllenInstitute/BarCounter-release)
     - [FastQC >=v0.11](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
     - [MultiQC >=v1.14](https://multiqc.info/docs/getting_started/installation/)
+    - [quarto >=v1.4](https://quarto.org/docs/get-started/)
+    - [panel >=v1.3.8](https://panel.holoviz.org/getting_started/installation.html)
     - [R >=v4.3](https://cran.r-project.org)
         * [Signac v1.10.0](https://CRAN.R-project.org/package=Signac)
 
