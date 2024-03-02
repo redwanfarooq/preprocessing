@@ -25,9 +25,13 @@ include: 'rules/multiqc.smk'
 include: 'rules/starsolo.smk'
 include: 'rules/chromap.smk'
 include: 'rules/macs2.smk'
+include: 'rules/mapping_qc.smk'
 
-# Set targets
-targets = [x for rule in [bcl2fastq, fastqc, multiqc, starsolo, chromap, macs2] for x in rule]
+# Set rules list
+rules = ['bcl2fastq', 'fastqc', 'multiqc', 'starsolo', 'chromap', 'macs2', 'mapping_qc']
+
+# Set targets list
+targets = [x for rule in [bcl2fastq, fastqc, multiqc, starsolo, chromap, macs2, mapping_qc] for x in rule]
 # --------------------------------------------------
 
 
