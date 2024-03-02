@@ -28,8 +28,8 @@ include: 'rules/macs2.smk'
 include: 'rules/barcounter.smk'
 include: 'rules/mapping_qc.smk'
 
-# Set rules list
-rules = ['bcl2fastq', 'fastqc', 'multiqc', 'starsolo', 'chromap', 'macs2', 'barcounter', 'mapping_qc']
+# Set module rules list
+module_rules = ['bcl2fastq', 'fastqc', 'multiqc', 'starsolo', 'chromap', 'macs2', 'barcounter', 'mapping_qc']
 
 # Set targets list
 targets = [x for rule in [bcl2fastq, fastqc, multiqc, starsolo, chromap, macs2, barcounter, mapping_qc] for x in rule]
