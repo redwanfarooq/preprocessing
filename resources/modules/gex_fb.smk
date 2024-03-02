@@ -18,14 +18,14 @@ with open(file=os.path.join(config.get("metadata_dir", "metadata"), "info.yaml")
 for key, value in parse_info(info).items():
     globals()[key] = value
 
+# Set module rules list
+module_rules = ['bcl2fastq', 'fastqc', 'multiqc', 'cellranger']
+
 # Import rules
 include: 'rules/bcl2fastq.smk'
 include: 'rules/fastqc.smk'
 include: 'rules/multiqc.smk'
 include: 'rules/cellranger.smk'
-
-# Set rules list
-rules = ['bcl2fastq', 'fastqc', 'multiqc', 'cellranger']
 
 # Set targets list
 targets = [x for rule in [bcl2fastq, fastqc, multiqc, cellranger] for x in rule]
