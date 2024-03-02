@@ -66,16 +66,13 @@ TRANSLATE_COLNAMES = {
 
 ```{python}
 samples = samples.split(",")
-files = {
-    k: {
-        sample: glob.glob(
-            os.path.join(input_dir, _.format(sample=sample)), recursive=True
-        )
-        for _ in v
-        for sample in samples
-    }
-    for k, v in PATHS.items()
-}
+files = {k: {sample: [] for sample in samples} for k in PATHS.keys()}
+for k in files.keys():
+    for sample in files[k].keys():
+        for _ in PATHS[k]:
+            files[k][sample] += glob.glob(
+                os.path.join(input_dir, _.format(sample=sample)), recursive=True
+            )
 ```
 
 ```{python}

@@ -18,6 +18,9 @@ with open(file=os.path.join(config.get("metadata_dir", "metadata"), "info.yaml")
 for key, value in parse_info(info).items():
     globals()[key] = value
 
+# Set module rules list
+module_rules = ['bcl2fastq', 'fastqc', 'multiqc', 'starsolo', 'chromap', 'macs2', 'barcounter', 'mapping_qc']
+
 # Import rules
 include: 'rules/bcl2fastq.smk'
 include: 'rules/fastqc.smk'
@@ -27,9 +30,6 @@ include: 'rules/chromap.smk'
 include: 'rules/macs2.smk'
 include: 'rules/barcounter.smk'
 include: 'rules/mapping_qc.smk'
-
-# Set module rules list
-module_rules = ['bcl2fastq', 'fastqc', 'multiqc', 'starsolo', 'chromap', 'macs2', 'barcounter', 'mapping_qc']
 
 # Set targets list
 targets = [x for rule in [bcl2fastq, fastqc, multiqc, starsolo, chromap, macs2, barcounter, mapping_qc] for x in rule]
