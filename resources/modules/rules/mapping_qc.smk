@@ -19,9 +19,8 @@ rule mapping_qc:
 	threads: 1
 	params:
 		script_path = scripts_dir if os.path.isabs(scripts_dir) else os.path.join(workflow.basedir, scripts_dir),
-		output_dir = config["output_dir"],
+		input_dir = config["output_dir"],
 		samples = ",".join(samples.keys()),
-		custom_flags = config.get("mapping_qc_args", ""),
 		output_path = os.path.join(config["output_dir"], "qc/mapping_qc")
 	conda: "quarto"
 	envmodules: "python-cbrg"
@@ -32,9 +31,9 @@ rule mapping_qc:
 		mkdir -p stamps/mapping_qc && \
 		mkdir -p {params.output_path} && \
 		quarto render \
-			{params.script_path}/mapping_qc.qmd \
+			{params.script_path}/mapping_qc_report.qmd \
 			--output-dir {params.output_path} \
-			-P output_dir:{params.output_dir} \
+			-P input_dir:{params.input_dir} \
 			-P samples:{params.samples} && \
 		touch {output} \
 		) > {log} 2>&1
