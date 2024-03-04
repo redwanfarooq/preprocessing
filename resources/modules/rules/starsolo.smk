@@ -18,8 +18,8 @@ rule starsolo:
 		reference = config["starsolo_reference"],
 		whitelist = config["gex_barcode_whitelist"],
 		custom_flags = config.get("starsolo_args", ""),
-		output_path = os.path.join(config["output_dir"], "starsolo")
-	conda: "starsolo"
+		output_path = os.path.join(config["output_dir"], "starsolo") # DO NOT CHANGE - downstream rules will search for mapping statistics in this directory
+	# conda: "starsolo"
 	envmodules:
 		"STAR/2.7.11a",
 		"samtools/1.17"

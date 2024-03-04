@@ -63,6 +63,7 @@ set-threads:
   barcounter: 1
   fastqc: 6
   multiqc: 1
+  count_reads: 1
   mapping_qc: 1
 # 'mem' and 'runtime' are Snakemake standard resources
 # Values supplied are parsed by the 'humanfriendly'
@@ -81,6 +82,9 @@ set-resources:
     mem: 2GiB
     runtime: 1h
   multiqc:
+    mem: 1GiB
+    runtime: 1h
+  count_reads:
     mem: 1GiB
     runtime: 1h
   cellranger:
