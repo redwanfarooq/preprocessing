@@ -1,7 +1,6 @@
 ##########################################################################################
 # Snakemake rule for macs2
 # Author: Redwan Farooq
-# Requires functions from resources/scripts/rule.py
 # Requires outputs from resources/rules/chromap.smk
 ##########################################################################################
 
@@ -16,7 +15,7 @@ rule macs2:
 	params:
 		custom_flags = config.get("macs2_args", ""),
 		script_path = scripts_dir if os.path.isabs(scripts_dir) else os.path.join(workflow.basedir, scripts_dir),
-		output_path = os.path.join(config["output_dir"], "chromap_macs2") # DO NOT CHANGE - downstream rules will search for fragment files in this directory
+		output_path = os.path.join(config["output_dir"], "chromap_macs2") # DO NOT CHANGE - downstream rules will search for mapping statistics in this directory
 	conda: "macs2"
 	# envmodules:
 	# 	"MACS2/2.2.9.1",
