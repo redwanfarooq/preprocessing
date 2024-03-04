@@ -1,7 +1,6 @@
 ##########################################################################################
 # Snakemake rule for macs2
 # Author: Redwan Farooq
-# Requires functions from resources/scripts/rule.py
 # Requires outputs from resources/rules/chromap.smk
 ##########################################################################################
 

@@ -1,7 +1,6 @@
 ##########################################################################################
 # Snakemake rule for mapping QC
 # Author: Redwan Farooq
-# Requires functions from resources/scripts/rule.py
 # Requires outputs from resources/rules/starsolo.smk
 # Requires outputs from resources/rules/barcounter.smk
 # Requires outputs from resources/rules/chromap.smk
