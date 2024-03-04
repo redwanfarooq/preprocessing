@@ -6,6 +6,8 @@ format:
     toc: true
     theme: cosmo
     embed-resources: true
+    code-tools:
+        source: true
 execute:
   echo: false
   warning: false
@@ -24,10 +26,13 @@ import os
 import glob
 import re
 import itertools
+import session_info
 import pandas as pd
+import plotly.express as px
 import panel as pn
 from IPython.display import Markdown
 pn.extension("tabulator")
+pn.extension("plotly")
 ```
 
 ```{python}
@@ -74,6 +79,19 @@ for k in files.keys():
                 os.path.join(input_dir, _.format(sample=sample)), recursive=True
             )
 ```
+
+```{python}
+os.makedirs("mapping_qc_data", exist_ok=True)
+```
+
+
+# Overview
+
+Summary statistics for mapping/alignment tools in preprocessing pipeline
+
+::: {.callout-note title="Source Directory" collapse="true"}
+`{python} Markdown(f"<pre>{input_dir}</pre>")`
+:::
 
 ```{python}
 def get_barcounter_metrics(logfile: os.PathLike) -> pd.DataFrame:
@@ -142,12 +160,17 @@ if any(itertools.chain.from_iterable(files["starsolo"].values())):
     Markdown(
 """
 # STARsolo (GEX)
- 
+
+Splicing-aware alignment to reference genome/transcriptome, barcode/UMI correction and UMI
+counting for gene expression libraries
+
+::: {.callout-tip title="Details" collapse="true"}
 **Total Reads** total number of sequenced read pairs  
 **% Saturation** fraction of reads originating from an already-observed UMI  
 **% Valid Barcode** fraction of reads with cell barcode matching whitelist  
 **% Mapped (Genome)** fraction of reads mapped to a unique region in the genome  
 **% Mapped (Transcriptome)** fraction of reads mapped to a unique gene in the transcriptome
+:::
 """
     )
 ```
@@ -196,13 +219,33 @@ if any(itertools.chain.from_iterable(files["starsolo"].values())):
             for x in cols
             if re.match(pattern="^\\%", string=x)
         },
-        layout="fit_columns",
-        width=750,
+        editors={x: None for x in cols},
+        selectable=False,
+        layout="fit_data_table",
+        max_width=800,
+        widths={x: 150 for x in cols if re.match(pattern="^\\%", string=x)},
         show_index=False,
+        frozen_columns=["Sample"],
         theme="site",
     )
 
-    pn.Tabs(("Summary", table)).servable()
+    bar_reads = px.bar(
+            df[cols],
+            x="Total Reads",
+            y="Sample",
+            category_orders={
+                "Sample": sorted(df["Sample"].unique())
+            }
+    ).update_layout(
+        height=50+50*len(df["Sample"].unique()),
+    ).update_yaxes(
+        title="",
+    )
+    bar_reads = pn.pane.Plotly(bar_reads)
+
+    pn.Tabs(("Summary", table), ("Total Reads", bar_reads)).servable()
+
+    df[cols].to_csv("mapping_qc_data/starsolo_stats.tsv", sep="\t", index=False)
 ```
 
 ```{python}
@@ -213,11 +256,17 @@ if any(itertools.chain.from_iterable(files["chromap"].values())) and any(
 """
 # chromap/MACS2 (ATAC)
 
+Adapter trimming, alignment of fragments (paired-end reads) to reference genome, barcode correction,
+deduplication, Tn5 shifting, peak calling and counting of fragments overlapping peaks for assay for
+transposase-accessible chromatin libraries.
+
+::: {.callout-tip title="Details" collapse="true"}
 **Total Reads** total number of sequenced read pairs  
 **% Duplicated** fraction of PCR duplicated fragments  
 **% Valid Barcode** fraction of reads with cell barcode matching whitelist  
-**% Mapped** fraction of reads mapped to a unique region in the genome with quality score > 30  
+**% Mapped** fraction of fragments mapped to a unique region in the genome with quality score > 30  
 **Total Peaks** total number of called peaks
+:::
 """
     )
 ```
@@ -273,13 +322,47 @@ if any(itertools.chain.from_iterable(files["chromap"].values())) and any(
             for x in cols
             if re.match(pattern="^\\%", string=x)
         },
-        layout="fit_columns",
-        width=750,
+        editors={x: None for x in cols},
+        selectable=False,
+        layout="fit_data_table",
+        max_width=800,
+        widths={x: 150 for x in cols if re.match(pattern="^\\%", string=x)},
         show_index=False,
+        frozen_columns=["Sample"],
         theme="site",
     )
 
-    pn.Tabs(("Summary", table)).servable()
+    bar_reads = px.bar(
+            df[cols],
+            x="Total Reads",
+            y="Sample",
+            category_orders={
+                "Sample": sorted(df["Sample"].unique())
+            }
+    ).update_layout(
+        height=50+50*len(df["Sample"].unique()),
+    ).update_yaxes(
+        title="",
+    )
+    bar_reads = pn.pane.Plotly(bar_reads)
+
+    bar_peaks = px.bar(
+            df[cols],
+            x="Total Peaks",
+            y="Sample",
+            category_orders={
+                "Sample": sorted(df["Sample"].unique())
+            }
+    ).update_layout(
+        height=50+50*len(df["Sample"].unique()),
+    ).update_yaxes(
+        title="",
+    )
+    bar_peaks = pn.pane.Plotly(bar_peaks)
+
+    pn.Tabs(("Summary", table), ("Total Reads", bar_reads), ("Total Peaks", bar_peaks)).servable()
+
+    df[cols].to_csv("mapping_qc_data/chromap_macs2_stats.tsv", sep="\t", index=False)
 ```
 
 ```{python}
@@ -287,10 +370,14 @@ if any(itertools.chain.from_iterable(files["barcounter"].values())):
     Markdown(
 """
 # BarCounter (ADT/HTO)
- 
+
+Barcode correction and UMI counting for antibody-derived tag libraries
+
+::: {.callout-tip title="Details" collapse="true"}
 **Total Reads** total number of sequenced read pairs  
 **% Valid Barcode** fraction of reads with cell barcode matching whitelist  
 **% Valid Tag** fraction of reads with antibody tag matching whitelist
+:::
 """
     )
 ```
@@ -331,11 +418,42 @@ if any(itertools.chain.from_iterable(files["barcounter"].values())):
             for x in cols
             if re.match(pattern="^\\%", string=x)
         },
-        layout="fit_columns",
-        width=750,
+        editors={x: None for x in cols},
+        selectable=False,
+        layout="fit_data_table",
+        max_width=800,
+        widths={x: 150 for x in cols if re.match(pattern="^\\%", string=x)},
         show_index=False,
+        frozen_columns=["Sample"],
         theme="site",
     )
 
-    pn.Tabs(("Summary", table)).servable()
+    bar_reads = px.bar(
+            df[cols],
+            x="Total Reads",
+            y="Sample",
+            category_orders={
+                "Sample": sorted(df["Sample"].unique())
+            }
+    ).update_layout(
+        height=50+50*len(df["Sample"].unique()),
+    ).update_yaxes(
+        title="",
+    )
+    bar_reads = pn.pane.Plotly(bar_reads)
+
+    pn.Tabs(("Summary", table), ("Total Reads", bar_reads)).servable()
+
+    df[cols].to_csv("mapping_qc_data/barcounter_stats.tsv", sep="\t", index=False)
+```
+
+```{python}
+#| include: false
+os.system("zip -mr mapping_qc_data.zip mapping_qc_data")
+```
+
+# Session Info
+
+```{python}
+session_info.show(dependencies=True, std_lib=True)
 ```
