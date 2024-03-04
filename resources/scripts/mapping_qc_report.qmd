@@ -81,8 +81,7 @@ for k in files.keys():
 ```
 
 ```{python}
-if not os.path.exists("mapping_qc_data"):
-    os.makedirs("mapping_qc_data", exist_ok=True)
+os.makedirs("mapping_qc_data", exist_ok=True)
 ```
 
 
