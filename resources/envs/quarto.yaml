@@ -298,3 +298,6 @@ dependencies:
   - zipp=3.17.0
   - zlib=1.2.13
   - zstd=1.5.5
+  - pip:
+      - session-info==1.0.0
+      - stdlib-list==0.10.0

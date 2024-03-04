@@ -16,7 +16,7 @@ rule fastqc:
 		fastqs = lambda wildcards: get_fastqc_fastqs(wildcards, info=info, output_dir=config["output_dir"]),
 		custom_flags = config.get("fastqc_args", ""),
 		output_path = os.path.join(config["output_dir"], "qc/fastqc")
-	conda: "fastqc"
+	# conda: "fastqc"
 	envmodules: "fastqc/0.11.9"
 	message: "Performing QC for FASTQ files for {wildcards.lib}"
 	shell:

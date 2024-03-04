@@ -15,9 +15,9 @@ rule multiqc:
 	params:
 		input_path = os.path.join(config["output_dir"], "qc"),
 		custom_flags = config.get("multiqc_args", ""),
-		output_path = os.path.join(config["output_dir"], "qc/multiqc")
+		output_path = os.path.join(config["output_dir"], "qc/multiqc") # DO NOT CHANGE - downstream rules will search for summary statistics in this directory
 	conda: "multiqc"
-	envmodules: "multiqc/1.14"
+	# envmodules: "multiqc/1.14"
 	message: "Aggregating QC reports"
 	shell:
 		"""

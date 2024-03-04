@@ -19,16 +19,17 @@ for key, value in parse_info(info).items():
     globals()[key] = value
 
 # Set module rules list
-module_rules = ['bcl2fastq', 'fastqc', 'multiqc', 'cellranger_arc']
+module_rules = ['bcl2fastq', 'fastqc', 'multiqc', 'count_reads', 'cellranger_arc']
 
 # Import rules
 include: 'rules/bcl2fastq.smk'
 include: 'rules/fastqc.smk'
 include: 'rules/multiqc.smk'
+include: 'rules/count_reads.smk'
 include: 'rules/cellranger_arc.smk'
 
 # Set targets list
-targets = [x for rule in [bcl2fastq, fastqc, multiqc, cellranger_arc] for x in rule]
+targets = [x for rule in [bcl2fastq, fastqc, multiqc, count_reads, cellranger_arc] for x in rule]
 # --------------------------------------------------
 
 

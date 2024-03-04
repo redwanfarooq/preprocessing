@@ -16,7 +16,7 @@ rule bcl2fastq:
 		bases_mask_flag = lambda wildcards: get_bases_mask_flag(wildcards, bases_mask=config.get("bases_mask", None), info=info, run_dir=config["run_dir"]),
 		custom_flags = config.get("bcl2fastq_args", ""),
 		output_path = os.path.join(config["output_dir"], "fastqs") # DO NOT CHANGE - downstream rules will search for FASTQs in this directory
-	conda: "bcl2fastq"
+	# conda: "bcl2fastq"
 	envmodules: "bcl2fastq/2.20.0.422"
 	message: "Making FASTQ files for {wildcards.lib}"
 	shell:
