@@ -1,5 +1,5 @@
 """
-Get read counts per sample and library type from MultiQC summary for FASTQC.
+Get read counts per library type/sample from MultiQC summary for FASTQC.
 
 Run from Snakemake rule with the following params:
 - multiqc_dir: Path to MultiQC output directory
@@ -13,14 +13,20 @@ import pandas as pd
 if os.path.isfile(
     os.path.join(snakemake.params["multiqc_dir"], "multiqc_data/multiqc_fastqc.txt")
 ):
-    os.system(f"cp {os.path.join(snakemake.params["multiqc_dir"], "multiqc_data/multiqc_fastqc.txt")} {os.path.join(snakemake.params["output_path"])}")
+    os.system(
+        f"cp {os.path.join(snakemake.params['multiqc_dir'], 'multiqc_data/multiqc_fastqc.txt')} {os.path.join(snakemake.params['output_path'])}"
+    )
 elif os.path.isfile(os.path.join(snakemake.params["multiqc_dir"], "multiqc_data.zip")):
-    os.system(f"unzip -p {os.path.join(snakemake.params["multiqc_dir"], "multiqc_data.zip")} multiqc_fastqc.txt > {os.path.join(snakemake.params["output_path"], "multiqc_fastqc.txt")}")
+    os.system(
+        f"unzip -p {os.path.join(snakemake.params['multiqc_dir'], 'multiqc_data.zip')} multiqc_fastqc.txt > {os.path.join(snakemake.params['output_path'], 'multiqc_fastqc.txt')}"
+    )
 else:
     raise FileNotFoundError
 
 
-df = pd.read_table(os.path.join(snakemake.params["output_path"], "multiqc_fastqc.txt"), delimiter="\t").rename(
+df = pd.read_table(
+    os.path.join(snakemake.params["output_path"], "multiqc_fastqc.txt"), delimiter="\t"
+).rename(
     columns={
         "Sample": "directory",
         "Filename": "filename",
@@ -46,4 +52,4 @@ df.to_csv(
 )
 
 
-os.system(f"rm {os.path.join(snakemake.params["output_path"], "multiqc_fastqc.txt")}")
+os.system(f"rm {os.path.join(snakemake.params['output_path'], 'multiqc_fastqc.txt')}")

@@ -1,7 +1,7 @@
 ##########################################################################################
 # Snakemake rule for count_reads
 # Author: Redwan Farooq
-# Requires outputs from resources/rules/fastqc.smk
+# Requires outputs from resources/rules/multiqc.smk
 ##########################################################################################
 
 scripts_dir = config.get("scripts_dir", "resources/scripts")
@@ -18,7 +18,7 @@ rule count_reads:
 		output_path = os.path.join(config["output_dir"], "qc/count_reads")
 	# conda: "quarto"
 	envmodules: "python-cbrg"
-	message: "Calculating total read counts per sample/library"
+	message: "Calculating total read counts per library type/sample"
 	script: "{params.script_path}/count_reads.py"
 
 
