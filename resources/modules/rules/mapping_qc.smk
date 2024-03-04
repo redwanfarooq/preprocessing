@@ -30,11 +30,12 @@ rule mapping_qc:
 		( \
 		mkdir -p stamps/mapping_qc && \
 		mkdir -p {params.output_path} && \
-		quarto render \
-			{params.script_path}/mapping_qc_report.qmd \
+		cp {params.script_path}/mapping_qc_report.qmd {params.output_path} && \
+		cd {params.output_path} && \
+		quarto render mapping_qc_report.qmd \
 			-P input_dir:{params.input_dir} \
 			-P samples:{params.samples} && \
-		mv {params.script_path}/mapping_qc_report.html {params.output_path} && \
+		rm mapping_qc_report.qmd && \
 		touch {output} \
 		) > {log} 2>&1
 		"""
