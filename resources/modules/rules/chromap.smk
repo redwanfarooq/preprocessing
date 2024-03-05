@@ -41,7 +41,7 @@ rule chromap:
 			--summary {params.output_path}/{wildcards.sample}/chromap_summary.csv \
 			{params.custom_flags} \
 			-t {threads} && \
-		bgzip -@ {threads} {params.output_path}/{wildcards.sample}/fragments.tsv && \
+		bgzip -f -@ {threads} {params.output_path}/{wildcards.sample}/fragments.tsv && \
 		tabix -p bed {params.output_path}/{wildcards.sample}/fragments.tsv.gz && \
 		touch {output} \
 		) > {log} 2>&1
