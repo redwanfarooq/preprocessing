@@ -449,7 +449,7 @@ if any(itertools.chain.from_iterable(files["barcounter"].values())):
 
 ```{python}
 #| include: false
-os.system("zip -mr mapping_qc_data.zip mapping_qc_data")
+os.system("zip -mr - mapping_qc_data > mapping_qc_data.zip")
 ```
 
 # Session Info

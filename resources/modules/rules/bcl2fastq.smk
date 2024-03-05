@@ -30,7 +30,7 @@ rule bcl2fastq:
 			--processing-threads={threads} \
 			{params.bases_mask_flag} {params.custom_flags} \
 			--output-dir={params.output_path}/{wildcards.lib} && \
-		find {params.output_path}/{wildcards.lib} -type f -name 'Undetermined_S0_*.fastq.gz' -exec rm -rf {{}} + && \
+		find {params.output_path}/{wildcards.lib} -type f -name 'Undetermined_S0_*.fastq.gz' -exec rm -rf {{}} \; && \
 		touch {output} \
 		) > {log} 2>&1
 		"""

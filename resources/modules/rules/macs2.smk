@@ -35,7 +35,7 @@ rule macs2:
 			--fragments {params.output_path}/{wildcards.sample}/fragments.tsv.gz \
 			--peaks {params.output_path}/{wildcards.sample}/macs2_peaks.narrowPeak \
 			--threads {threads} && \
-		find {params.output_path}/{wildcards.sample}/raw_feature_bc_matrix -type f -exec gzip {{}} + && \
+		find {params.output_path}/{wildcards.sample}/raw_feature_bc_matrix -type f -exec gzip -f {{}} \; && \
 		touch {output} \
 		) > {log} 2>&1
 		"""

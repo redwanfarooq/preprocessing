@@ -36,10 +36,10 @@ rule starsolo:
 			--outFileNamePrefix {params.output_path}/{wildcards.sample}/ \
 			{params.custom_flags} \
 			--runThreadN {threads} && \
-		find {params.output_path}/{wildcards.sample} -type f -name '*.bam' -exec samtools index -@ {threads} {{}} + && \
-		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'barcodes.tsv' -exec gzip {{}} + && \
-		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'features.tsv' -exec gzip {{}} + && \
-		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'matrix.mtx' -exec gzip {{}} + && \
+		find {params.output_path}/{wildcards.sample} -type f -name '*.bam' -exec samtools index -@ {threads} {{}} \; && \
+		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'barcodes.tsv' -exec gzip -f {{}} \; && \
+		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'features.tsv' -exec gzip -f {{}} \; && \
+		find {params.output_path}/{wildcards.sample}/Solo.out -type f -name 'matrix.mtx' -exec gzip -f {{}} \; && \
 		touch {output} \
 		) > {log} 2>&1
 		"""
