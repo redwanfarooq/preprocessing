@@ -31,6 +31,7 @@ import pandas as pd
 import plotly.express as px
 import panel as pn
 from IPython.display import Markdown
+
 pn.extension("tabulator")
 pn.extension("plotly")
 ```
@@ -71,6 +72,7 @@ TRANSLATE_COLNAMES = {
 
 ```{python}
 samples = samples.split(",")
+samples.sort()
 files = {k: {sample: [] for sample in samples} for k in PATHS.keys()}
 for k in files.keys():
     for sample in files[k].keys():
@@ -84,12 +86,11 @@ for k in files.keys():
 os.makedirs("mapping_qc_data", exist_ok=True)
 ```
 
-
 # Overview
 
 Summary statistics for mapping/alignment tools in preprocessing pipeline
 
-::: {.callout-note title="Source Directory" collapse="true"}
+::: {.callout-note title="Source Directory"}
 `{python} Markdown(f"<pre>{input_dir}</pre>")`
 :::
 
@@ -102,7 +103,7 @@ def get_barcounter_metrics(logfile: os.PathLike) -> pd.DataFrame:
             data={
                 k: v
                 for k, v in [
-                    re.search(pattern="\\t(.*)\\n", string=_).group(1).split(": ")
+                    re.search(pattern="\\t(.*)\\n", string=str(_)).group(1).split(": ")
                     for _ in lines
                 ]
             },
@@ -110,9 +111,8 @@ def get_barcounter_metrics(logfile: os.PathLike) -> pd.DataFrame:
         )
         .rename(columns={"Total reads processed": "total_reads"})
         .assign(
-            valid_barcode=lambda x: int(x["Total Valid barcodes"])
-            / int(x["total_reads"]),
-            valid_tag=lambda x: int(x["Valid tags"]) / int(x["total_reads"]),
+            valid_barcode=lambda x: [int(n) / int(d) for n, d in zip(x["Total Valid barcodes"], x["total_reads"])],
+            valid_tag=lambda x: [int(n) / int(d) for n, d in zip(x["Valid tags"], x["total_reads"])],
         )
     )
     return df[["total_reads", "valid_barcode", "valid_tag"]]
@@ -125,7 +125,7 @@ def get_chromap_metrics(logfile: os.PathLike, summary: os.PathLike) -> pd.DataFr
         data={
             k: int(v) / 2
             for k, v in [
-                re.search(pattern="(.*)\\.\\n", string=_).group(1).split(": ")
+                re.search(pattern="(.*)\\.\\n", string=str(_)).group(1).split(": ")
                 for _ in lines
             ]
         },
@@ -137,11 +137,10 @@ def get_chromap_metrics(logfile: os.PathLike, summary: os.PathLike) -> pd.DataFr
 
     df = (
         pd.concat([df_logfile, df_summary], axis=1)
-        .apply(lambda x: pd.to_numeric(x, downcast="integer", errors="coerce"))
         .assign(
-            valid_barcode=lambda x: int(x["total"]) / int(x["Number of reads"]),
-            duplicated=lambda x: int(x["duplicate"]) / int(x["total"]),
-            mapped=lambda x: 1 - int(x["lowmapq"]) / int(x["total"]),
+            valid_barcode=lambda x: [int(n) / int(d) for n, d in zip(x["total"], x["Number of reads"])],
+            duplicated=lambda x: [int(n) / int(d) for n, d in zip(x["duplicate"], x["total"])],
+            mapped=lambda x: [1 - (int(n) / int(d)) for n, d in zip(x["lowmapq"], x["total"])],
         )
         .rename(columns={"Number of reads": "total_reads"})
     )
@@ -164,7 +163,7 @@ if any(itertools.chain.from_iterable(files["starsolo"].values())):
 Splicing-aware alignment to reference genome/transcriptome, barcode/UMI correction and UMI
 counting for gene expression libraries
 
-::: {.callout-tip title="Details" collapse="true"}
+::: {.callout-tip title="Metrics"}
 **Total Reads** total number of sequenced read pairs  
 **% Saturation** fraction of reads originating from an already-observed UMI  
 **% Valid Barcode** fraction of reads with cell barcode matching whitelist  
@@ -185,11 +184,8 @@ if any(itertools.chain.from_iterable(files["starsolo"].values())):
         .assign(Sample=sample)
         for sample, files in files["starsolo"].items()
     ]
-    df = (
-        pd.concat(df, axis=0)
-        .rename(columns=TRANSLATE_COLNAMES["starsolo"])
-        .sort_values(by="Sample")
-        .reset_index(drop=True)
+    df = pd.concat(df, axis=0, ignore_index=True).rename(
+        columns=TRANSLATE_COLNAMES["starsolo"]
     )
     fraction_cols = df.filter(regex="^\\%").columns
     df.loc[:, fraction_cols] = df.loc[:, fraction_cols].apply(
@@ -217,29 +213,32 @@ if any(itertools.chain.from_iterable(files["starsolo"].values())):
         formatters={
             x: {"type": "progress", "max": 100, "legend": True}
             for x in cols
-            if re.match(pattern="^\\%", string=x)
+            if re.match(pattern="^\\%", string=str(x))
         },
         editors={x: None for x in cols},
         selectable=False,
         layout="fit_data_table",
-        max_width=800,
-        widths={x: 150 for x in cols if re.match(pattern="^\\%", string=x)},
+        max_width=780,
+        widths={x: 125 for x in cols[1:]},
         show_index=False,
         frozen_columns=["Sample"],
-        theme="site",
+        theme="bootstrap",
     )
 
-    bar_reads = px.bar(
+    bar_reads = (
+        px.bar(
             df[cols],
             x="Total Reads",
             y="Sample",
-            category_orders={
-                "Sample": sorted(df["Sample"].unique())
-            }
-    ).update_layout(
-        height=50+50*len(df["Sample"].unique()),
-    ).update_yaxes(
-        title="",
+            category_orders={"Sample": sorted(df["Sample"].unique())}
+        )
+        .update_layout(
+            width=780,
+            height=50+50*len(df["Sample"].unique()),
+        )
+        .update_yaxes(
+            title="",
+        )
     )
     bar_reads = pn.pane.Plotly(bar_reads)
 
@@ -260,7 +259,7 @@ Adapter trimming, alignment of fragments (paired-end reads) to reference genome,
 deduplication, Tn5 shifting, peak calling and counting of fragments overlapping peaks for assay for
 transposase-accessible chromatin libraries.
 
-::: {.callout-tip title="Details" collapse="true"}
+::: {.callout-tip title="Metrics"}
 **Total Reads** total number of sequenced read pairs  
 **% Duplicated** fraction of PCR duplicated fragments  
 **% Valid Barcode** fraction of reads with cell barcode matching whitelist  
@@ -282,7 +281,8 @@ if any(itertools.chain.from_iterable(files["chromap"].values())) and any(
         .assign(Sample=sample)
         for sample, files in files["chromap"].items()
     ]
-    df_chromap = pd.concat(df_chromap, axis=0).sort_values(by="Sample").reset_index(drop=True)
+    df_chromap = pd.concat(df_chromap, axis=0, ignore_index=True)
+
     df_macs2 = [
         get_macs2_metrics(peakfile=files[0])
         .apply(lambda x: pd.to_numeric(x, downcast="integer", errors="coerce"))
@@ -290,8 +290,8 @@ if any(itertools.chain.from_iterable(files["chromap"].values())) and any(
         .assign(Sample=sample)
         for sample, files in files["macs2"].items()
     ]
-    df_macs2 = pd.concat(df_macs2, axis=0).sort_values(by="Sample").reset_index(drop=True)
-    df = df_chromap.merge(df_macs2, on="Sample").rename(
+    df_macs2 = pd.concat(df_macs2, axis=0, ignore_index=True)
+    df = pd.merge(df_chromap, df_macs2, on="Sample").rename(
         columns=TRANSLATE_COLNAMES["chromap_macs2"]
     )
     fraction_cols = df.filter(regex="^\\%").columns
@@ -320,43 +320,53 @@ if any(itertools.chain.from_iterable(files["chromap"].values())) and any(
         formatters={
             x: {"type": "progress", "max": 100, "legend": True}
             for x in cols
-            if re.match(pattern="^\\%", string=x)
+            if re.match(pattern="^\\%", string=str(x))
         },
         editors={x: None for x in cols},
         selectable=False,
         layout="fit_data_table",
-        max_width=800,
-        widths={x: 150 for x in cols if re.match(pattern="^\\%", string=x)},
+        max_width=780,
+        widths={x: 125 for x in cols[1:]},
         show_index=False,
         frozen_columns=["Sample"],
-        theme="site",
+        theme="bootstrap",
     )
 
-    bar_reads = px.bar(
+    bar_reads = (
+        px.bar(
             df[cols],
             x="Total Reads",
             y="Sample",
             category_orders={
                 "Sample": sorted(df["Sample"].unique())
             }
-    ).update_layout(
-        height=50+50*len(df["Sample"].unique()),
-    ).update_yaxes(
-        title="",
+        )
+        .update_layout(
+            width=780,
+            height=50+50*len(df["Sample"].unique()),
+        )
+        .update_yaxes(
+            title="",
+        )
     )
     bar_reads = pn.pane.Plotly(bar_reads)
 
-    bar_peaks = px.bar(
+    bar_peaks = (
+        px.bar(
             df[cols],
             x="Total Peaks",
             y="Sample",
             category_orders={
                 "Sample": sorted(df["Sample"].unique())
             }
-    ).update_layout(
-        height=50+50*len(df["Sample"].unique()),
-    ).update_yaxes(
-        title="",
+        )
+        .update_layout(
+            width=780,
+            height=50+50*len(df["Sample"].unique()),
+        )
+        .update_yaxes(
+            title="",
+        )
     )
     bar_peaks = pn.pane.Plotly(bar_peaks)
 
@@ -373,7 +383,7 @@ if any(itertools.chain.from_iterable(files["barcounter"].values())):
 
 Barcode correction and UMI counting for antibody-derived tag libraries
 
-::: {.callout-tip title="Details" collapse="true"}
+::: {.callout-tip title="Metrics"}
 **Total Reads** total number of sequenced read pairs  
 **% Valid Barcode** fraction of reads with cell barcode matching whitelist  
 **% Valid Tag** fraction of reads with antibody tag matching whitelist
@@ -391,18 +401,20 @@ if any(itertools.chain.from_iterable(files["barcounter"].values())):
         .assign(Sample=sample)
         for sample, files in files["barcounter"].items()
     ]
-    df = (
-        pd.concat(df, axis=0)
-        .rename(columns=TRANSLATE_COLNAMES["barcounter"])
-        .sort_values(by="Sample")
-        .reset_index(drop=True)
+    df = pd.concat(df, axis=0, ignore_index=True).rename(
+        columns=TRANSLATE_COLNAMES["barcounter"]
     )
     fraction_cols = df.filter(regex="^\\%").columns
     df.loc[:, fraction_cols] = df.loc[:, fraction_cols].apply(
         lambda x: round(x * 100, ndigits=1)
     )
 
-    cols = ["Sample", "Total Reads", "% Valid Barcode", "% Valid Tag"]
+    cols = [
+        "Sample",
+        "Total Reads",
+        "% Valid Barcode",
+        "% Valid Tag",
+    ]
 
     table = pn.widgets.Tabulator(
         df[cols],
@@ -416,29 +428,34 @@ if any(itertools.chain.from_iterable(files["barcounter"].values())):
         formatters={
             x: {"type": "progress", "max": 100, "legend": True}
             for x in cols
-            if re.match(pattern="^\\%", string=x)
+            if re.match(pattern="^\\%", string=str(x))
         },
         editors={x: None for x in cols},
         selectable=False,
         layout="fit_data_table",
-        max_width=800,
-        widths={x: 150 for x in cols if re.match(pattern="^\\%", string=x)},
+        max_width=780,
+        widths={x: 125 for x in cols[1:]},
         show_index=False,
         frozen_columns=["Sample"],
-        theme="site",
+        theme="bootstrap",
     )
 
-    bar_reads = px.bar(
+    bar_reads = (
+        px.bar(
             df[cols],
             x="Total Reads",
             y="Sample",
             category_orders={
                 "Sample": sorted(df["Sample"].unique())
             }
-    ).update_layout(
-        height=50+50*len(df["Sample"].unique()),
-    ).update_yaxes(
-        title="",
+        )
+        .update_layout(
+            width=780,
+            height=50+50*len(df["Sample"].unique()),
+        )
+        .update_yaxes(
+            title="",
+        )
     )
     bar_reads = pn.pane.Plotly(bar_reads)
 
