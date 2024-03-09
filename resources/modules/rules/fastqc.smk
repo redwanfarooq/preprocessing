@@ -5,7 +5,6 @@
 # Requires outputs from resources/rules/bcl2fastq.smk
 ##########################################################################################
 
-
 # Define rule
 rule fastqc:
 	input: os.path.abspath("stamps/bcl2fastq/{lib}.stamp")

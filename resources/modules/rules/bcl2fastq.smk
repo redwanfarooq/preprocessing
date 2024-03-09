@@ -4,7 +4,6 @@
 # Requires functions from resources/scripts/rule.py
 ##########################################################################################
 
-
 # Define rule
 rule bcl2fastq:
 	output: os.path.abspath("stamps/bcl2fastq/{lib}.stamp")
