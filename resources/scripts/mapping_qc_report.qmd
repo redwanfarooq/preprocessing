@@ -41,10 +41,10 @@ PATHS = {
     "starsolo": ["starsolo/{sample}/**/Summary.csv"],
     "barcounter": ["barcounter/{sample}/{sample}_BarCounter.log"],
     "chromap": [
-        "chromap_macs2/{sample}/**/chromap.out",
-        "chromap_macs2/{sample}/**/chromap_summary.csv",
+        "chromap_macs2/{sample}/chromap.out",
+        "chromap_macs2/{sample}/chromap_summary.csv",
     ],
-    "macs2": ["chromap_macs2/{sample}/**/macs2_peaks.narrowPeak"],
+    "macs2": ["chromap_macs2/{sample}/macs2_peaks.narrowPeak"],
 }
 
 TRANSLATE_COLNAMES = {
