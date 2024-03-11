@@ -4,7 +4,6 @@
 # Requires outputs from resources/rules/fastqc.smk
 ##########################################################################################
 
-
 # Define rule
 rule multiqc:
 	input: [os.path.abspath(path) for path in expand("stamps/fastqc/{lib}.stamp", lib=libs.keys())]

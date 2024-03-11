@@ -5,7 +5,6 @@
 # Requires outputs from resources/rules/bcl2fastq.smk
 ##########################################################################################
 
-
 # Define rule
 rule cellranger_arc:
 	input: lambda wildcards: get_count_inputs(wildcards, lib_types={"GEX", "ATAC"}, info=info)
