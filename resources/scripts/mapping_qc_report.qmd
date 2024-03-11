@@ -83,18 +83,6 @@ for k in files.keys():
 ```
 
 ```{python}
-os.makedirs("mapping_qc_data", exist_ok=True)
-```
-
-# Overview
-
-Summary statistics for mapping/alignment tools in preprocessing pipeline
-
-::: {.callout-note title="Source Directory"}
-`{python} Markdown(f"<pre>{input_dir}</pre>")`
-:::
-
-```{python}
 def get_barcounter_metrics(logfile: os.PathLike) -> pd.DataFrame:
     with open(logfile, mode="r") as file:
         lines = file.readlines()[-6:-1]
@@ -155,6 +143,18 @@ def get_macs2_metrics(peakfile: os.PathLike) -> pd.DataFrame:
 ```
 
 ```{python}
+os.makedirs("mapping_qc_data", exist_ok=True)
+```
+
+# Overview
+
+Summary statistics for mapping/alignment tools in preprocessing pipeline
+
+::: {.callout-note title="Source Directory"}
+`{python} Markdown(f"<pre>{input_dir}</pre>")`
+:::
+
+```{python}
 if any(itertools.chain.from_iterable(files["starsolo"].values())):
     Markdown(
 """
@@ -211,7 +211,7 @@ if any(itertools.chain.from_iterable(files["starsolo"].values())):
             },
         },
         formatters={
-            x: {"type": "progress", "max": 100, "legend": True}
+            x: {"type": "progress", "max": 100, "legend": True, "color": "#E5ECF6"}
             for x in cols
             if re.match(pattern="^\\%", string=str(x))
         },
@@ -234,7 +234,7 @@ if any(itertools.chain.from_iterable(files["starsolo"].values())):
         )
         .update_layout(
             width=780,
-            height=50+50*len(df["Sample"].unique()),
+            height=50 + 30 * len(df["Sample"].unique()),
         )
         .update_yaxes(
             title="",
@@ -318,7 +318,7 @@ if any(itertools.chain.from_iterable(files["chromap"].values())) and any(
             },
         },
         formatters={
-            x: {"type": "progress", "max": 100, "legend": True}
+            x: {"type": "progress", "max": 100, "legend": True, "color": "#E5ECF6"}
             for x in cols
             if re.match(pattern="^\\%", string=str(x))
         },
@@ -343,7 +343,7 @@ if any(itertools.chain.from_iterable(files["chromap"].values())) and any(
         )
         .update_layout(
             width=780,
-            height=50+50*len(df["Sample"].unique()),
+            height=50 + 30 * len(df["Sample"].unique()),
         )
         .update_yaxes(
             title="",
@@ -362,7 +362,7 @@ if any(itertools.chain.from_iterable(files["chromap"].values())) and any(
         )
         .update_layout(
             width=780,
-            height=50+50*len(df["Sample"].unique()),
+            height=50 + 30 *len(df["Sample"].unique()),
         )
         .update_yaxes(
             title="",
@@ -426,7 +426,7 @@ if any(itertools.chain.from_iterable(files["barcounter"].values())):
             },
         },
         formatters={
-            x: {"type": "progress", "max": 100, "legend": True}
+            x: {"type": "progress", "max": 100, "legend": True, "color": "#E5ECF6"}
             for x in cols
             if re.match(pattern="^\\%", string=str(x))
         },
@@ -451,7 +451,7 @@ if any(itertools.chain.from_iterable(files["barcounter"].values())):
         )
         .update_layout(
             width=780,
-            height=50+50*len(df["Sample"].unique()),
+            height=50 + 30 * len(df["Sample"].unique()),
         )
         .update_yaxes(
             title="",
