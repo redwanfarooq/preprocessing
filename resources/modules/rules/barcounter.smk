@@ -5,7 +5,6 @@
 # Requires outputs from resources/rules/bcl2fastq.smk
 ##########################################################################################
 
-
 # Define rule
 rule barcounter:
 	input: lambda wildcards: get_count_inputs(wildcards, lib_types={"ADT", "HTO"}, info=info)
