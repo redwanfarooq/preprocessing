@@ -7,7 +7,6 @@
 # Requires outputs from resources/rules/macs2.smk
 ##########################################################################################
 
-
 scripts_dir = config.get("scripts_dir", "resources/scripts")
 
 # Define rule

@@ -95,10 +95,10 @@ set-resources:
     runtime: 6h
   starsolo:
     mem: 50GiB
-    runtime: 1h
+    runtime: 3h
   chromap:
     mem: 50GiB
-    runtime: 1h
+    runtime: 3h
   macs2:
     mem: 50GiB
     runtime: 1h
