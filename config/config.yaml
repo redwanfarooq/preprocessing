@@ -37,7 +37,7 @@ module: cite_seq
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/mogad_multiome/cite_seq/test
+output_dir: /project/fuggerlab/shared/mogad_multiome/cite_seq/cohort_01
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -175,6 +175,6 @@ multiqc_args: -zfd --dirs-depth=1 --interactive
 bases_mask:
   GEX: Y28n*,I10n*,I10n*,Y90n*
   # ATAC: Y50n*,I8n*,Y16n*,Y50n*
-  ADT: Y28n*,I6n*,Y15n*
-  HTO: Y28n*,I8n*,Y15n*
+  ADT: Y28n*,I6n*,n*,Y15n*
+  HTO: Y28n*,I8n*,n*,Y15n*
   # CRISPR: Y28n*,I10n*,I10n*,Y90n*
