@@ -4,10 +4,6 @@
 # Requires outputs from resources/rules/multiqc.smk
 ##########################################################################################
 
-import pandas as pd
-from loguru import logger
-logger.remove(0)
-
 # Define rule
 rule count_reads:
 	input: os.path.abspath("stamps/multiqc/multiqc.stamp")
@@ -19,6 +15,9 @@ rule count_reads:
 		output_path = os.path.join(config["output_dir"], "qc/count_reads")
 	message: "Calculating total read counts per library type/sample"
 	run:
+		import pandas as pd
+		from loguru import logger
+		logger.remove(0)
 		logfile = logger.add(sink=log[0], level="INFO", mode="w")
 
 		with logger.catch(reraise=True):
