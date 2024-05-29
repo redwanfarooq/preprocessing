@@ -61,7 +61,7 @@ set-threads:
   chromap: 16
   macs2: 16
   barcounter: 1
-  fastqc: 6
+  fastqc: 10
   multiqc: 1
   count_reads: 1
   mapping_qc: 1
@@ -77,15 +77,15 @@ set-threads:
 set-resources:
   bcl2fastq:
     mem: 20GiB
-    runtime: 1h
+    runtime: 3h
   fastqc:
-    mem: 2GiB
-    runtime: 1h
+    mem: 5GiB
+    runtime: 3h
   multiqc:
-    mem: 1GiB
+    mem: 5GiB
     runtime: 1h
   count_reads:
-    mem: 1GiB
+    mem: 5GiB
     runtime: 1h
   cellranger:
     mem: 250GiB
@@ -106,5 +106,5 @@ set-resources:
     mem: 50GiB
     runtime: 1h
   mapping_qc:
-    mem: 1GiB
+    mem: 5GiB
     runtime: 1h
