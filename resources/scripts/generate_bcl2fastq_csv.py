@@ -103,11 +103,15 @@ def _main(opt: dict) -> None:
         else None
     )
 
-    # Add lane, unique library ID and unique sample ID
-    md = md.assign(
-        lane=lambda x: ["" if lane == "*" else lane for lane in x.lane],
-        lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
-        sample_id=lambda x: sample_id(x.donor.tolist(), x.pool.tolist()),
+    # Add lane, unique library ID and unique sample ID; create a row for each lane if not * and more than one specified
+    md = (
+        md.assign(
+            lane=lambda x: ["" if lane == "*" else lane.split() for lane in x.lane],
+            lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
+            sample_id=lambda x: sample_id(x.donor.tolist(), x.pool.tolist()),
+        )
+        .explode("lane")
+        .reset_index(drop=True)
     )
 
     # Generate sample sheets
