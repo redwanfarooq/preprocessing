@@ -37,7 +37,7 @@ module: gex_fb
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/jurkat_crispri/gex_fb/test_04
+output_dir: /project/fuggerlab/shared/jurkat_crispri/gex_fb/test_05
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -67,7 +67,7 @@ runs: runs.csv
 # BarCounter antibody tag list
 # tags: barcounter/tags.csv
 # Cell Ranger feature reference
-features: cellranger/features.csv
+features: cellranger/features_5P_new.csv
 
 
 # --------------------------------------------------
@@ -91,12 +91,12 @@ dual_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
-single_index_kits:
+# single_index_kits:
 #   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
 #   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # Cell barcode whitelist
 # gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
@@ -176,5 +176,5 @@ bases_mask:
   GEX: Y28n*,I10n*,I10n*,Y90n*
   # ATAC: Y50n*,I8n*,Y16n*,Y50n*
   # ADT: Y28n*,I6n*,n*,Y15n*
-  HTO: Y28n*,I8n*,n*,Y15n*
+  # HTO: Y28n*,I8n*,n*,Y15n*
   CRISPR: Y28n*,I10n*,I10n*,Y90n*
