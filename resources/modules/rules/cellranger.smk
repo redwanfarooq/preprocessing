@@ -30,6 +30,7 @@ rule cellranger:
 			--libraries={params.librarysheet_path}/{wildcards.sample}.csv \
 			--feature-ref={params.features} \
 			--transcriptome={params.reference} \
+			--create-bam=true \
 			{params.custom_flags} \
 			--localcores={threads} && \
 		touch {output} \
