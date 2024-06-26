@@ -17,7 +17,7 @@ git submodule update --remote
     - [pandas >=v2.0](https://pandas.pydata.org/docs/getting_started/install.html)
 2. Specific modules
     - [bcl2fastq >=v2.20](https://sapac.support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html)
-    - [Cell Ranger >=v7.1](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
+    - [Cell Ranger >=v8.0](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
     - [Cell Ranger ARC >=v2.0](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/installation)
     - [STAR >=v2.7.11a](https://github.com/alexdobin/STAR)
     - [samtools >=v1.17](http://www.htslib.org)
