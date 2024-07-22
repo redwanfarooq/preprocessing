@@ -72,7 +72,7 @@ def _get_cmd(update: bool = False) -> list[str]:
             f"--module={MODULE}",
             "--template=resources/templates/wrapper.template",
         )
-        if "bcl2fastq" in RULES:
+        if "bcl2fastq" in RULES and INPUT_TYPE.lower() == "bcl":
             cmd += _cmd(
                 f"mkdir -p {os.path.join(METADATA_DIR, 'bcl2fastq')} &&",
                 f"{SCRIPTS_DIR}/generate_bcl2fastq_csv.py",
@@ -121,6 +121,7 @@ with open(file="config/config.yaml", mode="r", encoding="UTF-8") as file:
     REVERSE_COMPLEMENT = config.get("reverse_complement", False)
     try:
         RUNS_CSV = os.path.join(METADATA_DIR, config["runs"])
+        INPUT_TYPE = config["input_type"]
         OUTPUT_DIR = config["output_dir"]
         MODULE = config["module"]
     except KeyError as err:

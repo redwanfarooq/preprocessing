@@ -42,6 +42,21 @@ def get_run_path(wildcards, info: dict, run_dir: str) -> str:
     return os.path.join(run_dir, libs[wildcards.lib]["run"])
 
 
+def get_lib_type(wildcards, info: dict) -> str:
+    """
+    Get library type.
+
+    Arguments:
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``info``: dictionary of sample/library info.
+
+    Returns:
+        Library type.
+    """
+    libs = parse_info(info)["libs"]
+    return libs[wildcards.lib]["lib_type"]
+
+
 def get_bases_mask_flag(
     wildcards, bases_mask: dict | None, info: dict, run_dir: str
 ) -> str:
@@ -77,21 +92,55 @@ def get_bases_mask_flag(
     return f"--use-bases-mask={','.join(mask)}" if mask is not None else ""
 
 
-def get_count_inputs(wildcards, lib_types: set[str], info: dict) -> list[str]:
+def get_read_trim_flags(wildcards, read_trim: dict | None, info: dict) -> str:
     """
-    Get path to bcl2fastq stamp files.
+    Get read trimming flags for seqtk trimfq.
 
     Arguments:
         ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``read_trim``: dictionary of read trimming options with library types as keys.\n
+        ``info``: dictionary of sample/library info.\n
+
+    Returns:
+        Dictionary of read trimming flags to be inserted into shell command.
+    """
+    libs = parse_info(info)["libs"]
+    read_trim = (
+        read_trim.get(libs[wildcards.lib]["lib_type"], {})
+        if read_trim is not None
+        else {}
+    )
+    flags = {f"R{x}": "-L 150" for x in range(1, 4)}
+    for read in read_trim.keys():
+        flags[read] = [f"-{k} {v}" for k, v in read_trim[read].items()].join(" ")
+    return flags
+
+
+def get_count_inputs(
+    wildcards, input_type: str, lib_types: set[str], info: dict
+) -> list[str]:
+    """
+    Get path to bcl2fastq or trimfastq stamp files.
+
+    Arguments:
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``input_type``: string specifying input type ('bcl' or 'fastq').\n
         ``lib_types``: set of library types (use * to match any library type).\n
         ``info``: dictionary of sample/library info.
 
     Returns:
-        List of paths to bcl2fastq stamp files.
+        List of paths to bcl2fastq or trimfastq stamp files, depending on input type.
     """
+    match input_type.lower():
+        case "bcl":
+            rule = "bcl2fastq"
+        case "fastq":
+            rule = "trimfastq"
+        case _:
+            raise ValueError(f"Invalid input type: {input_type}")
     libs = parse_info(info)["libs"]
     inputs = [
-        f"stamps/bcl2fastq/{lib}.stamp"
+        f"stamps/{rule}/{lib}.stamp"
         for lib in info[wildcards.sample].keys()
         if any(x in {libs[lib]["lib_type"], "*"} for x in lib_types)
     ]

@@ -55,6 +55,7 @@ default-resources:
 # override defaults)
 set-threads:
   bcl2fastq: 16
+  trimfastq: 16
   cellranger: 48
   cellranger_arc: 48
   starsolo: 16
@@ -78,6 +79,9 @@ set-resources:
   bcl2fastq:
     mem: 20GiB
     runtime: 1h
+  trimfastq:
+    mem: 20GiB
+    runtime: 3h
   fastqc:
     mem: 2GiB
     runtime: 1h
