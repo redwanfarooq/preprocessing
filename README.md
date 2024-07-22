@@ -108,7 +108,7 @@ Folder(s) containing input FASTQ files
 - Cell barcode whitelist (GEX)
 - Cell barcode whitelist (ATAC)
 
-### cite_seq: CITE-seq protocol (TotalSeq-A antibodies)
+### cite_seq: CITE-seq protocol
 
 **REQUIRED:**
 
@@ -116,10 +116,10 @@ Folder(s) containing input FASTQ files
 - STAR genome reference package
 - Cell barcode whitelist (GEX)
 2. Antibody tag list in CSV format with the following required fields (without headers):
-- Tag sequence (length 15nt)
+- Tag sequence (length 15nt) - must begin at first base in read 2 (if leading bases are present, FASTQ files must be trimmed e.g. TotalSeq-B and TotalSeq-C antibodies) 
 - Tag name
 
-### tea_seq: TEA-seq protocol (TotalSeq-A antibodies)
+### tea_seq: TEA-seq protocol
 
 **REQUIRED:**
 
@@ -129,7 +129,7 @@ Folder(s) containing input FASTQ files
 - Cell barcode whitelist (GEX)
 - Cell barcode whitelist (ATAC)
 2. Antibody tag list in CSV format with the following required fields (without headers):
-- Tag sequence (length 15nt)
+- Tag sequence (length 15nt) - must begin at first base in read 2 (if leading bases are present, FASTQ files must be trimmed e.g. TotalSeq-B and TotalSeq-C antibodies) 
 - Tag name
 
 # Output
