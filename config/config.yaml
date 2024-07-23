@@ -197,31 +197,38 @@ bases_mask:
 # 'e' removes the specified number of bases from the 3' end
 # 'L' trims to the specified number of bases from the 5' end
 # All options are CASE-SENSITIVE
-read_trim:
-  GEX:
-    R1:
-      L: 28
-    R2:
-      L: 90
-  ATAC:
-    R1:
-      L: 50
-    R2:
-      L: 16
-    R3:
-      L: 50
-  ADT:
-    R1:
-      L: 28
-    R2:
-      L: 15
-  HTO:
-    R1:
-      L: 28
-    R2:
-      L: 15
-  CRISPR:
-    R1:
-      L: 28
-    R2:
-      L: 90
+# read_trim:
+#   GEX:
+#     R1:
+#       L: 28
+#     R2:
+#       L: 90
+#   ATAC:
+#     R1:
+#       L: 50
+#     R2:
+#       L: 16
+#     R3:
+#       L: 50
+#   ADT:
+#     R1:
+#       L: 28
+#     R2:
+#       L: 15
+#   HTO:
+#     R1:
+#       L: 28
+#     R2:
+#       L: 15
+#   CRISPR:
+#     R1:
+#       L: 28
+#     R2:
+#       L: 90
+# If 'barcode_translate' not provided, barcodes
+# for ADT/HTO libraries will not be translated to match
+# GEX libraries
+# Only required for 10x 3' protocols using TotalSeq-B
+# antibodies
+  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.txt.gz # 10x 3' v4
+  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.txt.gz # 10x 3' v3
