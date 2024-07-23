@@ -207,6 +207,7 @@ bases_mask:
 #     R1:
 #       L: 50
 #     R2:
+#       b: 8 # enable for read 2 length 24 bases (i.e. no dark cycles)
 #       L: 16
 #     R3:
 #       L: 50
@@ -214,11 +215,13 @@ bases_mask:
 #     R1:
 #       L: 28
 #     R2:
+#       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
 #       L: 15
 #   HTO:
 #     R1:
 #       L: 28
 #     R2:
+#       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
 #       L: 15
 #   CRISPR:
 #     R1:
@@ -226,9 +229,10 @@ bases_mask:
 #     R2:
 #       L: 90
 # If 'barcode_translate' not provided, barcodes
-# for ADT/HTO libraries will not be translated to match
-# GEX libraries
+# for ADT/HTO libraries in count matrices generated using
+# BarCounter will not be translated to match corresponding
+# barcodes in GEX libraries
 # Only required for 10x 3' protocols using TotalSeq-B
 # antibodies
-  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.txt.gz # 10x 3' v4
-  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.txt.gz # 10x 3' v3
+  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.tsv # 10x 3' v4
+  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.tsv # 10x 3' v3

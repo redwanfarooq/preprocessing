@@ -56,24 +56,26 @@ rule barcode_translate:
 			
 			lookup = {}
 			logger.info("Loading reference file: {}", params.reference)
-			with open(params.reference, "r", newline="") as infile:
+			with open(params.reference, mode="r", newline="") as infile:
 				reader = csv.reader(infile, delimiter="\t")
 				for row in reader:
 					lookup[row[0]] = row[1]
 
-			tempfile = NamedTemporaryFile(newline="")
-			logger.info("Loading barcounter CSV file: {}", params.barcounter_csv)
-			with open(params.barcounter_csv, "r", newline="") as infile, tempfile:
-				reader = csv.reader(csvfile, delimiter=",")
+			tempfile = NamedTemporaryFile(mode="w", newline="", delete=False)
+			logger.info("Loading BarCounter CSV file: {}", params.barcounter_csv)
+			with open(params.barcounter_csv, mode="r", newline="") as infile, tempfile:
+				reader = csv.reader(infile, delimiter=",")
 				writer = csv.writer(tempfile, delimiter=",")
 				header = next(reader)
 				writer.writerow(header)
 				for row in reader:
-					row[0] = lookup[row[0]]
-					writer.writerow(row)
+					try:
+						row[0] = lookup[row[0]]
+						writer.writerow(row)
+					except KeyError:
+						raise KeyError("Barcode not found, please check reference file.")
 			shutil.move(tempfile.name, params.barcounter_csv)
-			tempfile.close()
-			logger.success("Barcode translation complete")
+			logger.success("Barcode translation complete.")
 
 			shell("touch {output}")
 
