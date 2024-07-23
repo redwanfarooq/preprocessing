@@ -10,6 +10,7 @@
 # names (as per *.smk file names) in each module
 tea_seq:
   - bcl2fastq
+  - trimfastq
   - fastqc
   - multiqc
   - count_reads
@@ -20,6 +21,7 @@ tea_seq:
   - mapping_qc
 tea_seq_cellranger_arc:
   - bcl2fastq
+  - trimfastq
   - fastqc
   - multiqc
   - count_reads
@@ -28,6 +30,7 @@ tea_seq_cellranger_arc:
   - mapping_qc
 cite_seq:
   - bcl2fastq
+  - trimfastq
   - fastqc
   - multiqc
   - count_reads
@@ -36,6 +39,7 @@ cite_seq:
   - mapping_qc
 gex_atac:
   - bcl2fastq
+  - trimfastq
   - fastqc
   - multiqc
   - count_reads
@@ -45,12 +49,14 @@ gex_atac:
   - mapping_qc
 gex_atac_cellranger_arc:
   - bcl2fastq
+  - trimfastq
   - fastqc
   - multiqc
   - count_reads
   - cellranger_arc
 gex_fb:
   - bcl2fastq
+  - trimfastq
   - fastqc
   - multiqc
   - count_reads
