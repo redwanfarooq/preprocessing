@@ -17,7 +17,8 @@ git submodule update --remote
     - [pandas >=v2.0](https://pandas.pydata.org/docs/getting_started/install.html)
 2. Specific modules
     - [bcl2fastq >=v2.20](https://sapac.support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html)
-    - [Cell Ranger >=v7.1](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
+    - [Seqtk >= 1.3](https://github.com/lh3/seqtk)
+    - [Cell Ranger >=v8.0](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
     - [Cell Ranger ARC >=v2.0](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/installation)
     - [STAR >=v2.7.11a](https://github.com/alexdobin/STAR)
     - [samtools >=v1.17](http://www.htslib.org)
@@ -60,15 +61,24 @@ Pipeline requires the following input files/folders:
 
 **REQUIRED:**
 
-1. Illumina sequencing run folder(s)
-- Folders should be named according to default convention for the system e.g. **YYYYMMDD_InstrumentID_RunNumber_FlowCellID**
+1. Folder(s) containing input BCL files
+- One folder for each Illumina sequencing run with standard directory structure (***RunInfo.xml** must be present at top level) 
+- Folders should ideally be named according to default convention for the system e.g. **YYYYMMDD_InstrumentID_RunNumber_FlowCellID**, but any folder naming convention ending in an underscore followed by a unique ID will suffice
+
+*or*
+
+Folder(s) containing input FASTQ files
+- One folder for each Illumina sequencing run with subfolders containing FASTQ files from each library type 
+- Folders should ideally be named according to default convention for the system e.g. **YYYYMMDD_InstrumentID_RunNumber_FlowCellID**, but any folder naming ending in an underscore followed by a unique ID will suffice
+- Subfolders should be named according to library type (must match __exactly__ with **lib_type** field entry in runs summary table)
+- FASTQ files should be named according to default convention e.g. **SampleName_Sx_Lxxx_Rx_001.fastq.gz** (**SampleName** must match exactly with a hyphen-separated combination of **donor** and **pool** field entries in runs summary table)
 2. Runs summary table in CSV format with the following required fields (with headers):
 - **run**: run folder name
 - **lib_type**: library type
 - **donor**: donor ID
 - **pool**: pool ID
-- **sample_index**: *either* index name *or* i7 index sequence
-- **lane**: *either* lane number *or* * (for all lanes)
+- **sample_index**: *either* index name *or* i7 index sequence - only required if input type is BCL
+- **lane**: *either* lane number *or* * (for all lanes) - only required if input type is BCL
 
 **OPTIONAL:**
 
@@ -98,7 +108,7 @@ Pipeline requires the following input files/folders:
 - Cell barcode whitelist (GEX)
 - Cell barcode whitelist (ATAC)
 
-### cite_seq: CITE-seq protocol (TotalSeq-A antibodies)
+### cite_seq: CITE-seq protocol
 
 **REQUIRED:**
 
@@ -106,10 +116,10 @@ Pipeline requires the following input files/folders:
 - STAR genome reference package
 - Cell barcode whitelist (GEX)
 2. Antibody tag list in CSV format with the following required fields (without headers):
-- Tag sequence (length 15nt)
+- Tag sequence (length 15nt) - must begin at first base in read 2 (if leading bases are present, FASTQ files must be trimmed e.g. TotalSeq-B and TotalSeq-C antibodies) 
 - Tag name
 
-### tea_seq: TEA-seq protocol (TotalSeq-A antibodies)
+### tea_seq: TEA-seq protocol
 
 **REQUIRED:**
 
@@ -119,7 +129,7 @@ Pipeline requires the following input files/folders:
 - Cell barcode whitelist (GEX)
 - Cell barcode whitelist (ATAC)
 2. Antibody tag list in CSV format with the following required fields (without headers):
-- Tag sequence (length 15nt)
+- Tag sequence (length 15nt) - must begin at first base in read 2 (if leading bases are present, FASTQ files must be trimmed e.g. TotalSeq-B and TotalSeq-C antibodies) 
 - Tag name
 
 # Output

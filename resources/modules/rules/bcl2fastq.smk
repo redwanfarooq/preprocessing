@@ -36,4 +36,4 @@ rule bcl2fastq:
 
 	
 # Set rule targets
-bcl2fastq = [f"stamps/bcl2fastq/{lib}.stamp" for lib in libs]
+bcl2fastq = [f"stamps/bcl2fastq/{lib}.stamp" for lib in libs] if config["input_type"].lower() == "bcl" else []
