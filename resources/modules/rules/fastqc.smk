@@ -2,12 +2,19 @@
 # Snakemake rule for FastQC
 # Author: Redwan Farooq
 # Requires functions from resources/scripts/rule.py
-# Requires outputs from resources/rules/bcl2fastq.smk
+# Requires outputs from resources/rules/bcl2fastq.smk or resources/rules/trimfastq.smk
 ##########################################################################################
 
 # Define rule
 rule fastqc:
-	input: os.path.abspath("stamps/bcl2fastq/{lib}.stamp")
+	input:
+		match config["input_type"].lower():
+			case "bcl":
+				os.path.abspath("stamps/bcl2fastq/{lib}.stamp")
+			case "fastq":
+				os.path.abspath("stamps/trimfastq/{lib}.stamp")
+			case _:
+				raise ValueError(f"Invalid input type: {config['input_type']}")
 	output: os.path.abspath("stamps/fastqc/{lib}.stamp")
 	log: os.path.abspath("logs/fastqc/{lib}.log")
 	threads: 1
