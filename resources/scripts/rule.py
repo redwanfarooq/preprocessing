@@ -120,7 +120,7 @@ def get_count_inputs(
     wildcards, input_type: str, lib_types: set[str], info: dict
 ) -> list[str]:
     """
-    Get path to bcl2fastq or trimfastq stamp files.
+    Get path to bcl2fastq or trimfastq stamp files for specific library type(s).
 
     Arguments:
         ``wildcards``: Snakemake ``wildcards`` object.\n
@@ -178,6 +178,27 @@ def get_count_fastqs(
     ]
     fastqs.sort()
     return ",".join(fastqs)
+
+
+def get_fastqc_inputs(wildcards, input_type: str) -> str:
+    """
+    Get path to bcl2fastq or trimfastq stamp file.
+
+    Arguments:
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``input_type``: string specifying input type ('bcl' or 'fastq').\n
+
+    Returns:
+        Path to bcl2fastq or trimfastq stamp file, depending on input type.
+    """
+    match input_type.lower():
+        case "bcl":
+            path = "stamps/bcl2fastq/{lib}.stamp"
+        case "fastq":
+            path = "stamps/trimfastq/{lib}.stamp"
+        case _:
+            raise ValueError(f"Invalid input type: {input_type}")
+    return os.path.abspath(path.format(lib=wildcards.lib))
 
 
 def get_fastqc_fastqs(wildcards, info: dict, output_dir: str) -> str:

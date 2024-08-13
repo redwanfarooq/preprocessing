@@ -7,14 +7,7 @@
 
 # Define rule
 rule fastqc:
-	input:
-		match config["input_type"].lower():
-			case "bcl":
-				os.path.abspath("stamps/bcl2fastq/{lib}.stamp")
-			case "fastq":
-				os.path.abspath("stamps/trimfastq/{lib}.stamp")
-			case _:
-				raise ValueError(f"Invalid input type: {config['input_type']}")
+	input: lambda wildcards: get_fastqc_inputs(wildcards, input_type=config["input_type"])
 	output: os.path.abspath("stamps/fastqc/{lib}.stamp")
 	log: os.path.abspath("logs/fastqc/{lib}.log")
 	threads: 1
