@@ -64,7 +64,9 @@ def _main(opt: dict) -> None:
     logger.info("Generating library sheets for cellranger-arc count")
     for x in md.sample_id.unique():
         generate_library_sheet(
-            df=md[(md.sample_id == x) & (md.lib_type.isin({"GEX", "ATAC"}))],
+            df=md[(md.sample_id == x) & (md.lib_type.isin({"GEX", "ATAC"}))][
+                ["sample_id", "lib_id", "lib_type"]
+            ].drop_duplicates(),
             fastqdir=opt["--fastqdir"],
             filename=os.path.join(opt["--outdir"], f"{x}.csv"),
         )
