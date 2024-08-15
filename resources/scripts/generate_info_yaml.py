@@ -62,7 +62,7 @@ def _main(opt: dict) -> None:
     # Generate info YAML
     logger.info("Generating info YAML")
     generate_info_yaml(
-        df=md[["sample_id", "lib_id", "lib_type", "run"]],
+        df=md[["sample_id", "lib_id", "lib_type", "run"]].drop_duplicates(),
         filename=os.path.join(opt["--outdir"], "info.yaml"),
     )
     logger.success(
