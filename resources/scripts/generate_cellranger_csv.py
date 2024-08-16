@@ -64,7 +64,9 @@ def _main(opt: dict) -> None:
     logger.info("Generating library sheets for cellranger count")
     for x in md.sample_id.unique():
         generate_library_sheet(
-            df=md[md.sample_id == x],
+            df=md[md.sample_id == x][
+                ["sample_id", "lib_id", "lib_type"]
+            ].drop_duplicates(),
             fastqdir=opt["--fastqdir"],
             filename=os.path.join(opt["--outdir"], f"{x}.csv"),
         )
