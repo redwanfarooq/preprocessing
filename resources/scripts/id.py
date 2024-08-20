@@ -32,20 +32,6 @@ def lib_id(lib_type: list[str], run: list[str]) -> list[str]:
     return paste(lib_type, fcid(run), sep="-")
 
 
-def sample_id(donor_id: list[str], pool_id: list[str]) -> list[str]:
-    """
-    Generate unique sample IDs from donor ID and hash ID.
-
-    Arguments:
-        ``donor_id``: List of strings specifying donor IDs.\n
-        ``pool_id``: List of strings specifying hash IDs.
-
-    Returns:
-        List of unique sample IDs.
-    """
-    return paste(donor_id, pool_id, sep="-")
-
-
 def fcid(run: list[str]) -> list[str]:
     """
     Extract flow cell IDs from Illumina run folder names.
