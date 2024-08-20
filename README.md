@@ -1,5 +1,5 @@
 # Description
-Snakemake pipeline for preprocessing sequencing data
+Snakemake pipeline for preprocessing single cell sequencing data
 - Modularised workflow can be modified and/or extended for different library preparation protocols
 - Add as a submodule in a bioinformatics project GitHub repository
 ```
@@ -7,7 +7,7 @@ git submodule add https://github.com/redwanfarooq/preprocessing preprocessing
 ```
 - Update submodule to the latest version
 ```
-git submodule update --remote
+git submodule update --remote preprocessing
 ```
 
 # Required software
@@ -71,12 +71,11 @@ Folder(s) containing input FASTQ files
 - One folder for each Illumina sequencing run with subfolders containing FASTQ files from each library type 
 - Folders should ideally be named according to default convention for the system e.g. **YYYYMMDD_InstrumentID_RunNumber_FlowCellID**, but any folder naming ending in an underscore followed by a unique ID will suffice
 - Subfolders should be named according to library type (must match __exactly__ with **lib_type** field entry in runs summary table)
-- FASTQ files should be named according to default convention e.g. **SampleName_Sx_Lxxx_Rx_001.fastq.gz** (**SampleName** must match exactly with a hyphen-separated combination of **donor** and **pool** field entries in runs summary table)
+- FASTQ files should be named according to default convention e.g. **SampleID_Sx_Lxxx_Rx_001.fastq.gz**
 2. Runs summary table in CSV format with the following required fields (with headers):
 - **run**: run folder name
 - **lib_type**: library type
-- **donor**: donor ID
-- **pool**: pool ID
+- **sample_id**: sample ID
 - **sample_index**: *either* index name *or* i7 index sequence - only required if input type is BCL
 - **lane**: *either* lane number *or* * (for all lanes) - only required if input type is BCL
 
