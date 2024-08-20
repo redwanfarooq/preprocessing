@@ -7,8 +7,7 @@ Requires:
 - Metadata CSV file with the following fields:
     run: run folder name
     lib_type: library type
-    donor: donor ID
-    pool: pool ID
+    sample_id: sample ID
 """
 
 
@@ -20,7 +19,7 @@ import yaml
 import docopt
 from loguru import logger
 import pandas as pd
-from id import sample_id, lib_id
+from id import lib_id
 
 
 # ==============================
@@ -50,14 +49,11 @@ def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0)
     assert set(md.columns).issuperset(
-        {"run", "lib_type", "donor", "pool"}
+        {"run", "lib_type", "sample_id"}
     ), "Invalid metadata CSV file."
 
-    # Add unique library ID and unique sample ID
-    md = md.assign(
-        lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
-        sample_id=lambda x: sample_id(x.donor.tolist(), x.pool.tolist()),
-    )
+    # Add unique library ID
+    md = md.assign(lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()))
 
     # Generate info YAML
     logger.info("Generating info YAML")

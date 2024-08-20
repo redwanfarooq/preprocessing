@@ -7,8 +7,7 @@ Requires:
 - Metadata CSV file with the following fields:
     run: run folder name
     lib_type: library type
-    donor: donor ID
-    pool: pool ID
+    sample_id: sample ID
     sample_index: EITHER index set name OR i7 index sequence
     lane: EITHER lane number OR * (for all lanes)
 Optional:
@@ -29,7 +28,7 @@ import docopt
 from loguru import logger
 import pandas as pd
 from classes import IndexKit
-from id import lib_id, sample_id
+from id import lib_id
 
 
 # ==============================
@@ -62,7 +61,7 @@ def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0)
     assert set(md.columns).issuperset(
-        {"run", "lib_type", "donor", "pool", "sample_index", "lane"}
+        {"run", "lib_type", "sample_id", "sample_index", "lane"}
     ), "Invalid metadata CSV file."
     dual = (
         (
@@ -103,12 +102,11 @@ def _main(opt: dict) -> None:
         else None
     )
 
-    # Add lane, unique library ID and unique sample ID; create a row for each lane if not * and more than one specified
+    # Add lane and unique library ID; create a row for each lane if not * and more than one specified
     md = (
         md.assign(
             lane=lambda x: ["" if lane == "*" else lane.split() for lane in x.lane],
             lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
-            sample_id=lambda x: sample_id(x.donor.tolist(), x.pool.tolist()),
         )
         .explode("lane")
         .reset_index(drop=True)
