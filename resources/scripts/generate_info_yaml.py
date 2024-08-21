@@ -4,7 +4,7 @@
 """
 Generates info YAML for use with preprocessing pipeline.
 Requires:
-- Metadata CSV file with the following fields:
+- Metadata table file with the following fields:
     run: run folder name
     lib_type: library type
     sample_id: sample ID
@@ -33,7 +33,7 @@ Usage:
   generate_info_yaml.py --md=<md> --outdir=<outdir> [options]
 
 Arguments:
-  -m --md=<md>              Metadata CSV file (required)
+  -m --md=<md>              Metadata table file (required)
   -o --outdir=<outdir>      Output directory (required)
 
 Options:
@@ -47,10 +47,10 @@ Options:
 @logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
-    md = pd.read_csv(opt["--md"], header=0)
+    md = pd.read_csv(opt["--md"], header=0, sep=None, engine="python")
     assert set(md.columns).issuperset(
         {"run", "lib_type", "sample_id"}
-    ), "Invalid metadata CSV file."
+    ), "Invalid metadata table file."
 
     # Add unique library ID
     md = md.assign(lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()))
