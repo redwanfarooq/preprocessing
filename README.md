@@ -72,7 +72,7 @@ Folder(s) containing input FASTQ files
 - Folders should ideally be named according to default convention for the system e.g. **YYYYMMDD_InstrumentID_RunNumber_FlowCellID**, but any folder naming ending in an underscore followed by a unique ID will suffice
 - Subfolders should be named according to library type (must match __exactly__ with **lib_type** field entry in runs summary table)
 - FASTQ files should be named according to default convention e.g. **SampleID_Sx_Lxxx_Rx_001.fastq.gz**
-2. Runs summary table in CSV format with the following required fields (with headers):
+2. Runs summary table in delimited file format (e.g. TSV, CSV) with the following required fields (with headers):
 - **run**: run folder name
 - **lib_type**: library type
 - **sample_id**: sample ID

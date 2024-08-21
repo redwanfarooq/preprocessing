@@ -64,14 +64,14 @@ input_type: bcl
 # *** RELATIVE paths from 'metadata_dir' ***
 # --------------------------------------------------
 # REQUIRED
-# Runs summary table in CSV format
+# Runs summary table in table in delimited file format (e.g. TSV, CSV)
 # Required fields:
 #   run: run folder name
 #   lib_type: library type
 #   sample_id: unique sample ID
 #   sample_index: EITHER index name OR i7 index sequence - only required if input type is BCL
 #   lane: EITHER lane number OR * (for all lanes) - only required if input type is BCL
-runs: runs.csv
+runs: runs.tsv
 
 # OPTIONAL
 # BarCounter antibody tag list
