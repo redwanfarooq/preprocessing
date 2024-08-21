@@ -4,7 +4,7 @@
 """
 Generates CSV sample sheets for libraries from 10X multiome experiments for use with bcl2fastq.
 Requires:
-- Metadata CSV file with the following fields:
+- Metadata table file with the following fields:
     run: run folder name
     lib_type: library type
     sample_id: sample ID
@@ -42,7 +42,7 @@ Usage:
   generate_bcl2fastq_csv.py --md=<md> --outdir=<outdir> [--dual=<dual>] [--single=<single>] [options]
 
 Arguments:
-  -m --md=<md>              Metadata CSV file (required)
+  -m --md=<md>              Metadata table file (required)
   -o --outdir=<outdir>      Output directory (required)
   -d --dual=<dual>          Comma-separated list of dual index kit CSV files
   -s --single=<single>      Comma-separated list of single index kit CSV files
@@ -59,10 +59,10 @@ Options:
 @logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
-    md = pd.read_csv(opt["--md"], header=0)
+    md = pd.read_csv(opt["--md"], header=0, sep=None, engine="python")
     assert set(md.columns).issuperset(
         {"run", "lib_type", "sample_id", "sample_index", "lane"}
-    ), "Invalid metadata CSV file."
+    ), "Invalid metadata table file."
     dual = (
         (
             IndexKit(
