@@ -72,11 +72,11 @@ def _get_cmd(update: bool = False) -> list[str]:
             f"--module={MODULE}",
             "--template=resources/templates/wrapper.template",
         )
-        if "bcl2fastq" in RULES:
+        if "bcl2fastq" in RULES and INPUT_TYPE.lower() == "bcl":
             cmd += _cmd(
                 f"mkdir -p {os.path.join(METADATA_DIR, 'bcl2fastq')} &&",
                 f"{SCRIPTS_DIR}/generate_bcl2fastq_csv.py",
-                f"--md={RUNS_CSV}",
+                f"--md={RUNS_TABLE}",
                 f"--outdir={os.path.join(METADATA_DIR, 'bcl2fastq')}",
                 _get_index_kit_flags(
                     dual=DUAL,
@@ -88,7 +88,7 @@ def _get_cmd(update: bool = False) -> list[str]:
             cmd += _cmd(
                 f"mkdir -p {os.path.join(METADATA_DIR, 'cellranger_arc')} &&",
                 f"{SCRIPTS_DIR}/generate_cellranger_arc_csv.py",
-                f"--md={RUNS_CSV}",
+                f"--md={RUNS_TABLE}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger_arc')}",
             )
@@ -96,13 +96,13 @@ def _get_cmd(update: bool = False) -> list[str]:
             cmd += _cmd(
                 f"mkdir -p {os.path.join(METADATA_DIR, 'cellranger')} &&",
                 f"{SCRIPTS_DIR}/generate_cellranger_csv.py",
-                f"--md={RUNS_CSV}",
+                f"--md={RUNS_TABLE}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
             )
         cmd += _cmd(
             f"{SCRIPTS_DIR}/generate_info_yaml.py",
-            f"--md={RUNS_CSV}",
+            f"--md={RUNS_TABLE}",
             f"--outdir={METADATA_DIR}",
         )
         cmd += _cmd("snakemake --profile=profile")
@@ -120,7 +120,8 @@ with open(file="config/config.yaml", mode="r", encoding="UTF-8") as file:
     SINGLE = config.get("single_index_kits", None)
     REVERSE_COMPLEMENT = config.get("reverse_complement", False)
     try:
-        RUNS_CSV = os.path.join(METADATA_DIR, config["runs"])
+        RUNS_TABLE = os.path.join(METADATA_DIR, config["runs"])
+        INPUT_TYPE = config["input_type"]
         OUTPUT_DIR = config["output_dir"]
         MODULE = config["module"]
     except KeyError as err:
