@@ -37,7 +37,7 @@ module: cite_seq
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/ocrelizumab_multiome/cite_seq/cohort_01
+output_dir: /project/fuggerlab/shared/ocrelizumab_multiome/cite_seq/cohort_02
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -101,13 +101,13 @@ dual_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
-  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
+  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
-single_index_kits:
+# single_index_kits:
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
+  # - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # Cell barcode whitelist
 # gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023.txt.gz # 10x 3' v4 (GEX)
 gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
@@ -137,8 +137,8 @@ reverse_complement: true
 # If not specified, defaults to ''
 bcl2fastq_args: >-
   --create-fastq-for-index-reads
-  --minimum-trimmed-read-length=6
-  --mask-short-adapter-reads=6
+  --minimum-trimmed-read-length=8
+  --mask-short-adapter-reads=8
   --ignore-missing-positions
   --ignore-missing-filter
   --ignore-missing-bcls
@@ -187,8 +187,8 @@ multiqc_args: -zfd --dirs-depth=1 --interactive
 bases_mask:
   GEX: Y28n*,I10n*,I10n*,Y90n*
   # ATAC: Y50n*,I8n*,Y16n*,Y50n*
-  ADT: Y28n*,I6n*,n*,Y15n*
-  HTO: Y28n*,I8n*,n*,Y15n*
+  ADT: Y28n*,I10n*,I10n*,n10Y15n*
+  # HTO: Y28n*,I8n*,n*,Y15n*
   # CRISPR: Y28n*,I10n*,I10n*,Y90n*
 # If 'read_trim' not provided, defaults to trimming to 150
 # bases from the 5' end of each read
@@ -233,5 +233,5 @@ bases_mask:
 # barcodes in GEX libraries
 # Only required for 10x 3' protocols using TotalSeq-B
 # antibodies
-  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.tsv # 10x 3' v4
-  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.tsv # 10x 3' v3
+# barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.tsv # 10x 3' v4
+barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.tsv # 10x 3' v3
