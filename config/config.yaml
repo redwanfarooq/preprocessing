@@ -37,7 +37,7 @@ module: gex_atac
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/jurkat_multiome/gex_atac
+output_dir: /project/fuggerlab/shared/jurkat_multiome/gex_atac/test_02
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
