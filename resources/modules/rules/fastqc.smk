@@ -2,12 +2,12 @@
 # Snakemake rule for FastQC
 # Author: Redwan Farooq
 # Requires functions from resources/scripts/rule.py
-# Requires outputs from resources/rules/bcl2fastq.smk
+# Requires outputs from resources/rules/bcl2fastq.smk or resources/rules/trimfastq.smk
 ##########################################################################################
 
 # Define rule
 rule fastqc:
-	input: os.path.abspath("stamps/bcl2fastq/{lib}.stamp")
+	input: lambda wildcards: get_fastqc_inputs(wildcards, input_type=config["input_type"])
 	output: os.path.abspath("stamps/fastqc/{lib}.stamp")
 	log: os.path.abspath("logs/fastqc/{lib}.log")
 	threads: 1

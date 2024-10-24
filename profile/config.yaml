@@ -36,6 +36,7 @@ cluster:
     --partition={resources.partition}
     --ntasks={resources.tasks}
     --cpus-per-task={threads}
+    --gpus-per-task={resources.gpus}
     --mem={resources.mem_mb}
     --time={resources.runtime}
     --job-name={rule}.{jobid}
@@ -49,18 +50,21 @@ jobname: '{rule}.{jobid}'
 default-resources:
   partition: short
   tasks: 1
+  gpus: 0
   disk_mb: null
   mem_mib: null
 # Specified job resources for each rule (will
 # override defaults)
 set-threads:
   bcl2fastq: 16
+  trimfastq: 16
   cellranger: 48
   cellranger_arc: 48
   starsolo: 16
   chromap: 16
   macs2: 16
   barcounter: 1
+  barcode_translate: 1
   fastqc: 6
   multiqc: 1
   count_reads: 1
@@ -78,6 +82,9 @@ set-resources:
   bcl2fastq:
     mem: 20GiB
     runtime: 1h
+  trimfastq:
+    mem: 20GiB
+    runtime: 3h
   fastqc:
     mem: 2GiB
     runtime: 1h
@@ -104,6 +111,9 @@ set-resources:
     runtime: 1h
   barcounter:
     mem: 50GiB
+    runtime: 1h
+  barcode_translate:
+    mem: 1GiB
     runtime: 1h
   mapping_qc:
     mem: 1GiB

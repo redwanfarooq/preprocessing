@@ -4,11 +4,10 @@
 """
 Generates CSV sample sheets for libraries from 10X multiome experiments for use with bcl2fastq.
 Requires:
-- Metadata CSV file with the following fields:
+- Metadata table file with the following fields:
     run: run folder name
     lib_type: library type
-    donor: donor ID
-    pool: pool ID
+    sample_id: sample ID
     sample_index: EITHER index set name OR i7 index sequence
     lane: EITHER lane number OR * (for all lanes)
 Optional:
@@ -29,7 +28,7 @@ import docopt
 from loguru import logger
 import pandas as pd
 from classes import IndexKit
-from id import lib_id, sample_id
+from id import lib_id
 
 
 # ==============================
@@ -43,7 +42,7 @@ Usage:
   generate_bcl2fastq_csv.py --md=<md> --outdir=<outdir> [--dual=<dual>] [--single=<single>] [options]
 
 Arguments:
-  -m --md=<md>              Metadata CSV file (required)
+  -m --md=<md>              Metadata table file (required)
   -o --outdir=<outdir>      Output directory (required)
   -d --dual=<dual>          Comma-separated list of dual index kit CSV files
   -s --single=<single>      Comma-separated list of single index kit CSV files
@@ -60,10 +59,10 @@ Options:
 @logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
-    md = pd.read_csv(opt["--md"], header=0)
+    md = pd.read_csv(opt["--md"], header=0, sep=None, engine="python")
     assert set(md.columns).issuperset(
-        {"run", "lib_type", "donor", "pool", "sample_index", "lane"}
-    ), "Invalid metadata CSV file."
+        {"run", "lib_type", "sample_id", "sample_index", "lane"}
+    ), "Invalid metadata table file."
     dual = (
         (
             IndexKit(
@@ -103,11 +102,14 @@ def _main(opt: dict) -> None:
         else None
     )
 
-    # Add lane, unique library ID and unique sample ID
-    md = md.assign(
-        lane=lambda x: ["" if lane == "*" else lane for lane in x.lane],
-        lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
-        sample_id=lambda x: sample_id(x.donor.tolist(), x.pool.tolist()),
+    # Add lane and unique library ID; create a row for each lane if not * and more than one specified
+    md = (
+        md.assign(
+            lane=lambda x: ["" if lane == "*" else lane.split() for lane in x.lane],
+            lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
+        )
+        .explode("lane")
+        .reset_index(drop=True)
     )
 
     # Generate sample sheets

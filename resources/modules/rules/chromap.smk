@@ -7,7 +7,7 @@
 
 # Define rule
 rule chromap:
-	input: lambda wildcards: get_count_inputs(wildcards, lib_types={"ATAC"}, info=info)
+	input: lambda wildcards: get_count_inputs(wildcards, input_type = config["input_type"], lib_types={"ATAC"}, info=info)
 	output: os.path.abspath("stamps/chromap/{sample}.stamp")
 	log: os.path.abspath("logs/chromap/{sample}.log")
 	threads: 1

@@ -5,11 +5,10 @@
 Generates CSV library sheets (GEX and FB) for each sample from 10X feature barcoding experiments
 for use with cellranger count.
 Requires:
-- Metadata CSV file with the following fields:
+- Metadata table file with the following fields:
     run: run folder name
     lib_type: library type
-    donor: donor ID
-    pool: pool ID
+    sample_id: sample ID
 """
 
 
@@ -20,7 +19,7 @@ import os
 import docopt
 from loguru import logger
 import pandas as pd
-from id import lib_id, sample_id
+from id import lib_id
 
 
 # ==============================
@@ -34,7 +33,7 @@ Usage:
   generate_cellranger_csv.py --md=<md> --fastqdir=<fastqdir> --outdir=<outdir> [options]
 
 Arguments:
-  -m --md=<md>              Metadata CSV file (required)
+  -m --md=<md>              Metadata table file (required)
   -f --fastqdir=<fastqdir>  FASTQ directory (required)
   -o --outdir=<outdir>      Output directory (required)
 
@@ -49,22 +48,21 @@ Options:
 @logger.catch(reraise=True)
 def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
-    md = pd.read_csv(opt["--md"], header=0)
+    md = pd.read_csv(opt["--md"], header=0, sep=None, engine="python")
     assert set(md.columns).issuperset(
-        {"run", "lib_type", "donor", "pool"}
-    ), "Invalid metadata CSV file."
+        {"run", "lib_type", "sample_id"}
+    ), "Invalid metadata table file."
 
-    # Add unique library ID and unique sample ID
-    md = md.assign(
-        lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
-        sample_id=lambda x: sample_id(x.donor.tolist(), x.pool.tolist()),
-    )
+    # Add unique library ID
+    md = md.assign(lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()))
 
     # Generate library sheets
     logger.info("Generating library sheets for cellranger count")
     for x in md.sample_id.unique():
         generate_library_sheet(
-            df=md[md.sample_id == x],
+            df=md[md.sample_id == x][
+                ["sample_id", "lib_id", "lib_type"]
+            ].drop_duplicates(),
             fastqdir=opt["--fastqdir"],
             filename=os.path.join(opt["--outdir"], f"{x}.csv"),
         )
