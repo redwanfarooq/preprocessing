@@ -99,8 +99,8 @@ def get_barcounter_metrics(logfile: os.PathLike) -> pd.DataFrame:
         )
         .rename(columns={"Total reads processed": "total_reads"})
         .assign(
-            valid_barcode=lambda x: [int(n) / int(d) for n, d in zip(x["Total Valid barcodes"], x["total_reads"])],
-            valid_tag=lambda x: [int(n) / int(d) for n, d in zip(x["Valid tags"], x["total_reads"])],
+            valid_barcode=lambda x: [int(valid) / int(total) for valid, total in zip(x["Total Valid barcodes"], x["total_reads"])],
+            valid_tag=lambda x: [int(valid) / int(total) for valid, total in zip(x["Valid tags"], x["total_reads"])],
         )
     )
     return df[["total_reads", "valid_barcode", "valid_tag"]]
@@ -108,10 +108,14 @@ def get_barcounter_metrics(logfile: os.PathLike) -> pd.DataFrame:
 
 def get_chromap_metrics(logfile: os.PathLike, summary: os.PathLike) -> pd.DataFrame:
     with open(logfile, mode="r") as file:
-        lines = file.readlines()[-14:-13]
+        lines = file.readlines()[-14:-4]
     df_logfile = pd.DataFrame(
         data={
-            k: int(v) / 2
+            k: (
+                int(v)
+                if k in {"Number of barcodes in whitelist", "Number of corrected barcodes"}
+                else int(v) / 2
+            )
             for k, v in [
                 re.search(pattern="(.*)\\.\\n", string=str(_)).group(1).split(": ")
                 for _ in lines
@@ -126,9 +130,23 @@ def get_chromap_metrics(logfile: os.PathLike, summary: os.PathLike) -> pd.DataFr
     df = (
         pd.concat([df_logfile, df_summary], axis=1)
         .assign(
-            valid_barcode=lambda x: [int(n) / int(d) for n, d in zip(x["total"], x["Number of reads"])],
-            duplicated=lambda x: [int(n) / int(d) for n, d in zip(x["duplicate"], x["total"])],
-            mapped=lambda x: [1 - (int(n) / int(d)) for n, d in zip(x["lowmapq"], x["total"])],
+            valid_barcode=lambda x: [
+                (int(valid) + int(corrected)) / int(total)
+                for valid, corrected, total in zip(
+                    x["Number of barcodes in whitelist"],
+                    x["Number of corrected barcodes"],
+                    x["Number of reads"],
+                )
+            ],
+            duplicated=lambda x: [
+                int(duplicated) / (int(total) - int(unmapped) - int(lowmapq))
+                for duplicated, total, unmapped, lowmapq in zip(
+                    x["duplicate"], x["total"], x["unmapped"], x["lowmapq"]
+                )
+            ],
+            mapped=lambda x: [
+                1 - ((int(unmapped) + int(lowmapq)) / int(total)) for unmapped, lowmapq, total in zip(x["unmapped"], x["lowmapq"], x["total"])
+            ],
         )
         .rename(columns={"Number of reads": "total_reads"})
     )
