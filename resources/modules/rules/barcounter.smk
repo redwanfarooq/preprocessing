@@ -83,5 +83,5 @@ rule barcode_translate:
 
 # Set rule targets
 barcounter = [f"stamps/barcounter/{sample}.stamp" for sample in samples]
-if config["barcode_translate"]:
+if config.get("barcode_translate", None):
 	barcounter.extend([f"stamps/barcode_translate/{sample}.stamp" for sample in samples])
