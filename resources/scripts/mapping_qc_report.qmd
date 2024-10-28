@@ -154,9 +154,20 @@ def get_chromap_metrics(logfile: os.PathLike, summary: os.PathLike) -> pd.DataFr
 
 
 def get_macs2_metrics(peakfile: os.PathLike) -> pd.DataFrame:
-    with open(peakfile, mode="rb") as file:
-        n_lines = sum(1 for _ in file)
-    df = pd.DataFrame(data={"total_peaks": n_lines}, index=[0])
+    df = pd.DataFrame(
+        data={
+            "total_peaks": pd.read_csv(
+                peakfile,
+                sep=None,
+                engine="python",
+                header=None,
+                usecols=[0, 1, 2],
+            )
+            .drop_duplicates()
+            .shape[0]
+        },
+        index=[0],
+    )
     return df
 ```
 
