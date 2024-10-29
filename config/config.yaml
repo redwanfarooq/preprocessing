@@ -171,8 +171,10 @@ macs2_args: >-
   -f BED
   -g hs
   --nomodel
-  --extsize 200
-  --shift -100
+  --nolambda
+  --call-summits
+  --extsize 150
+  --shift -75
   --keep-dup all
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive

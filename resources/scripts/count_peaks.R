@@ -68,8 +68,9 @@ features <- read.table(
     symbol = sprintf("%s:%d-%d", chr, start, stop),
     type = "Peaks"
   ) %>%
-  select(id, symbol, type, chr, start, stop)
-peaks <- makeGRangesFromDataFrame(features)
+  select(id, symbol, type, chr, start, stop) %>%
+  distinct(id, .keep_all = TRUE)
+peaks <- makeGRangesFromDataFrame(features, starts.in.df.are.0based = TRUE)
 
 logger::log_info("Counting fragments in peaks per cell")
 peaks.mat <- FeatureMatrix(fragments, peaks)
