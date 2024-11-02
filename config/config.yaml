@@ -170,8 +170,10 @@ starsolo_args: >-
 #   -f BED
 #   -g hs
 #   --nomodel
+#   --nolambda
 #   --extsize 200
 #   --shift -100
+#   --max-gap 0
 #   --keep-dup all
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
