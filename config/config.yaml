@@ -171,9 +171,9 @@ macs2_args: >-
   -g hs
   --nomodel
   --nolambda
-  --call-summits
-  --extsize 150
-  --shift -75
+  --extsize 200
+  --shift -100
+  --max-gap 0
   --keep-dup all
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
