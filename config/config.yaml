@@ -37,7 +37,7 @@ module:
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/
+output_dir: /project/fuggerlab/rfarooq/project_name/data/raw
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
