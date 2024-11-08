@@ -37,7 +37,7 @@ module: tea_seq
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/ocrelizumab_multiome/dogma_seq/cohort_02
+output_dir: /project/fuggerlab/rfarooq/project/ocrelizumab_multiome/dogma_seq/cohort_02
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -176,6 +176,7 @@ macs2_args: >-
   --shift -100
   --max-gap 0
   --keep-dup all
+  --call-summits
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
 
