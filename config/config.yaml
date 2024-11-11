@@ -37,7 +37,7 @@ module: cite_seq
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/mogad_multiome/cite_seq/cohort_01
+output_dir: /project/fuggerlab/rfarooq/project/mogad_multiome/data/raw/cite_seq/cohort_01
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -175,6 +175,7 @@ starsolo_args: >-
 #   --shift -100
 #   --max-gap 0
 #   --keep-dup all
+#   --call-summits
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
 
