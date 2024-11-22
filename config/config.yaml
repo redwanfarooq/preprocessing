@@ -107,7 +107,7 @@ chromap_index: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/chromap/index # chr
 # provided, index name parsing will not be performed
 # and all sample indexes in runs table will be
 # interpreted as literal i7 index sequences
-dual_index_kits:
+# dual_index_kits:
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
