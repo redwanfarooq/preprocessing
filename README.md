@@ -20,6 +20,7 @@ git submodule update --remote preprocessing
     - [bcl2fastq >=v2.20](https://sapac.support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html)
     - [Seqtk >= 1.3](https://github.com/lh3/seqtk)
     - [Cell Ranger >=v8.0](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
+    - [Cell Ranger ATAC >=v2.0](https://software.10xgenomics.com/single-cell-atac/software/pipelines/latest/installation)
     - [Cell Ranger ARC >=v2.0](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/installation)
     - [STAR >=v2.7.11a](https://github.com/alexdobin/STAR)
     - [samtools >=v1.17](http://www.htslib.org)
@@ -90,13 +91,29 @@ Folder(s) containing input FASTQ files
 
 ## Module-specific
 
-### gex_fb: 10X feature barcoding (GEX + FB) protocol
+### gex: GEX only protocol
+
+**REQUIRED:**
+
+1. Reference files:
+- STAR genome reference package
+- Cell barcode whitelist
+
+### atac: ATAC only protocol
+
+**REQUIRED:**
+
+1. Reference files:
+- chromap genome reference and index
+- Cell barcode whitelist
+
+### gex_fb_cellranger: 10X feature barcoding (GEX +/- FB) protocol
 
 **REQUIRED:**
 
 1. Reference files:
 - Cell Ranger genome reference package
-2. Feature reference in CSV format - see [specifications](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref)
+2. Feature reference in CSV format - see [specifications](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref) (if using feature barcode)
 
 ### gex_atac: 10X multiome (GEX + ATAC) protocol
 
@@ -138,7 +155,9 @@ Output directory will be created in specified location with subfolders containin
 # Modules
 
 ## Available modules
-- gex_fb
+- gex
+- atac
+- gex_fb_cellranger
 - gex_atac
 - cite_seq
 - tea_seq

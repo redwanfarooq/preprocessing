@@ -151,12 +151,12 @@ def get_count_fastqs(
     wildcards, lib_types: set[str], read: str, info: dict, output_dir: str
 ) -> str:
     """
-    Get input FASTQ string for barcounter/CITE-seq-Count.
+    Get input FASTQ string for count-type tool (e.g. STARsolo, chromap, barcounter).
 
     Arguments:
         ``wildcards``: Snakemake ``wildcards`` object.\n
         ``lib_types``: set of library types (use * to match any library type).\n
-        ``read``: string specifying read number ('R1' or 'R2').\n
+        ``read``: string specifying read number ('R1, 'R2' or 'R3').\n
         ``info``: dictionary of sample/library info.\n
         ``output_dir``: pipeline output directory.
 
@@ -178,6 +178,30 @@ def get_count_fastqs(
     ]
     fastqs.sort()
     return ",".join(fastqs)
+
+
+def get_count_fastqdirs(
+    wildcards, lib_types: set[str], info: dict, output_dir: str
+) -> str:
+    """
+    Get input FASTQ directory string for cellranger(-atac/-arc) count.
+
+    Arguments:
+        ``wildcards``: Snakemake ``wildcards`` object.\n
+        ``lib_types``: set of library types (use * to match any library type).\n
+        ``info``: dictionary of sample/library info.\n
+        ``output_dir``: pipeline output directory.
+
+    Returns:
+        Comma-separated string of paths to input FASTQ directory.
+    """
+    libs = parse_info(info)["libs"]
+    dirs = [
+        os.path.join(output_dir, f"fastqs/{lib}")
+        for lib in info[wildcards.sample].keys()
+        if any(x in {libs[lib]["lib_type"], "*"} for x in lib_types)
+    ]
+    return ",".join(dirs)
 
 
 def get_fastqc_inputs(wildcards, input_type: str) -> str:

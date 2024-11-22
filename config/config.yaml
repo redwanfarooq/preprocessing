@@ -12,22 +12,28 @@
 # REQUIRED
 # Pipeline module for library preparation protocol
 # Options:
-#   tea_seq: TEA-seq protocol
+#   gex: GEX only protocol
 #     Additional required configuration:
-#       - 'tags' (metadata files)
+#       - 'gex_barcode_whitelist' (reference files)
+#   atac: ATAC only protocol
+#     Additional required configuration:
+#       - 'atac_barcode_whitelist' (reference files)
+#   gex_fb_cellranger: 10X feature barcoding (GEX +/- FB) protocol
+#     Additional required configuration:
+#     - 'features' (metadata files) if using FB
+#   gex_atac: 10X multiome (GEX + ATAC) protocol
+#     Additional required configuration:
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'atac_barcode_whitelist' (reference files)
 #   cite_seq: CITE-seq protocol
 #     Additional required configuration:
 #       - 'tags' (metadata files)
 #       - 'gex_barcode_whitelist' (reference files)
-#   gex_atac: 10X multiome (GEX + ATAC) protocol
+#   tea_seq: TEA-seq protocol
 #     Additional required configuration:
+#       - 'tags' (metadata files)
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'atac_barcode_whitelist' (reference files)
-#   gex_fb: 10X feature barcoding (GEX + FB) protocol
-#     Additional required configuration:
-#     - 'features' (metadata files)
 module: 
 
 # --------------------------------------------------
@@ -87,6 +93,7 @@ features: cellranger/features.csv
 # REQUIRED
 # Cell Ranger/STARsolo/chromap genome reference package
 # cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
+# cellranger_reference: /databank/10x-rangers/refdata-cellranger-atac-GRCh38-2020-A-2.0.0 # Cell Ranger ATAC
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
 # starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
 # chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
@@ -162,7 +169,7 @@ starsolo_args: >-
   --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
   --soloUMIfiltering MultiGeneUMI_CR
   --soloUMIdedup 1MM_CR  
-chromap_args: >-
+chromap_args: >- # remove --barcode-translate flag if not 10X multiome (GEX + ATAC) protocol
   --preset atac
   --read-format bc:8:-1:-
   --barcode-translate /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_translation.tsv
