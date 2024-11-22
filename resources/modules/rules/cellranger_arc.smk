@@ -7,7 +7,7 @@
 
 # Define rule
 rule cellranger_arc:
-	input: lambda wildcards: get_count_inputs(wildcards, input_type = config["input_type"], lib_types={"GEX", "ATAC"}, info=info)
+	input: lambda wildcards: get_count_inputs(wildcards, input_type=config["input_type"], lib_types={"GEX", "ATAC"}, info=info)
 	output: os.path.abspath("stamps/cellranger_arc/{sample}.stamp")
 	log: os.path.abspath("logs/cellranger_arc/{sample}.log")
 	threads: 1

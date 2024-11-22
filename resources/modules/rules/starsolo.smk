@@ -7,7 +7,7 @@
 
 # Define rule
 rule starsolo:
-	input: lambda wildcards: get_count_inputs(wildcards, input_type = config["input_type"], lib_types={"GEX"}, info=info)
+	input: lambda wildcards: get_count_inputs(wildcards, input_type=config["input_type"], lib_types={"GEX"}, info=info)
 	output: os.path.abspath("stamps/starsolo/{sample}.stamp")
 	log: os.path.abspath("logs/starsolo/{sample}.log")
 	threads: 1
