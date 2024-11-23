@@ -107,14 +107,6 @@ Folder(s) containing input FASTQ files
 - chromap genome reference and index
 - Cell barcode whitelist
 
-### gex_fb_cellranger: 10X feature barcoding (GEX +/- FB) protocol
-
-**REQUIRED:**
-
-1. Reference files:
-- Cell Ranger genome reference package
-2. Feature reference in CSV format - see [specifications](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref) (if using feature barcode)
-
 ### gex_atac: 10X multiome (GEX + ATAC) protocol
 
 **REQUIRED:**
@@ -136,7 +128,7 @@ Folder(s) containing input FASTQ files
 - Tag sequence (length 15nt) - must begin at first base in read 2 (if leading bases are present, FASTQ files must be trimmed e.g. TotalSeq-B and TotalSeq-C antibodies) 
 - Tag name
 
-### tea_seq: TEA-seq protocol
+### tea_seq: TEA-seq/DOGMA-seq protocol
 
 **REQUIRED:**
 
@@ -149,6 +141,39 @@ Folder(s) containing input FASTQ files
 - Tag sequence (length 15nt) - must begin at first base in read 2 (if leading bases are present, FASTQ files must be trimmed e.g. TotalSeq-B and TotalSeq-C antibodies) 
 - Tag name
 
+### gex_fb_cellranger: 10X GEX +/- feature barcoding protocol
+
+**REQUIRED:**
+
+1. Reference files:
+- Cell Ranger genome reference package
+2. Feature reference in CSV format - see [specifications](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref) (if using feature barcoding)
+
+### atac_cellranger: 10X ATAC only protocol
+
+**REQUIRED:**
+
+1. Reference files:
+- Cell Ranger genome reference package
+
+### gex_atac_cellranger: 10X multiome (GEX + ATAC) protocol
+
+**REQUIRED:**
+
+1. Reference files:
+- Cell Ranger genome reference package
+
+### tea_seq_cellranger: TEA-seq/DOGMA-seq protocol
+
+**REQUIRED:**
+
+1. Reference files:
+- Cell Ranger genome reference package
+- Cell barcode whitelist (GEX)
+2. Antibody tag list in CSV format with the following required fields (without headers):
+- Tag sequence (length 15nt) - must begin at first base in read 2 (if leading bases are present, FASTQ files must be trimmed e.g. TotalSeq-B and TotalSeq-C antibodies)
+- Tag name
+
 # Output
 Output directory will be created in specified location with subfolders containing the output of each software tool specified in the module.
 
@@ -157,10 +182,13 @@ Output directory will be created in specified location with subfolders containin
 ## Available modules
 - gex
 - atac
-- gex_fb_cellranger
 - gex_atac
 - cite_seq
 - tea_seq
+- gex_fb_cellranger
+- atac_cellranger
+- gex_atac_cellranger
+- tea_seq_cellranger
 
 ## Adding new module
 1. Add entry to module rule specifications file **config/modules.yaml** with module name and list of rule names
