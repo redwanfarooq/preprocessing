@@ -14,29 +14,48 @@
 # Options:
 #   gex: GEX only protocol
 #     Additional required configuration:
+#       - 'starsolo_reference' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
 #   atac: ATAC only protocol
 #     Additional required configuration:
+#       - 'chromap_reference' (reference files)
+#       - 'chromap_index' (reference files)
 #       - 'atac_barcode_whitelist' (reference files)
-#   gex_fb_cellranger: 10X feature barcoding (GEX +/- FB) protocol
-#     Additional required configuration:
-#     - 'features' (metadata files) if using FB
 #   gex_atac: 10X multiome (GEX + ATAC) protocol
 #     Additional required configuration:
+#       - 'starsolo_reference' (reference files)
+#       - 'chromap_reference' (reference files)
+#       - 'chromap_index' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'atac_barcode_whitelist' (reference files)
 #   cite_seq: CITE-seq protocol
 #     Additional required configuration:
-#       - 'tags' (metadata files)
+#       - 'starsolo_reference' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
-#   tea_seq: TEA-seq protocol
-#     Additional required configuration:
 #       - 'tags' (metadata files)
+#   tea_seq: TEA-seq/DOGMA-seq protocol
+#     Additional required configuration:
+#       - 'starsolo_reference' (reference files)
+#       - 'chromap_reference' (reference files)
+#       - 'chromap_index' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'atac_barcode_whitelist' (reference files)
-#   gex_fb: 10X feature barcoding (GEX + FB) protocol
+#       - 'tags' (metadata files)
+#   gex_fb_cellranger: 10X GEX +/- feature barcoding protocol
 #     Additional required configuration:
-#     - 'features' (metadata files)
+#       - 'cellranger_reference' (reference files)
+#       - 'features' (metadata files) if using feature barcoding
+#   atac_cellranger: 10X ATAC only protocol
+#     Additional required configuration:
+#       - 'cellranger_reference' (reference files)
+#   gex_atac_cellranger: 10X multiome (GEX + ATAC) protocol
+#     Additional required configuration:
+#       - 'cellranger_reference' (reference files)
+#   tea_seq_cellranger: TEA-seq/DOGMA-seq protocol
+#     Additional required configuration:
+#       - 'cellranger_reference' (reference files)
+#       - 'gex_barcode_whitelist' (reference files)
+#       - 'tags' (metadata files)
 module: atac
 
 # --------------------------------------------------
