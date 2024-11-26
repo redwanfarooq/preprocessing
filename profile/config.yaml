@@ -59,6 +59,7 @@ set-threads:
   bcl2fastq: 16
   trimfastq: 16
   cellranger: 48
+  cellranger_atac: 48
   cellranger_arc: 48
   starsolo: 16
   chromap: 16
@@ -95,6 +96,9 @@ set-resources:
     mem: 5GiB
     runtime: 1h
   cellranger:
+    mem: 250GiB
+    runtime: 6h
+  cellranger_atac:
     mem: 250GiB
     runtime: 6h
   cellranger_arc:

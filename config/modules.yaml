@@ -8,34 +8,23 @@
 # --------------------------------------------------
 # Available pipeline module names and lists of rule
 # names (as per *.smk file names) in each module
-tea_seq:
+gex:
   - bcl2fastq
   - trimfastq
   - fastqc
   - multiqc
   - count_reads
   - starsolo
+  - barcounter
+  - mapping_qc
+atac:
+  - bcl2fastq
+  - trimfastq
+  - fastqc
+  - multiqc
+  - count_reads
   - chromap
   - macs2
-  - barcounter
-  - mapping_qc
-tea_seq_cellranger_arc:
-  - bcl2fastq
-  - trimfastq
-  - fastqc
-  - multiqc
-  - count_reads
-  - cellranger_arc
-  - barcounter
-  - mapping_qc
-cite_seq:
-  - bcl2fastq
-  - trimfastq
-  - fastqc
-  - multiqc
-  - count_reads
-  - starsolo
-  - barcounter
   - mapping_qc
 gex_atac:
   - bcl2fastq
@@ -47,17 +36,53 @@ gex_atac:
   - chromap
   - macs2
   - mapping_qc
-gex_atac_cellranger_arc:
+cite_seq:
   - bcl2fastq
   - trimfastq
   - fastqc
   - multiqc
   - count_reads
-  - cellranger_arc
-gex_fb:
+  - starsolo
+  - barcounter
+  - mapping_qc
+tea_seq:
+  - bcl2fastq
+  - trimfastq
+  - fastqc
+  - multiqc
+  - count_reads
+  - starsolo
+  - chromap
+  - macs2
+  - barcounter
+  - mapping_qc
+gex_fb_cellranger:
   - bcl2fastq
   - trimfastq
   - fastqc
   - multiqc
   - count_reads
   - cellranger
+atac_cellranger:
+  - bcl2fastq
+  - trimfastq
+  - fastqc
+  - multiqc
+  - count_reads
+  - cellranger_atac
+gex_atac_cellranger:
+  - bcl2fastq
+  - trimfastq
+  - fastqc
+  - multiqc
+  - count_reads
+  - cellranger_arc
+tea_seq_cellranger:
+  - bcl2fastq
+  - trimfastq
+  - fastqc
+  - multiqc
+  - count_reads
+  - cellranger_arc
+  - barcounter
+  - mapping_qc
