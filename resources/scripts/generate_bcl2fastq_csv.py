@@ -102,6 +102,10 @@ def _main(opt: dict) -> None:
         else None
     )
 
+    # Reverse complement literal i5 index sequence if required
+    if "sample_index2" in md.columns and opt["--reversecomplement"]:
+        md["sample_index2"] = md.sample_index2.apply(_reverse_complement)
+
     # Add lane and unique library ID; create a row for each lane if not * and more than one specified
     md = (
         md.assign(
@@ -139,6 +143,11 @@ def _get_index_kit(index_names: set[str], index_kits: set[IndexKit]) -> IndexKit
     return None
 
 
+def _reverse_complement(seq: str) -> str:
+    assert set(seq).issubset("ATCG"), "Invalid bases detected in sequence."
+    return seq.translate(str.maketrans("ATCG", "TAGC"))[::-1]
+
+
 def generate_sample_sheet(
     df: pd.DataFrame,
     index_kits: set[IndexKit] | None,
@@ -169,6 +178,8 @@ def generate_sample_sheet(
                 "index": df.sample_index.tolist(),
             }
         )
+        if "sample_index2" in df.columns:
+            out["index2"] = df.sample_index2.tolist()
     else:
         if index_kit.index_type == "dual":
             out = pd.DataFrame(

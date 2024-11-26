@@ -95,10 +95,12 @@ input_type: bcl
 # Runs summary table in table in delimited file format (e.g. TSV, CSV)
 # Required fields:
 #   run: run folder name
-#   lib_type: library type
+#   lib_type: library type (options: GEX, ATAC, ADT, HTO, CRISPR)
 #   sample_id: unique sample ID
-#   sample_index: EITHER index name OR i7 index sequence - only required if input type is BCL
-#   lane: EITHER lane number OR * (for all lanes) - only required if input type is BCL
+#   sample_index: EITHER index name OR literal i7 index sequence - only required if input type is BCL
+#   lane: EITHER lane number(s) (separated with spaces if more than one lane used) OR * (for all lanes) - only required if input type is BCL
+# Optional fields:
+#   sample_index2: literal i5 index sequence (as per forward strand workflow, additionally set 'reverse_complement' to True if sequencer workflow reads i5 index in reverse complement)
 runs: runs.tsv
 
 # OPTIONAL
@@ -125,7 +127,7 @@ features: cellranger/features.csv
 # If 'dual_index_kits' and 'single_index_kits' not
 # provided, index name parsing will not be performed
 # and all sample indexes in runs table will be
-# interpreted as literal i7 index sequences
+# interpreted as literal index sequences
 dual_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
@@ -152,8 +154,9 @@ single_index_kits:
 # If 'reverse_complement' not provided, defaults to
 # False; set to True if sequencer workflow reads i5
 # index in reverse complement e.g.
-#   NovaSeq6000 with v1.0 reagent kits
-#   iSeq100
+#   NovaSeq X
+#   NovaSeq 6000 with v1.0 reagent kits
+#   iSeq 100
 #   MiniSeq with standard reagent kits
 #   NextSeq
 #   HiSeq X/4000/3000
