@@ -8,8 +8,9 @@ Requires:
     run: run folder name
     lib_type: library type
     sample_id: sample ID
-    sample_index: EITHER index set name OR i7 index sequence
+    sample_index: EITHER index set name OR literal i7 index sequence
     lane: EITHER lane number OR * (for all lanes)
+    sample_index2: literal i5 index sequence (if dual indexing used and sample_index is literal i7 index sequence)
 Optional:
 - Index kit CSV files with the following fields:
     index_name: index set name (e.g. SI-TT-A1); must be first field
