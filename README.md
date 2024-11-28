@@ -64,7 +64,7 @@ Pipeline requires the following input files/folders:
 **REQUIRED:**
 
 1. Folder(s) containing input BCL files
-- One folder for each Illumina sequencing run with standard directory structure (***RunInfo.xml** must be present at top level) 
+- One folder for each Illumina sequencing run with standard directory structure (**RunInfo.xml** must be present at top level) 
 - Folders should ideally be named according to default convention for the system e.g. **YYYYMMDD_InstrumentID_RunNumber_FlowCellID**, but any folder naming convention ending in an underscore followed by a unique ID will suffice
 
 *or*
