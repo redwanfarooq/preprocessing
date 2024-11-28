@@ -103,8 +103,7 @@ def _main(opt: dict) -> None:
         shutil.copy(src=CONFIG, dst=os.path.join(OUTPUT_DIR, ".pipeline"))
         shutil.copy(src="VERSION", dst=os.path.join(OUTPUT_DIR, ".pipeline"))
         for f in METADATA:
-            if os.path.exists(f):
-                shutil.copy(src=f, dst=os.path.join(OUTPUT_DIR, ".pipeline"))
+            shutil.copy(src=f, dst=os.path.join(OUTPUT_DIR, ".pipeline"))
         if os.path.exists("logs"):
             shutil.copytree(
                 src="logs",
@@ -187,7 +186,7 @@ def _get_cmd(update: bool = False) -> list[str]:
 
 
 def _get_hash(options: dict, *args):
-    x = [_file_to_str(_) if os.path.isfile(_) else "" for _ in args] if args else []
+    x = [_file_to_str(_) for _ in args] if args else []
     x.append(yaml.dump(options, sort_keys=True))
     return hashlib.md5("".join(x).encode()).hexdigest()
 
@@ -224,7 +223,9 @@ with open(file=CONFIG, mode="r", encoding="UTF-8") as file:
     except KeyError as err:
         logger.exception("{} not specified in {}", err, file.name)
         raise KeyError from err
-METADATA = [_ for _ in [INPUT_TABLE, TAGS, FEATURES] if _ is not None]
+METADATA = [
+    _ for _ in [INPUT_TABLE, TAGS, FEATURES] if _ is not None and os.path.isfile(_)
+]
 
 with open(file="config/modules.yaml", mode="r", encoding="UTF-8") as file:
     try:
