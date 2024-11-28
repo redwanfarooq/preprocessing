@@ -112,7 +112,9 @@ def _main(opt: dict) -> None:
     # Add lane and unique library ID; create a row for each lane if not * and more than one specified
     md = (
         md.assign(
-            lane=lambda x: ["" if lane == "*" else lane.split() for lane in x.lane],
+            lane=lambda x: [
+                "" if lane == "*" else str(lane).split() for lane in x.lane
+            ],
             lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
         )
         .explode("lane")
