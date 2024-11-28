@@ -195,20 +195,20 @@ bcl2fastq_args: >-
 #   --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
 #   --soloUMIfiltering MultiGeneUMI_CR
 #   --soloUMIdedup 1MM_CR  
-# chromap_args: >- # remove --barcode-translate flag if not 10X multiome (GEX + ATAC) protocol
-#   --preset atac
-#   --read-format bc:0:-1:-
-# --barcode-translate /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_translation.tsv
-# macs2_args: >-
-#   -f BED
-#   -g hs
-#   --nomodel
-#   --nolambda
-#   --extsize 200
-#   --shift -100
-#   --max-gap 0
-#   --keep-dup all
-#   --call-summits
+chromap_args: >- # remove --barcode-translate flag if not 10X multiome (GEX + ATAC) protocol
+  --preset atac
+  --read-format bc:0:-1:-
+#  --barcode-translate /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_translation.tsv
+macs2_args: >-
+  -f BED
+  -g hs
+  --nomodel
+  --nolambda
+  --extsize 200
+  --shift -100
+  --max-gap 0
+  --keep-dup all
+  --call-summits
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
 
