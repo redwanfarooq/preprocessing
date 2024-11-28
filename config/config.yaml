@@ -117,7 +117,7 @@ runs: runs.tsv
 # REQUIRED
 # Cell Ranger/STARsolo/chromap genome reference package
 # cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
-cellranger_reference: /databank/10x-rangers/refdata-cellranger-atac-GRCh38-2020-A-2.0.0 # Cell Ranger ATAC
+# cellranger_reference: /databank/10x-rangers/refdata-cellranger-atac-GRCh38-2020-A-2.0.0 # Cell Ranger ATAC
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
 # starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
 chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
