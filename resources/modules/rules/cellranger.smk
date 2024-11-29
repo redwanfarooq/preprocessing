@@ -7,13 +7,13 @@
 
 # Define rule
 rule cellranger:
-	input: lambda wildcards: get_count_inputs(wildcards, input_type = config["input_type"], lib_types={"*"}, info=info)
+	input: lambda wildcards: get_count_inputs(wildcards, input_type=config["input_type"], lib_types={"*"}, info=info)
 	output: os.path.abspath("stamps/cellranger/{sample}.stamp")
 	log: os.path.abspath("logs/cellranger/{sample}.log")
 	threads: 1
 	params: 
 		librarysheet_path = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), "cellranger")),
-		features = os.path.abspath(os.path.join(config.get("metadata_dir", "metadata"), config["features"])),
+		feature_ref_flag = f"--feature-ref={os.path.abspath(os.path.join(config.get('metadata_dir', 'metadata'), config['features']))}" if "features" in config else "",
 		reference = config["cellranger_reference"],
 		custom_flags = config.get("cellranger_args", ""),
 		output_path = os.path.join(config["output_dir"], "cellranger")
@@ -28,8 +28,8 @@ rule cellranger:
 		cellranger count \
 			--id={wildcards.sample} \
 			--libraries={params.librarysheet_path}/{wildcards.sample}.csv \
-			--feature-ref={params.features} \
 			--transcriptome={params.reference} \
+			{params.feature_ref_flag} \
 			--create-bam=true \
 			{params.custom_flags} \
 			--localcores={threads} && \

@@ -12,22 +12,50 @@
 # REQUIRED
 # Pipeline module for library preparation protocol
 # Options:
-#   tea_seq: TEA-seq protocol
+#   gex: GEX only protocol
 #     Additional required configuration:
-#       - 'tags' (metadata files)
+#       - 'starsolo_reference' (reference files)
+#       - 'gex_barcode_whitelist' (reference files)
+#   atac: ATAC only protocol
+#     Additional required configuration:
+#       - 'chromap_reference' (reference files)
+#       - 'chromap_index' (reference files)
+#       - 'atac_barcode_whitelist' (reference files)
+#   gex_atac: 10X multiome (GEX + ATAC) protocol
+#     Additional required configuration:
+#       - 'starsolo_reference' (reference files)
+#       - 'chromap_reference' (reference files)
+#       - 'chromap_index' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'atac_barcode_whitelist' (reference files)
 #   cite_seq: CITE-seq protocol
 #     Additional required configuration:
-#       - 'tags' (metadata files)
+#       - 'starsolo_reference' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
-#   gex_atac: 10X multiome (GEX + ATAC) protocol
+#       - 'tags' (metadata files)
+#   tea_seq: TEA-seq/DOGMA-seq protocol
 #     Additional required configuration:
+#       - 'starsolo_reference' (reference files)
+#       - 'chromap_reference' (reference files)
+#       - 'chromap_index' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'atac_barcode_whitelist' (reference files)
-#   gex_fb: 10X feature barcoding (GEX + FB) protocol
+#       - 'tags' (metadata files)
+#   gex_fb_cellranger: 10X GEX +/- feature barcoding protocol
 #     Additional required configuration:
-#     - 'features' (metadata files)
+#       - 'cellranger_reference' (reference files)
+#       - 'features' (metadata files) if using feature barcoding
+#   atac_cellranger: 10X ATAC only protocol
+#     Additional required configuration:
+#       - 'cellranger_reference' (reference files)
+#   gex_atac_cellranger: 10X multiome (GEX + ATAC) protocol
+#     Additional required configuration:
+#       - 'cellranger_reference' (reference files)
+#   tea_seq_cellranger: TEA-seq/DOGMA-seq protocol
+#     Additional required configuration:
+#       - 'cellranger_reference' (reference files)
+#       - 'gex_barcode_whitelist' (reference files)
+#       - 'tags' (metadata files)
 module: gex_fb
 
 # --------------------------------------------------
@@ -37,7 +65,7 @@ module: gex_fb
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/shared/jurkat_crispri/gex_fb/test_06
+output_dir: /project/fuggerlab/rfarooq/project/jurkat_crispri/data/raw/gex_fb/test_06
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -67,10 +95,12 @@ input_type: bcl
 # Runs summary table in table in delimited file format (e.g. TSV, CSV)
 # Required fields:
 #   run: run folder name
-#   lib_type: library type
+#   lib_type: library type (options: GEX, ATAC, ADT, HTO, CRISPR)
 #   sample_id: unique sample ID
-#   sample_index: EITHER index name OR i7 index sequence - only required if input type is BCL
-#   lane: EITHER lane number OR * (for all lanes) - only required if input type is BCL
+#   sample_index: EITHER index name OR literal i7 index sequence - only required if input type is BCL
+#   lane: EITHER lane number(s) (separated with spaces if more than one lane used) OR * (for all lanes) - only required if input type is BCL
+# Optional fields:
+#   sample_index2: literal i5 index sequence (as per forward strand workflow, additionally set 'reverse_complement' to True if sequencer workflow reads i5 index in reverse complement)
 runs: runs.tsv
 
 # OPTIONAL
@@ -87,6 +117,7 @@ features: cellranger/features_5P_new.csv
 # REQUIRED
 # Cell Ranger/STARsolo/chromap genome reference package
 cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
+# cellranger_reference: /databank/10x-rangers/refdata-cellranger-atac-GRCh38-2020-A-2.0.0 # Cell Ranger ATAC
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
 # starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
 # chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
@@ -96,7 +127,7 @@ cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ran
 # If 'dual_index_kits' and 'single_index_kits' not
 # provided, index name parsing will not be performed
 # and all sample indexes in runs table will be
-# interpreted as literal i7 index sequences
+# interpreted as literal index sequences
 dual_index_kits:
   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
@@ -110,10 +141,11 @@ dual_index_kits:
   # - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # Cell barcode whitelist
 # gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023.txt.gz # 10x 3' v4 (GEX)
-# gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3
+# gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3 (GEX)
 # gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-5pgex-jan-2023.txt.gz # 10x 5' v3 (GEX)
 # gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1.txt.gz # 10x multiome v1 (GEX)
 # atac_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_atac.txt.gz # 10x multiome v1 (ATAC)
+# atac_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-cratac-v1.txt.gz # 10x ATAC v2 (ATAC)
 
 # --------------------------------------------------
 # Script parameters
@@ -122,8 +154,9 @@ dual_index_kits:
 # If 'reverse_complement' not provided, defaults to
 # False; set to True if sequencer workflow reads i5
 # index in reverse complement e.g.
-#   NovaSeq6000 with v1.0 reagent kits
-#   iSeq100
+#   NovaSeq X
+#   NovaSeq 6000 with v1.0 reagent kits
+#   iSeq 100
 #   MiniSeq with standard reagent kits
 #   NextSeq
 #   HiSeq X/4000/3000
@@ -162,7 +195,7 @@ cellranger_args: >-
 #   --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
 #   --soloUMIfiltering MultiGeneUMI_CR
 #   --soloUMIdedup 1MM_CR  
-# chromap_args: >-
+# chromap_args: >- # remove --barcode-translate flag if not 10X multiome (GEX + ATAC) protocol
 #   --preset atac
 #   --read-format bc:8:-1:-
 #   --barcode-translate /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_translation.tsv
@@ -175,6 +208,7 @@ cellranger_args: >-
 #   --shift -100
 #   --max-gap 0
 #   --keep-dup all
+#   --call-summits
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
 
@@ -235,5 +269,5 @@ bases_mask:
 # barcodes in GEX libraries
 # Only required for 10x 3' protocols using TotalSeq-B
 # antibodies
-  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.tsv # 10x 3' v4
-  # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.tsv # 10x 3' v3
+# barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.tsv # 10x 3' v4
+# barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.tsv # 10x 3' v3
