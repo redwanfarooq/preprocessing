@@ -117,7 +117,7 @@ set-resources:
     mem: 50GiB
     runtime: 1h
   barcode_translate:
-    mem: 1GiB
+    mem: 5GiB
     runtime: 1h
   mapping_qc:
     mem: 5GiB

@@ -8,8 +8,9 @@ Requires:
     run: run folder name
     lib_type: library type
     sample_id: sample ID
-    sample_index: EITHER index set name OR i7 index sequence
+    sample_index: EITHER index set name OR literal i7 index sequence
     lane: EITHER lane number OR * (for all lanes)
+    sample_index2: literal i5 index sequence (if dual indexing used and sample_index is literal i7 index sequence)
 Optional:
 - Index kit CSV files with the following fields:
     index_name: index set name (e.g. SI-TT-A1); must be first field
@@ -103,13 +104,17 @@ def _main(opt: dict) -> None:
     )
 
     # Reverse complement literal i5 index sequence if required
-    if "sample_index2" in md.columns and opt["--reversecomplement"]:
-        md["sample_index2"] = md.sample_index2.apply(_reverse_complement)
+    if "sample_index2" in md.columns:
+        md["sample_index2"] = md.sample_index2.fillna("")
+        if opt["--reversecomplement"]:
+            md["sample_index2"] = md.sample_index2.apply(_reverse_complement)
 
     # Add lane and unique library ID; create a row for each lane if not * and more than one specified
     md = (
         md.assign(
-            lane=lambda x: ["" if lane == "*" else lane.split() for lane in x.lane],
+            lane=lambda x: [
+                "" if lane == "*" else str(lane).split() for lane in x.lane
+            ],
             lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
         )
         .explode("lane")
@@ -144,8 +149,10 @@ def _get_index_kit(index_names: set[str], index_kits: set[IndexKit]) -> IndexKit
 
 
 def _reverse_complement(seq: str) -> str:
-    assert set(seq).issubset("ATCG"), "Invalid bases detected in sequence."
-    return seq.translate(str.maketrans("ATCG", "TAGC"))[::-1]
+    if seq != "":
+        assert set(seq).issubset("ATCG"), "Invalid bases detected in sequence."
+        seq = seq.translate(str.maketrans("ATCG", "TAGC"))[::-1]
+    return seq
 
 
 def generate_sample_sheet(
