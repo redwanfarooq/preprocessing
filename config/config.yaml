@@ -105,7 +105,7 @@ runs: runs.tsv
 
 # OPTIONAL
 # BarCounter antibody tag list
-tags: barcounter/tags.csv
+tags: barcounter/tags_totalseq_b.csv
 # Cell Ranger feature reference
 # features: cellranger/features.csv
 
