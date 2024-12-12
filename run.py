@@ -10,6 +10,7 @@ Runs preprocessing pipeline.
 # MODULES
 # ==============================
 import os
+import glob
 import sys
 import shutil
 import hashlib
@@ -102,14 +103,16 @@ def _main(opt: dict) -> None:
         shutil.copy(src=CONFIG, dst=os.path.join(OUTPUT_DIR, ".pipeline"))
         shutil.copy(src="VERSION", dst=os.path.join(OUTPUT_DIR, ".pipeline"))
         for f in METADATA:
-            if os.path.exists(f):
-                shutil.copy(src=f, dst=os.path.join(OUTPUT_DIR, ".pipeline"))
+            shutil.copy(src=f, dst=os.path.join(OUTPUT_DIR, ".pipeline"))
         if os.path.exists("logs"):
             shutil.copytree(
                 src="logs",
                 dst=os.path.join(OUTPUT_DIR, ".pipeline", "logs"),
                 dirs_exist_ok=True,
             )
+        # Clean up cluster logs
+        if glob.glob("sps-*"):
+            os.system("rm -r sps-*")
         logger.success(
             "Pipeline completed successfully; run information saved to {}",
             os.path.join(OUTPUT_DIR, ".pipeline"),
@@ -189,8 +192,10 @@ def _get_hash(options: dict, *args):
 
 
 def _file_to_str(path: os.PathLike) -> str:
-    with open(file=path, mode="r", encoding="UTF-8") as f:
-        return f.read().strip()
+    if os.path.isfile(path):
+        with open(file=path, mode="r", encoding="UTF-8") as f:
+            return f.read().strip()
+    return ""
 
 
 # ==============================
@@ -220,7 +225,9 @@ with open(file=CONFIG, mode="r", encoding="UTF-8") as file:
     except KeyError as err:
         logger.exception("{} not specified in {}", err, file.name)
         raise KeyError from err
-METADATA = [_ for _ in [INPUT_TABLE, TAGS, FEATURES] if _ is not None]
+METADATA = [
+    _ for _ in [INPUT_TABLE, TAGS, FEATURES] if _ is not None and os.path.isfile(_)
+]
 
 with open(file="config/modules.yaml", mode="r", encoding="UTF-8") as file:
     try:

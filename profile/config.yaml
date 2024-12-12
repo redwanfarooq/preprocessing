@@ -59,6 +59,7 @@ set-threads:
   bcl2fastq: 16
   trimfastq: 16
   cellranger: 48
+  cellranger_atac: 48
   cellranger_arc: 48
   starsolo: 16
   chromap: 16
@@ -97,6 +98,9 @@ set-resources:
   cellranger:
     mem: 250GiB
     runtime: 6h
+  cellranger_atac:
+    mem: 250GiB
+    runtime: 6h
   cellranger_arc:
     mem: 250GiB
     runtime: 6h
@@ -113,7 +117,7 @@ set-resources:
     mem: 50GiB
     runtime: 1h
   barcode_translate:
-    mem: 1GiB
+    mem: 5GiB
     runtime: 1h
   mapping_qc:
     mem: 1GiB
