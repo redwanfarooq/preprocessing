@@ -16,6 +16,7 @@ git submodule update --remote preprocessing
     - [docopt >=v0.6](https://github.com/docopt/docopt)
     - [pandas >=v2.0](https://pandas.pydata.org/docs/getting_started/install.html)
     - [loguru >=v0.7](https://github.com/Delgan/loguru)
+    - [h5py >=3.12](https://docs.h5py.org/en/latest/build.html)
 2. Specific modules
     - [bcl2fastq >=v2.20](https://sapac.support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html)
     - [Seqtk >= 1.3](https://github.com/lh3/seqtk)
