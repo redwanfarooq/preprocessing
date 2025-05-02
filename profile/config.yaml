@@ -58,6 +58,7 @@ default-resources:
 set-threads:
   bcl2fastq: 16
   trimfastq: 16
+  linkfastq: 1
   cellranger: 48
   cellranger_atac: 48
   cellranger_arc: 48
@@ -86,6 +87,9 @@ set-resources:
   trimfastq:
     mem: 20GiB
     runtime: 3h
+  linkfastq:
+    mem: 1GiB
+    runtime: 1h
   fastqc:
     mem: 2GiB
     runtime: 1h
