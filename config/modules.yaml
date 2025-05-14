@@ -11,6 +11,7 @@
 gex:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads
@@ -20,6 +21,7 @@ gex:
 atac:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads
@@ -29,6 +31,7 @@ atac:
 gex_atac:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads
@@ -39,6 +42,7 @@ gex_atac:
 cite_seq:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads
@@ -48,6 +52,7 @@ cite_seq:
 tea_seq:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads
@@ -59,6 +64,7 @@ tea_seq:
 gex_fb_cellranger:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads
@@ -66,6 +72,7 @@ gex_fb_cellranger:
 atac_cellranger:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads
@@ -73,6 +80,7 @@ atac_cellranger:
 gex_atac_cellranger:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads
@@ -80,6 +88,7 @@ gex_atac_cellranger:
 tea_seq_cellranger:
   - bcl2fastq
   - trimfastq
+  - linkfastq
   - fastqc
   - multiqc
   - count_reads

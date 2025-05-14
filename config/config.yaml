@@ -227,8 +227,12 @@ bases_mask:
   ADT: Y28n*,I10n*,I10n*,n10Y15n*
   # HTO: Y28n*,I8n*,n*,Y15n*
   # CRISPR: Y28n*,I10n*,I10n*,Y90n*
-# If 'read_trim' not provided, defaults to trimming to 150
-# bases from the 5' end of each read
+# If 'read_trim' not provided, no trimming will be performed
+# and symbolic links to the original FASTQ files will be created
+# in the output directory
+# If 'read_trim' is provided but trimming options for the library
+# type are missing, defaults to trimming to 150 bases from the
+# 5' end of each read
 # 'b' removes the specified number of bases from the 5' end
 # 'e' removes the specified number of bases from the 3' end
 # 'L' trims to the specified number of bases from the 5' end

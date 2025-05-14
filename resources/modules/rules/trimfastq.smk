@@ -31,4 +31,4 @@ rule trimfastq:
 		"""
 
 # Set rule targets
-trimfastq = [f"stamps/trimfastq/{lib}.stamp" for lib in libs] if config["input_type"].lower() == "fastq" else []
+trimfastq = [f"stamps/trimfastq/{lib}.stamp" for lib in libs] if config["input_type"].lower() == "fastq" and "read_trim" in config.keys() else []
