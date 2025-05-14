@@ -65,7 +65,7 @@ module: gex_fb
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/rfarooq/project/jurkat_crispri/data/raw/gex_fb/test_06
+output_dir: /project/fuggerlab/rfarooq/project/ms_snp_crispri/data/raw/gex_fb/cd4_ms17_ms19_stat4
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
