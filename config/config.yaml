@@ -56,7 +56,7 @@
 #       - 'cellranger_reference' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'tags' (metadata files)
-module: gex_fb
+module: gex_fb_cellranger
 
 # --------------------------------------------------
 # Input/output directories
