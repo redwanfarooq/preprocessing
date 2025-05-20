@@ -148,9 +148,8 @@ def _get_cmd(update: bool = False) -> list[str]:
             f"--module={MODULE}",
             "--template=resources/templates/wrapper.template",
         )
-        if "bcl2fastq" in RULES and INPUT_TYPE.lower() == "bcl":
+        if "bcl2fastq" in RULES:
             cmd += _cmd(
-                f"mkdir -p {os.path.join(METADATA_DIR, 'bcl2fastq')} &&",
                 f"{SCRIPTS_DIR}/generate_bcl2fastq_csv.py",
                 f"--md={INPUT_TABLE}",
                 f"--outdir={os.path.join(METADATA_DIR, 'bcl2fastq')}",
@@ -162,7 +161,6 @@ def _get_cmd(update: bool = False) -> list[str]:
             )
         if "cellranger_arc" in RULES:
             cmd += _cmd(
-                f"mkdir -p {os.path.join(METADATA_DIR, 'cellranger_arc')} &&",
                 f"{SCRIPTS_DIR}/generate_cellranger_arc_csv.py",
                 f"--md={INPUT_TABLE}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
@@ -170,7 +168,6 @@ def _get_cmd(update: bool = False) -> list[str]:
             )
         if "cellranger" in RULES:
             cmd += _cmd(
-                f"mkdir -p {os.path.join(METADATA_DIR, 'cellranger')} &&",
                 f"{SCRIPTS_DIR}/generate_cellranger_csv.py",
                 f"--md={INPUT_TABLE}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
@@ -218,7 +215,6 @@ with open(file=CONFIG, mode="r", encoding="UTF-8") as file:
     SINGLE = config.get("single_index_kits", None)
     REVERSE_COMPLEMENT = config.get("reverse_complement", False)
     try:
-        INPUT_TYPE = config["input_type"]
         INPUT_TABLE = os.path.join(METADATA_DIR, config["runs"])
         OUTPUT_DIR = config["output_dir"]
         MODULE = config["module"]

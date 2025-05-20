@@ -77,17 +77,6 @@ output_dir: /project/fuggerlab/rfarooq/project_name/data/raw
 
 
 # --------------------------------------------------
-# Input type
-# --------------------------------------------------
-# REQUIRED
-# File type of pipeline input
-# Options:
-#   bcl: Base call files (Illumina)
-#   fastq: FASTQ files
-input_type: bcl
-
-
-# --------------------------------------------------
 # Metadata files
 # *** RELATIVE paths from 'metadata_dir' ***
 # --------------------------------------------------

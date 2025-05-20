@@ -77,11 +77,12 @@ Folder(s) containing input FASTQ files
 - FASTQ files should be named according to default convention e.g. **SampleID_Sx_Lxxx_Rx_001.fastq.gz**
 2. Runs summary table in delimited file format (e.g. TSV, CSV) with the following required fields (with headers):
 - **run**: run folder name
+- **format**: file type (options: BCL, FASTQ)
 - **lib_type**: library type (options: GEX, ATAC, ADT, HTO, CRISPR)
 - **sample_id**: sample ID
-- **sample_index**: *either* index name *or* literal i7 index sequence - only required if input type is BCL
-- **lane**: *either* lane number(s) (separated with spaces if more than one lane used) *or* * (for all lanes) - only required if input type is BCL
-- **sample_index2**: literal i5 index sequence (if applicable) - only required if input type is BCL, dual indexing used and **sample_index** is literal i7 index sequence
+- **sample_index**: *either* index name *or* literal i7 index sequence - only required if **format** is BCL
+- **lane**: *either* lane number(s) (separated with spaces if more than one lane used) *or* * (for all lanes) - only required if **format** is BCL
+- **sample_index2**: literal i5 index sequence (if applicable) - only required if **format** is BCL, dual indexing used and **sample_index** is literal i7 index sequence
 
 **OPTIONAL:**
 

@@ -7,6 +7,16 @@ import glob
 import xml.etree.ElementTree as ET
 
 
+def _get_fastq_rule(lib: str, libs: str, read_trim: bool) -> str:
+    if libs[lib]["format"].upper() == "BCL":
+        rule = "bcl2fastq"
+    elif libs[lib]["format"].upper() == "FASTQ":
+        rule = "trimfastq" if read_trim else "linkfastq"
+    else:
+        raise ValueError(f"Invalid format '{libs[lib]['format']}' for library '{lib}'.")
+    return rule
+
+
 def parse_info(info: dict) -> dict:
     """
     Parse dictionary of sample/library info.
@@ -92,17 +102,20 @@ def get_bases_mask_flag(
     return f"--use-bases-mask={','.join(mask)}" if mask is not None else ""
 
 
-def get_read_trim_flags(wildcards, read_trim: dict | None, info: dict) -> str:
+def get_read_trim_flags(
+    wildcards, read_trim: dict | None, read: str, info: dict
+) -> str:
     """
     Get read trimming flags for seqtk trimfq.
 
     Arguments:
         ``wildcards``: Snakemake ``wildcards`` object.\n
         ``read_trim``: dictionary of read trimming options with library types as keys.\n
-        ``info``: dictionary of sample/library info.\n
+        ``read``: string specifying read number ('R1', 'R2' or 'R3').\n
+        ``info``: dictionary of sample/library info.
 
     Returns:
-        Dictionary of read trimming flags to be inserted into shell command.
+        Read trimming flags to be inserted into shell command.
     """
     libs = parse_info(info)["libs"]
     read_trim = (
@@ -110,37 +123,32 @@ def get_read_trim_flags(wildcards, read_trim: dict | None, info: dict) -> str:
         if read_trim is not None
         else {}
     )
-    flags = {f"R{x}": "-L 150" for x in range(1, 4)}
-    for read in read_trim.keys():
-        flags[read] = [f"-{k} {v}" for k, v in read_trim[read].items()].join(" ")
+    flags = (
+        " ".join([f"-{k} {v}" for k, v in read_trim[read].items()])
+        if read in read_trim.keys()
+        else "-L 150"
+    )
     return flags
 
 
 def get_count_inputs(
-    wildcards, input_type: str, lib_types: set[str], info: dict
+    wildcards, lib_types: set[str], info: dict, read_trim: bool
 ) -> list[str]:
     """
-    Get path to bcl2fastq or trimfastq stamp files for specific library type(s).
+    Get path to FASTQ stamp files for specific library type(s).
 
     Arguments:
         ``wildcards``: Snakemake ``wildcards`` object.\n
-        ``input_type``: string specifying input type ('bcl' or 'fastq').\n
         ``lib_types``: set of library types (use * to match any library type).\n
-        ``info``: dictionary of sample/library info.
+        ``info``: dictionary of sample/library info.\n
+        ``read_trim``: boolean indicating whether FASTQ read trimming is enabled.
 
     Returns:
-        List of paths to bcl2fastq or trimfastq stamp files, depending on input type.
+        List of paths to FASTQ stamp files.
     """
-    match input_type.lower():
-        case "bcl":
-            rule = "bcl2fastq"
-        case "fastq":
-            rule = "trimfastq"
-        case _:
-            raise ValueError(f"Invalid input type: {input_type}")
     libs = parse_info(info)["libs"]
     inputs = [
-        f"stamps/{rule}/{lib}.stamp"
+        f"stamps/{_get_fastq_rule(lib, libs, read_trim)}/{lib}.stamp"
         for lib in info[wildcards.sample].keys()
         if any(x in {libs[lib]["lib_type"], "*"} for x in lib_types)
     ]
@@ -204,25 +212,22 @@ def get_count_fastqdirs(
     return ",".join(dirs)
 
 
-def get_fastqc_inputs(wildcards, input_type: str) -> str:
+def get_fastqc_inputs(wildcards, info: dict, read_trim: bool) -> str:
     """
-    Get path to bcl2fastq or trimfastq stamp file.
+    Get path to FASTQ stamp file for a specific library.
 
     Arguments:
         ``wildcards``: Snakemake ``wildcards`` object.\n
-        ``input_type``: string specifying input type ('bcl' or 'fastq').\n
+        ``info``: dictionary of sample/library info.\n
+        ``read_trim``: boolean indicating whether FASTQ read trimming is enabled.
 
     Returns:
-        Path to bcl2fastq or trimfastq stamp file, depending on input type.
+        Path to FASTQ stamp file.
     """
-    match input_type.lower():
-        case "bcl":
-            path = "stamps/bcl2fastq/{lib}.stamp"
-        case "fastq":
-            path = "stamps/trimfastq/{lib}.stamp"
-        case _:
-            raise ValueError(f"Invalid input type: {input_type}")
-    return os.path.abspath(path.format(lib=wildcards.lib))
+    libs = parse_info(info)["libs"]
+    return os.path.abspath(
+        f"stamps/{_get_fastq_rule(wildcards.lib, libs, read_trim)}/{wildcards.lib}.stamp"
+    )
 
 
 def get_fastqc_fastqs(wildcards, info: dict, output_dir: str) -> str:
