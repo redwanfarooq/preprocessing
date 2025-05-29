@@ -159,6 +159,13 @@ def _get_cmd(update: bool = False) -> list[str]:
                 ),
                 _get_reverse_complement_flag(reverse_complement=REVERSE_COMPLEMENT),
             )
+        if "cellranger" in RULES:
+            cmd += _cmd(
+                f"{SCRIPTS_DIR}/generate_cellranger_csv.py",
+                f"--md={INPUT_TABLE}",
+                f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
+                f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
+            )
         if "cellranger_arc" in RULES:
             cmd += _cmd(
                 f"{SCRIPTS_DIR}/generate_cellranger_arc_csv.py",
@@ -166,12 +173,16 @@ def _get_cmd(update: bool = False) -> list[str]:
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger_arc')}",
             )
-        if "cellranger" in RULES:
+        if "cellranger_multi" in RULES:
             cmd += _cmd(
-                f"{SCRIPTS_DIR}/generate_cellranger_csv.py",
+                f"{SCRIPTS_DIR}/generate_cellranger_multi_csv.py",
                 f"--md={INPUT_TABLE}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
+                f"--features={FEATURES}" if FEATURES else "",
+                f"--hashes={HASHES}" if HASHES else "",
+                f"--transcriptome={TRANSCRIPTOME}" if TRANSCRIPTOME else "",
+                f"--vdj={VDJ}" if VDJ else "",
             )
         cmd += _cmd(
             f"{SCRIPTS_DIR}/generate_info_yaml.py",
@@ -204,16 +215,25 @@ with open(file=CONFIG, mode="r", encoding="UTF-8") as file:
     SCRIPTS_DIR = config.get("scripts_dir", "resources/scripts")
     METADATA_DIR = config.get("metadata_dir", "metadata")
     TAGS = (
-        os.path.join(METADATA_DIR, config["tags"]) if config.get("tags", None) else None
+        os.path.join(METADATA_DIR, config["tags"])
+        if config.get("tags", None)
+        else None
     )
     FEATURES = (
         os.path.join(METADATA_DIR, config["features"])
         if config.get("features", None)
         else None
     )
+    HASHES = (
+        os.path.join(METADATA_DIR, config["hashes"])
+        if config.get("hashes", None)
+        else None
+    )
     DUAL = config.get("dual_index_kits", None)
     SINGLE = config.get("single_index_kits", None)
     REVERSE_COMPLEMENT = config.get("reverse_complement", False)
+    TRANSCRIPTOME = config.get("cellranger_reference", None)
+    VDJ = config.get("cellranger_vdj_reference", None)
     try:
         INPUT_TABLE = os.path.join(METADATA_DIR, config["runs"])
         OUTPUT_DIR = config["output_dir"]
@@ -222,7 +242,7 @@ with open(file=CONFIG, mode="r", encoding="UTF-8") as file:
         logger.exception("{} not specified in {}", err, file.name)
         raise KeyError from err
 METADATA = [
-    _ for _ in [INPUT_TABLE, TAGS, FEATURES] if _ is not None and os.path.isfile(_)
+    _ for _ in [INPUT_TABLE, TAGS, FEATURES, HASHES] if _ is not None and os.path.isfile(_)
 ]
 
 with open(file="config/modules.yaml", mode="r", encoding="UTF-8") as file:

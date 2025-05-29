@@ -51,11 +51,20 @@
 #   gex_atac_cellranger: 10X multiome (GEX + ATAC) protocol
 #     Additional required configuration:
 #       - 'cellranger_reference' (reference files)
+#   vdj_cellranger: 10X immune profiling protocol
+#     Additional required configuration:
+#       - 'cellranger_vdj_reference' (reference files)
 #   tea_seq_cellranger: TEA-seq/DOGMA-seq protocol
 #     Additional required configuration:
 #       - 'cellranger_reference' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'tags' (metadata files)
+#   gex_fb_vdj_cellranger: 10X GEX +/- feature barcoding +/- immune profiling protocol (with optional sample hashing)
+#     Additional required configuration:
+#       - 'cellranger_reference' (reference files)
+#       - 'cellranger_vdj_reference' (reference files) if using immune profiling
+#       - 'features' (metadata files) if using feature barcoding
+#       - 'hashes' (metadata files) if using sample hashing
 module: 
 
 # --------------------------------------------------
@@ -97,6 +106,8 @@ runs: runs.tsv
 tags: barcounter/tags.csv
 # Cell Ranger feature reference
 features: cellranger/features.csv
+# Cell Ranger sample hashing reference
+hashes: cellranger/hashes.csv
 
 
 # --------------------------------------------------
@@ -108,6 +119,7 @@ features: cellranger/features.csv
 # cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-atac-GRCh38-2020-A-2.0.0 # Cell Ranger ATAC
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
+# cellranger_vdj_reference: /databank/10x-rangers/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.1.0 # Cell Ranger VDJ
 # starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
 # chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
 # chromap_index: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/chromap/index # chromap
@@ -167,6 +179,8 @@ bcl2fastq_args: >-
 cellranger_args: >-
   --nosecondary
   --disable-ui
+cellranger_vdj_args: >-
+  --chain auto
 starsolo_args: >-
   --sysShell /bin/bash
   --readFilesCommand zcat

@@ -17,7 +17,7 @@ rule cellranger:
 		reference = config["cellranger_reference"],
 		custom_flags = config.get("cellranger_args", ""),
 		output_path = os.path.join(config["output_dir"], "cellranger")
-	envmodules: "cellranger/8.0.1"
+	envmodules: "cellranger/9.0.0"
 	message: "Making GEX and FB count matrix for {wildcards.sample}"
 	shell:
 		"""
