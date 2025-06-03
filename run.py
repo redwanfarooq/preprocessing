@@ -17,6 +17,7 @@ import hashlib
 from datetime import datetime
 import yaml
 import docopt
+import pandas as pd
 from loguru import logger
 
 
@@ -148,7 +149,7 @@ def _get_cmd(update: bool = False) -> list[str]:
             f"--module={MODULE}",
             "--template=resources/templates/wrapper.template",
         )
-        if "bcl2fastq" in RULES:
+        if "bcl2fastq" in RULES and "BCL" in INPUT_FORMATS:
             cmd += _cmd(
                 f"{SCRIPTS_DIR}/generate_bcl2fastq_csv.py",
                 f"--md={INPUT_TABLE}",
@@ -236,11 +237,20 @@ with open(file=CONFIG, mode="r", encoding="UTF-8") as file:
     VDJ = config.get("cellranger_vdj_reference", None)
     try:
         INPUT_TABLE = os.path.join(METADATA_DIR, config["runs"])
+        df = pd.read_csv(INPUT_TABLE, header=0, sep=None, engine="python")
+        assert "format" in df.columns
+        INPUT_FORMATS = set(df.format.dropna().str.upper().unique())
         OUTPUT_DIR = config["output_dir"]
         MODULE = config["module"]
     except KeyError as err:
         logger.exception("{} not specified in {}", err, file.name)
         raise KeyError from err
+    except FileNotFoundError as err:
+        logger.exception("Input table not found: {}", INPUT_TABLE)
+        raise FileNotFoundError from err
+    except AssertionError as err:
+        logger.exception("Input table does not contain 'format' column: {}", INPUT_TABLE)
+        raise AssertionError from err
 METADATA = [
     _ for _ in [INPUT_TABLE, TAGS, FEATURES, HASHES] if _ is not None and os.path.isfile(_)
 ]
