@@ -264,7 +264,7 @@ bases_mask:
 #       L: 28
 #     R2:
 #       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#       L: 15
+#       L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
 #   CRISPR:
 #     R1:
 #       L: 28
