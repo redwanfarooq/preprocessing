@@ -65,16 +65,16 @@
 #       - 'cellranger_vdj_reference' (reference files) if using immune profiling
 #       - 'features' (metadata files) if using feature barcoding
 #       - 'hashes' (metadata files) if using sample hashing
-module: 
+module: gex_fb_vdj_cellranger
 
 # --------------------------------------------------
 # Input/output directories
 # --------------------------------------------------
 # REQUIRED
 # Raw sequencing runs directory
-run_dir: /project/fuggerlab/shared/runs
+run_dir: /project/fuggerlab/shared/fastq/ms_pregnancy_multiome
 # Pipeline output directory
-output_dir: /project/fuggerlab/rfarooq/project_name/data/raw
+output_dir: /project/fuggerlab/rfarooq/ms_pregnancy_multiome/data/raw
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -103,7 +103,7 @@ runs: runs.tsv
 
 # OPTIONAL
 # BarCounter antibody tag list
-tags: barcounter/tags.csv
+# tags: barcounter/tags.csv
 # Cell Ranger feature reference
 features: cellranger/features.csv
 # Cell Ranger sample hashing reference
@@ -116,10 +116,10 @@ hashes: cellranger/hashes.csv
 # --------------------------------------------------
 # REQUIRED
 # Cell Ranger/STARsolo/chromap genome reference package
-# cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
+cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-atac-GRCh38-2020-A-2.0.0 # Cell Ranger ATAC
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
-# cellranger_vdj_reference: /databank/10x-rangers/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.1.0 # Cell Ranger VDJ
+cellranger_vdj_reference: /databank/10x-rangers/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.1.0 # Cell Ranger VDJ
 # starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
 # chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
 # chromap_index: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/chromap/index # chromap
@@ -129,17 +129,17 @@ hashes: cellranger/hashes.csv
 # provided, index name parsing will not be performed
 # and all sample indexes in runs table will be
 # interpreted as literal index sequences
-dual_index_kits:
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
-single_index_kits:
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
-  - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
+# dual_index_kits:
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TT_Set_A.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TS_Set_A.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_TN_Set_A.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NT_Set_A.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Dual_Index_Kit_NN_Set_A.csv
+# single_index_kits:
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_T_Set_A.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/10X_Single_Index_Kit_N_Set_A.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_D.csv
+#   - /project/fuggerlab/rfarooq/ref/sample_index_kits/Illumina_Single_Index_Kit_RPI.csv
 # Cell barcode whitelist
 # gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023.txt.gz # 10x 3' v4 (GEX)
 # gex_barcode_whitelist: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018.txt.gz # 10x 3' v3 (GEX)
@@ -161,7 +161,7 @@ single_index_kits:
 #   MiniSeq with standard reagent kits
 #   NextSeq
 #   HiSeq X/4000/3000
-reverse_complement: true
+# reverse_complement: true
 
 
 # --------------------------------------------------
@@ -169,49 +169,48 @@ reverse_complement: true
 # --------------------------------------------------
 # OPTIONAL
 # If not specified, defaults to ''
-bcl2fastq_args: >-
-  --create-fastq-for-index-reads
-  --minimum-trimmed-read-length=6
-  --mask-short-adapter-reads=6
-  --ignore-missing-positions
-  --ignore-missing-filter
-  --ignore-missing-bcls
+# bcl2fastq_args: >-
+#   --create-fastq-for-index-reads
+#   --minimum-trimmed-read-length=6
+#   --mask-short-adapter-reads=6
+#   --ignore-missing-positions
+#   --ignore-missing-filter
+#   --ignore-missing-bcls
 cellranger_args: >-
-  --nosecondary
   --disable-ui
-cellranger_vdj_args: >-
-  --chain auto
-starsolo_args: >-
-  --sysShell /bin/bash
-  --readFilesCommand zcat
-  --clipAdapterType CellRanger4
-  --outFilterScoreMin 30
-  --outSAMtype BAM SortedByCoordinate
-  --soloType CB_UMI_Simple
-  --soloCellFilter None
-  --soloFeatures GeneFull_Ex50pAS
-  --soloStrand Forward
-  --soloCBstart 1
-  --soloCBlen 16
-  --soloUMIstart 17
-  --soloUMIlen 12
-  --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
-  --soloUMIfiltering MultiGeneUMI_CR
-  --soloUMIdedup 1MM_CR  
-chromap_args: >- # remove --barcode-translate flag if not 10X multiome (GEX + ATAC) protocol
-  --preset atac
-  --read-format bc:8:-1:-
-  --barcode-translate /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_translation.tsv
-macs2_args: >-
-  -f BED
-  -g hs
-  --nomodel
-  --nolambda
-  --extsize 200
-  --shift -100
-  --max-gap 0
-  --keep-dup all
-  --call-summits
+# cellranger_vdj_args: >-
+#   --chain auto
+# starsolo_args: >-
+#   --sysShell /bin/bash
+#   --readFilesCommand zcat
+#   --clipAdapterType CellRanger4
+#   --outFilterScoreMin 30
+#   --outSAMtype BAM SortedByCoordinate
+#   --soloType CB_UMI_Simple
+#   --soloCellFilter None
+#   --soloFeatures GeneFull_Ex50pAS
+#   --soloStrand Forward
+#   --soloCBstart 1
+#   --soloCBlen 16
+#   --soloUMIstart 17
+#   --soloUMIlen 12
+#   --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
+#   --soloUMIfiltering MultiGeneUMI_CR
+#   --soloUMIdedup 1MM_CR  
+# chromap_args: >- # remove --barcode-translate flag if not 10X multiome (GEX + ATAC) protocol
+#   --preset atac
+#   --read-format bc:8:-1:-
+#   --barcode-translate /project/fuggerlab/rfarooq/ref/barcode_whitelists/737K-arc-v1_translation.tsv
+# macs2_args: >-
+#   -f BED
+#   -g hs
+#   --nomodel
+#   --nolambda
+#   --extsize 200
+#   --shift -100
+#   --max-gap 0
+#   --keep-dup all
+#   --call-summits
 fastqc_args: --noextract
 multiqc_args: -zfd --dirs-depth=1 --interactive
 
@@ -223,12 +222,12 @@ multiqc_args: -zfd --dirs-depth=1 --interactive
 # If 'bases_mask' not provided, defaults to read
 # type/length specified in RunInfo.xml file in
 # Illumina run folder
-bases_mask:
-  GEX: Y28n*,I10n*,I10n*,Y90n*
-  ATAC: Y50n*,I8n*,Y16n*,Y50n*
-  ADT: Y28n*,I6n*,n*,Y15n*
-  HTO: Y28n*,I8n*,n*,Y15n*
-  CRISPR: Y28n*,I10n*,I10n*,Y90n*
+# bases_mask:
+#   GEX: Y28n*,I10n*,I10n*,Y90n*
+#   ATAC: Y50n*,I8n*,Y16n*,Y50n*
+#   ADT: Y28n*,I6n*,n*,Y15n*
+#   HTO: Y28n*,I8n*,n*,Y15n*
+#   CRISPR: Y28n*,I10n*,I10n*,Y90n*
 # If 'read_trim' not provided, no trimming will be performed
 # and symbolic links to the original FASTQ files will be created
 # in the output directory
@@ -239,47 +238,47 @@ bases_mask:
 # 'e' removes the specified number of bases from the 3' end
 # 'L' trims to the specified number of bases from the 5' end
 # All options are CASE-SENSITIVE
-# read_trim:
-#   GEX:
-#     R1:
-#       L: 28
-#     R2:
-#       L: 90
-#   ATAC:
-#     R1:
-#       L: 50
-#     R2:
-#       b: 8 # enable for read 2 length 24 bases (i.e. no dark cycles)
-#       L: 16
-#     R3:
-#       L: 50
-#   ADT:
-#     R1:
-#       L: 28
-#     R2:
-#       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#       L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#   HTO:
-#     R1:
-#       L: 28
-#     R2:
-#       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#       L: 15
-#   CRISPR:
-#     R1:
-#       L: 28
-#     R2:
-#       L: 90
-#   BCR:
-#     R1:
-#       L: 150
-#     R2:
-#       L: 150
-#   TCR:
-#     R1:
-#       L: 150
-#     R2:
-#       L: 150
+read_trim:
+  GEX:
+    R1:
+      L: 26
+    R2:
+      L: 91
+  # ATAC:
+  #   R1:
+  #     L: 50
+  #   R2:
+  #     b: 8 # enable for read 2 length 24 bases (i.e. no dark cycles)
+  #     L: 16
+  #   R3:
+  #     L: 50
+  ADT:
+    R1:
+      L: 26
+    R2:
+      # b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
+      L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
+  HTO:
+    R1:
+      L: 26
+    R2:
+      # b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
+      L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
+  # CRISPR:
+  #   R1:
+  #     L: 28
+  #   R2:
+  #     L: 90
+  BCR:
+    R1:
+      L: 150
+    R2:
+      L: 150
+  TCR:
+    R1:
+      L: 150
+    R2:
+      L: 150
 # If 'barcode_translate' not provided, barcodes
 # for ADT/HTO libraries in count matrices generated using
 # BarCounter will not be translated to match corresponding
