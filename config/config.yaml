@@ -258,7 +258,7 @@ bases_mask:
 #       L: 28
 #     R2:
 #       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#       L: 15
+#       L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
 #   HTO:
 #     R1:
 #       L: 28
@@ -270,6 +270,16 @@ bases_mask:
 #       L: 28
 #     R2:
 #       L: 90
+#   BCR:
+#     R1:
+#       L: 150
+#     R2:
+#       L: 150
+#   TCR:
+#     R1:
+#       L: 150
+#     R2:
+#       L: 150
 # If 'barcode_translate' not provided, barcodes
 # for ADT/HTO libraries in count matrices generated using
 # BarCounter will not be translated to match corresponding
