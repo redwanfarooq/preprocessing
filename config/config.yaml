@@ -74,7 +74,7 @@ module: gex_fb_vdj_cellranger
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/fastq/ms_pregnancy_multiome
 # Pipeline output directory
-output_dir: /project/fuggerlab/rfarooq/ms_pregnancy_multiome/data/raw
+output_dir: /project/fuggerlab/rfarooq/project/ms_pregnancy_multiome/data/raw
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
