@@ -180,8 +180,8 @@ def _get_cmd(update: bool = False) -> list[str]:
                 f"--md={INPUT_TABLE}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
-                f"--features={FEATURES}" if FEATURES else "",
-                f"--hashes={HASHES}" if HASHES else "",
+                f"--features={os.path.abspath(FEATURES)}" if FEATURES else "",
+                f"--hashes={os.path.abspath(HASHES)}" if HASHES else "",
                 f"--transcriptome={TRANSCRIPTOME}" if TRANSCRIPTOME else "",
                 f"--vdj={VDJ}" if VDJ else "",
             )
