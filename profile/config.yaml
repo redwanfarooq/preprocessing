@@ -88,16 +88,16 @@ set-resources:
     runtime: 1h
   trimfastq:
     mem: 20GiB
-    runtime: 3h
+    runtime: 24h
   linkfastq:
     mem: 1GiB
     runtime: 1h
   fastqc:
     mem: 2GiB
-    runtime: 1h
+    runtime: 6h
   multiqc:
-    mem: 1GiB
-    runtime: 1h
+    mem: 10GiB
+    runtime: 6h
   count_reads:
     mem: 1GiB
     runtime: 1h

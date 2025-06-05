@@ -287,3 +287,11 @@ read_trim:
 # antibodies
 # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.tsv # 10x 3' v4
 # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.tsv # 10x 3' v3
+# If 'cellranger_multi_options' not provided, defaults to
+# default Cell Ranger Multi options
+# Keys and values should be valid Cell Ranger Multi options
+# see https://www.10xgenomics.com/support/software/cell-ranger/latest/advanced/cr-multi-config-csv-opts
+cellranger_multi_options:
+  chemistry: SC5P-R2
+  no-secondary: true
+  check-library-compatibility: false
