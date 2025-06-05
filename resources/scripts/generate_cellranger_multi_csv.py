@@ -37,16 +37,26 @@ Usage:
   generate_cellranger_multi_csv.py --md=<md> --fastqdir=<fastqdir> --outdir=<outdir> [--features=<features> --hashes=<hashes> --transcriptome=<transcriptome> --vdj=<vdj>] [options]
 
 Arguments:
-  -m --md=<md>                    Metadata table file (required)
-  -f --fastqdir=<fastqdir>        FASTQ directory (required)
-  -o --outdir=<outdir>            Output directory (required)
-  --features=<features>           Features reference CSV file
-  --hashes=<hashes>               Sample hashing CSV file
-  --transcriptome=<transcriptome> Path to Cell Ranger transcriptome reference
-  --vdj=<vdj>                     Path to Cell Ranger VDJ reference
+  -m --md=<md>                         Metadata table file (required)
+  -f --fastqdir=<fastqdir>             FASTQ directory (required)
+  -o --outdir=<outdir>                 Output directory (required)
+  --features=<features>                Features reference CSV file
+  --hashes=<hashes>                    Sample hashing CSV file
+  --transcriptome=<transcriptome>      Path to Cell Ranger transcriptome reference
+  --vdj=<vdj>                          Path to Cell Ranger VDJ reference
+  --create-bam=<bool>                  Enable or disable BAM file generation [default: true]
+  --tenx-cloud-token-path=<path>       Path to 10x Cloud Analysis user token used to enable cell annotation
+  --cell-annotation-model=<model>      Cell annotation model to use
+  --chemistry=<chemistry>              Assay configuration
+  --expect-cells=<int>                 Expected number of recovered cells
+  --force-cells=<int>                  Force pipeline to use this number of cells
+  --include-introns=<bool>             Include intronic reads in gene expression count matrix
+  --no-secondary=<bool>                Disable secondary analysis
+  --check-library-compatibility=<bool> Evaluate 10x Barcode overlap between libraries when multiple libraries are specified
+  --emptydrops-minimum-umis=<int>      Minimum number of UMIs for a cell to be called by EmptyDrops
 
 Options:
-  -h --help                 Show this screen
+  -h --help                            Show this screen
 """
 
 
@@ -78,6 +88,7 @@ def _main(opt: dict) -> None:
                 ["sample_id", "lib_id", "lib_type"]
             ].drop_duplicates(),
             fastqdir=opt["--fastqdir"],
+            options={k.removeprefix("--"): opt[k] for k in {"--create-bam", "--tenx-cloud-token-path", "--cell-annotation-model", "--chemistry", "--expect-cells", "--force-cells", "--include-introns", "--no-secondary", "--check-library-compatibility", "--emptydrops-minimum-umis"} if k in opt},
             hashes=hashes[hashes.sample_id == x] if opt["--hashes"] else None,
             features=opt["--features"],
             transcriptome=opt["--transcriptome"],
@@ -137,6 +148,7 @@ def _generate_sample_sheet(df: pd.DataFrame) -> pd.DataFrame:
 def generate_config_sheet(
     libraries: pd.DataFrame,
     fastqdir: str,
+    options: dict,
     hashes: pd.DataFrame | None = None,
     features: str | None = None,
     transcriptome: str | None = None,
@@ -171,7 +183,10 @@ def generate_config_sheet(
         assert transcriptome, "Transcriptome reference must be provided for gene expression libraries."
         out.append("[gene-expression]")
         out.append(f"reference,{transcriptome}")
-        out.append("create-bam,true\nno-secondary,true\n")
+        for k, v in options.items():
+            if v is not None:
+                out.append(f"{k},{v}")
+        out.append("")
     if any(libraries.feature_types.isin({"VDJ-B", "VDJ-T"})):
         assert vdj, "VDJ reference must be provided for VDJ libraries."
         out.append("[vdj]")

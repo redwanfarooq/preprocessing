@@ -135,6 +135,14 @@ def _get_reverse_complement_flag(reverse_complement: bool) -> str:
     return "--reversecomplement" if reverse_complement else ""
 
 
+def _get_options_flags(options: dict) -> str:
+    return " ".join(
+        f"--{k}={v if isinstance(v, str) else str(v).lower()}"
+        for k, v in options.items()
+        if options
+    )
+
+
 def _get_cmd(update: bool = False) -> list[str]:
     if update:
         cmd = _cmd(
@@ -184,6 +192,7 @@ def _get_cmd(update: bool = False) -> list[str]:
                 f"--hashes={os.path.abspath(HASHES)}" if HASHES else "",
                 f"--transcriptome={TRANSCRIPTOME}" if TRANSCRIPTOME else "",
                 f"--vdj={VDJ}" if VDJ else "",
+                _get_options_flags(options=CELLRANGER_MULTI_OPTIONS),
             )
         cmd += _cmd(
             f"{SCRIPTS_DIR}/generate_info_yaml.py",
@@ -235,6 +244,7 @@ with open(file=CONFIG, mode="r", encoding="UTF-8") as file:
     REVERSE_COMPLEMENT = config.get("reverse_complement", False)
     TRANSCRIPTOME = config.get("cellranger_reference", None)
     VDJ = config.get("cellranger_vdj_reference", None)
+    CELLRANGER_MULTI_OPTIONS = config.get("cellranger_multi_options", {})
     try:
         INPUT_TABLE = os.path.join(METADATA_DIR, config["runs"])
         df = pd.read_csv(INPUT_TABLE, header=0, sep=None, engine="python")
