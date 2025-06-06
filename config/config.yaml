@@ -295,3 +295,4 @@ cellranger_multi_options:
   chemistry: SC5P-R2
   no-secondary: true
   check-library-compatibility: false
+  emptydrops-minimum-umis: 100
