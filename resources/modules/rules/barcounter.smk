@@ -7,7 +7,7 @@
 
 # Define rules
 rule barcounter:
-	input: lambda wildcards: get_count_inputs(wildcards, input_type=config["input_type"], lib_types={"ADT", "HTO"}, info=info)
+	input: lambda wildcards: get_count_inputs(wildcards, lib_types={"ADT", "HTO"}, info=info, read_trim=True if "read_trim" in config.keys() else False),
 	output: os.path.abspath("stamps/barcounter/{sample}.stamp")
 	log: os.path.abspath("logs/barcounter/{sample}.log")
 	threads: 1

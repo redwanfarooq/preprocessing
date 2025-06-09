@@ -6,6 +6,7 @@ Generates info YAML for use with preprocessing pipeline.
 Requires:
 - Metadata table file with the following fields:
     run: run folder name
+    format: file type ("BCL" or "FASTQ" - case-insensitive)
     lib_type: library type
     sample_id: sample ID
 """
@@ -49,7 +50,7 @@ def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0, sep=None, engine="python")
     assert set(md.columns).issuperset(
-        {"run", "lib_type", "sample_id"}
+        {"run", "format", "lib_type", "sample_id"}
     ), "Invalid metadata table file."
 
     # Add unique library ID
@@ -58,7 +59,7 @@ def _main(opt: dict) -> None:
     # Generate info YAML
     logger.info("Generating info YAML")
     generate_info_yaml(
-        df=md[["sample_id", "lib_id", "lib_type", "run"]].drop_duplicates(),
+        df=md[["sample_id", "lib_id", "format", "lib_type", "run"]].drop_duplicates(),
         filename=os.path.join(opt["--outdir"], "info.yaml"),
     )
     logger.success(

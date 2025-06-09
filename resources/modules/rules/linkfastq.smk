@@ -26,4 +26,4 @@ rule linkfastq:
 		"""
 
 # Set rule targets
-linkfastq = [f"stamps/linkfastq/{lib}.stamp" for lib in libs] if config["input_type"].lower() == "fastq" and "read_trim" not in config.keys() else []
+linkfastq = [f"stamps/linkfastq/{lib}.stamp" for lib in libs if libs[lib]["format"].upper() == "FASTQ" and "read_trim" not in config.keys()]

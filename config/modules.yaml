@@ -85,6 +85,14 @@ gex_atac_cellranger:
   - multiqc
   - count_reads
   - cellranger_arc
+vdj_cellranger:
+  - bcl2fastq
+  - trimfastq
+  - linkfastq
+  - fastqc
+  - multiqc
+  - count_reads
+  - cellranger_vdj
 tea_seq_cellranger:
   - bcl2fastq
   - trimfastq
@@ -95,3 +103,11 @@ tea_seq_cellranger:
   - cellranger_arc
   - barcounter
   - mapping_qc
+gex_fb_vdj_cellranger:
+  - bcl2fastq
+  - trimfastq
+  - linkfastq
+  - fastqc
+  - multiqc
+  - count_reads
+  - cellranger_multi

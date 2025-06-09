@@ -51,11 +51,20 @@
 #   gex_atac_cellranger: 10X multiome (GEX + ATAC) protocol
 #     Additional required configuration:
 #       - 'cellranger_reference' (reference files)
+#   vdj_cellranger: 10X immune profiling protocol
+#     Additional required configuration:
+#       - 'cellranger_vdj_reference' (reference files)
 #   tea_seq_cellranger: TEA-seq/DOGMA-seq protocol
 #     Additional required configuration:
 #       - 'cellranger_reference' (reference files)
 #       - 'gex_barcode_whitelist' (reference files)
 #       - 'tags' (metadata files)
+#   gex_fb_vdj_cellranger: 10X GEX +/- feature barcoding +/- immune profiling protocol (with optional sample hashing)
+#     Additional required configuration:
+#       - 'cellranger_reference' (reference files)
+#       - 'cellranger_vdj_reference' (reference files) if using immune profiling
+#       - 'features' (metadata files) if using feature barcoding
+#       - 'hashes' (metadata files) if using sample hashing
 module: cite_seq
 
 # --------------------------------------------------
@@ -74,17 +83,6 @@ output_dir: /project/fuggerlab/rfarooq/project/ocrelizumab_multiome/data/raw/cit
 # If 'metadata_dir' not specified, defaults to
 # 'metadata'
 # metadata_dir:
-
-
-# --------------------------------------------------
-# Input type
-# --------------------------------------------------
-# REQUIRED
-# File type of pipeline input
-# Options:
-#   bcl: Base call files (Illumina)
-#   fastq: FASTQ files
-input_type: bcl
 
 
 # --------------------------------------------------
@@ -108,6 +106,8 @@ runs: runs.tsv
 tags: barcounter/tags_totalseq_b.csv
 # Cell Ranger feature reference
 # features: cellranger/features.csv
+# Cell Ranger sample hashing reference
+# hashes: cellranger/hashes.csv
 
 
 # --------------------------------------------------
@@ -119,6 +119,7 @@ tags: barcounter/tags_totalseq_b.csv
 # cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-atac-GRCh38-2020-A-2.0.0 # Cell Ranger ATAC
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
+# cellranger_vdj_reference: /databank/10x-rangers/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.1.0 # Cell Ranger VDJ
 starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
 # chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
 # chromap_index: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/chromap/index # chromap
@@ -179,6 +180,8 @@ bcl2fastq_args: >-
 # cellranger_args: >-
 #   --nosecondary
 #   --disable-ui
+# cellranger_vdj_args: >-
+#   --chain auto
 starsolo_args: >-
   --sysShell /bin/bash
   --readFilesCommand zcat
@@ -256,18 +259,28 @@ bases_mask:
 #       L: 28
 #     R2:
 #       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#       L: 15
+#       L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
 #   HTO:
 #     R1:
 #       L: 28
 #     R2:
 #       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#       L: 15
+#       L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
 #   CRISPR:
 #     R1:
 #       L: 28
 #     R2:
 #       L: 90
+#   BCR:
+#     R1:
+#       L: 150
+#     R2:
+#       L: 150
+#   TCR:
+#     R1:
+#       L: 150
+#     R2:
+#       L: 150
 # If 'barcode_translate' not provided, barcodes
 # for ADT/HTO libraries in count matrices generated using
 # BarCounter will not be translated to match corresponding
@@ -276,3 +289,9 @@ bases_mask:
 # antibodies
 # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.tsv # 10x 3' v4
 barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.tsv # 10x 3' v3
+# If 'cellranger_multi_options' not provided, defaults to
+# default Cell Ranger Multi options
+# Keys and values should be valid Cell Ranger Multi options
+# see https://www.10xgenomics.com/support/software/cell-ranger/latest/advanced/cr-multi-config-csv-opts
+# cellranger_multi_options:
+#   no-secondary: true

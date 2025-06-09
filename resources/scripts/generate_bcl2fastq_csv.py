@@ -6,6 +6,7 @@ Generates CSV sample sheets for libraries from 10X multiome experiments for use 
 Requires:
 - Metadata table file with the following fields:
     run: run folder name
+    format: file type ("BCL" or "FASTQ" - case-insensitive)
     lib_type: library type
     sample_id: sample ID
     sample_index: EITHER index set name OR literal i7 index sequence
@@ -62,7 +63,7 @@ def _main(opt: dict) -> None:
     # Read input CSV and check fields are valid
     md = pd.read_csv(opt["--md"], header=0, sep=None, engine="python")
     assert set(md.columns).issuperset(
-        {"run", "lib_type", "sample_id", "sample_index", "lane"}
+        {"run", "format", "lib_type", "sample_id", "sample_index", "lane"}
     ), "Invalid metadata table file."
     dual = (
         (
@@ -103,36 +104,40 @@ def _main(opt: dict) -> None:
         else None
     )
 
-    # Reverse complement literal i5 index sequence if required
-    if "sample_index2" in md.columns:
-        md["sample_index2"] = md.sample_index2.fillna("")
-        if opt["--reversecomplement"]:
-            md["sample_index2"] = md.sample_index2.apply(_reverse_complement)
+    # Select runs in BCL format only
+    md = md[md.format.str.upper() == "BCL"]
 
-    # Add lane and unique library ID; create a row for each lane if not * and more than one specified
-    md = (
-        md.assign(
-            lane=lambda x: [
-                "" if lane == "*" else str(lane).split() for lane in x.lane
-            ],
-            lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
-        )
-        .explode("lane")
-        .reset_index(drop=True)
-    )
+    if not md.empty:
+        # Reverse complement literal i5 index sequence if required
+        if "sample_index2" in md.columns:
+            md["sample_index2"] = md.sample_index2.fillna("")
+            if opt["--reversecomplement"]:
+                md["sample_index2"] = md.sample_index2.apply(_reverse_complement)
 
-    # Generate sample sheets
-    logger.info("Generating sample sheets for bcl2fastq")
-    for x in md.lib_id.unique():
-        generate_sample_sheet(
-            df=md[md.lib_id == x],
-            index_kits=kits,
-            filename=os.path.join(opt["--outdir"], f"{x}.csv"),
+        # Add lane and unique library ID; create a row for each lane if not * and more than one specified
+        md = (
+            md.assign(
+                lane=lambda x: [
+                    "" if lane == "*" else str(lane).split() for lane in x.lane
+                ],
+                lib_id=lambda x: lib_id(x.lib_type.tolist(), x.run.tolist()),
+            )
+            .explode("lane")
+            .reset_index(drop=True)
         )
-        logger.success(
-            "Output file: {}",
-            os.path.abspath(os.path.join(opt["--outdir"], f"{x}.csv")),
-        )
+
+        # Generate sample sheets
+        logger.info("Generating sample sheets for bcl2fastq")
+        for x in md.lib_id.unique():
+            generate_sample_sheet(
+                df=md[md.lib_id == x],
+                index_kits=kits,
+                filename=os.path.join(opt["--outdir"], f"{x}.csv"),
+            )
+            logger.success(
+                "Output file: {}",
+                os.path.abspath(os.path.join(opt["--outdir"], f"{x}.csv")),
+            )
 
 
 def _read_index_csv(filename: str, index_cols: slice) -> dict:
@@ -221,6 +226,7 @@ def generate_sample_sheet(
             )
 
     if filename is not None:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
         csv_string = "[Data]\n" + out.to_csv(header=True, index=False)
         with open(file=filename, mode="w", encoding="UTF-8") as file:
             file.write(csv_string)

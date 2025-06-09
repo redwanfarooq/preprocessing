@@ -7,7 +7,7 @@
 
 # Define rule
 rule cellranger:
-	input: lambda wildcards: get_count_inputs(wildcards, input_type=config["input_type"], lib_types={"*"}, info=info)
+	input: lambda wildcards: get_count_inputs(wildcards, lib_types={"GEX", "ADT", "HTO", "CRISPR"}, info=info, read_trim=True if "read_trim" in config.keys() else False),
 	output: os.path.abspath("stamps/cellranger/{sample}.stamp")
 	log: os.path.abspath("logs/cellranger/{sample}.log")
 	threads: 1
@@ -17,7 +17,7 @@ rule cellranger:
 		reference = config["cellranger_reference"],
 		custom_flags = config.get("cellranger_args", ""),
 		output_path = os.path.join(config["output_dir"], "cellranger")
-	envmodules: "cellranger/8.0.1"
+	envmodules: "cellranger/9.0.0"
 	message: "Making GEX and FB count matrix for {wildcards.sample}"
 	shell:
 		"""
