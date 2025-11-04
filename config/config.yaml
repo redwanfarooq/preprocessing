@@ -51,6 +51,9 @@
 #   gex_atac_cellranger: 10X multiome (GEX + ATAC) protocol
 #     Additional required configuration:
 #       - 'cellranger_reference' (reference files)
+#   vdj_cellranger: 10X immune profiling protocol
+#     Additional required configuration:
+#       - 'cellranger_vdj_reference' (reference files)
 #   tea_seq_cellranger: TEA-seq/DOGMA-seq protocol
 #     Additional required configuration:
 #       - 'cellranger_reference' (reference files)
@@ -65,7 +68,7 @@ module: gex_fb_cellranger
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/rfarooq/project/ms_snp_crispri/data/raw/gex_fb/cd4_ms17_ms19_stat4
+output_dir: /project/fuggerlab/rfarooq/project/ms_snp_crispri/data/raw/gex_fb/cd4_ms17_ms19_stat4_02
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -74,17 +77,6 @@ output_dir: /project/fuggerlab/rfarooq/project/ms_snp_crispri/data/raw/gex_fb/cd
 # If 'metadata_dir' not specified, defaults to
 # 'metadata'
 # metadata_dir:
-
-
-# --------------------------------------------------
-# Input type
-# --------------------------------------------------
-# REQUIRED
-# File type of pipeline input
-# Options:
-#   bcl: Base call files (Illumina)
-#   fastq: FASTQ files
-input_type: bcl
 
 
 # --------------------------------------------------
@@ -108,6 +100,8 @@ runs: runs.tsv
 # tags: barcounter/tags.csv
 # Cell Ranger feature reference
 features: cellranger/features_5P_new.csv
+# Cell Ranger sample hashing reference
+# hashes: cellranger/hashes.csv
 
 
 # --------------------------------------------------
@@ -119,6 +113,7 @@ features: cellranger/features_5P_new.csv
 cellranger_reference: /databank/10x-rangers/refdata-gex-GRCh38-2020-A # Cell Ranger
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-atac-GRCh38-2020-A-2.0.0 # Cell Ranger ATAC
 # cellranger_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0 # Cell Ranger ARC
+# cellranger_vdj_reference: /databank/10x-rangers/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.1.0 # Cell Ranger VDJ
 # starsolo_reference: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/star # STARSolo
 # chromap_reference: /databank/10x-rangers/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa # chromap
 # chromap_index: /project/fuggerlab/rfarooq/ref/genomes/GRCh38/chromap/index # chromap
@@ -168,16 +163,18 @@ reverse_complement: true
 # --------------------------------------------------
 # OPTIONAL
 # If not specified, defaults to ''
-bcl2fastq_args: >-
-  --create-fastq-for-index-reads
-  --minimum-trimmed-read-length=8
-  --mask-short-adapter-reads=8
-  --ignore-missing-positions
-  --ignore-missing-filter
-  --ignore-missing-bcls
+# bcl2fastq_args: >-
+#   --create-fastq-for-index-reads
+#   --minimum-trimmed-read-length=8
+#   --mask-short-adapter-reads=8
+#   --ignore-missing-positions
+#   --ignore-missing-filter
+#   --ignore-missing-bcls
 cellranger_args: >-
   --nosecondary
   --disable-ui
+# cellranger_vdj_args: >-
+#   --chain auto
 # starsolo_args: >-
 #   --sysShell /bin/bash
 #   --readFilesCommand zcat
@@ -220,12 +217,12 @@ multiqc_args: -zfd --dirs-depth=1 --interactive
 # If 'bases_mask' not provided, defaults to read
 # type/length specified in RunInfo.xml file in
 # Illumina run folder
-bases_mask:
-  GEX: Y28n*,I10n*,I10n*,Y90n*
+# bases_mask:
+#   GEX: Y28n*,I10n*,I10n*,Y90n*
   # ATAC: Y50n*,I8n*,Y16n*,Y50n*
   # ADT: Y28n*,I6n*,n*,Y15n*
   # HTO: Y28n*,I8n*,n*,Y15n*
-  CRISPR: Y28n*,I10n*,I10n*,Y90n*
+  # CRISPR: Y28n*,I10n*,I10n*,Y90n*
 # If 'read_trim' not provided, no trimming will be performed
 # and symbolic links to the original FASTQ files will be created
 # in the output directory
@@ -236,12 +233,12 @@ bases_mask:
 # 'e' removes the specified number of bases from the 3' end
 # 'L' trims to the specified number of bases from the 5' end
 # All options are CASE-SENSITIVE
-# read_trim:
-#   GEX:
-#     R1:
-#       L: 28
-#     R2:
-#       L: 90
+read_trim:
+  GEX:
+    R1:
+      L: 28
+    R2:
+      L: 90
 #   ATAC:
 #     R1:
 #       L: 50
@@ -255,18 +252,28 @@ bases_mask:
 #       L: 28
 #     R2:
 #       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#       L: 15
+#       L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
 #   HTO:
 #     R1:
 #       L: 28
 #     R2:
 #       b: 10 # enable for TotalSeq-B/TotalSeq-C antibodies with BarCounter
-#       L: 15
-#   CRISPR:
+#       L: 25 # change to 15 for TotalSeq-A antibodies or for TotalSeq-B/TotalSeq-C antibodies with BarCounter
+  CRISPR:
+    R1:
+      L: 28
+    R2:
+      L: 90
+#   BCR:
 #     R1:
-#       L: 28
+#       L: 150
 #     R2:
-#       L: 90
+#       L: 150
+#   TCR:
+#     R1:
+#       L: 150
+#     R2:
+#       L: 150
 # If 'barcode_translate' not provided, barcodes
 # for ADT/HTO libraries in count matrices generated using
 # BarCounter will not be translated to match corresponding
@@ -275,3 +282,9 @@ bases_mask:
 # antibodies
 # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-3pgex-may-2023_translation.tsv # 10x 3' v4
 # barcode_translate: /project/fuggerlab/rfarooq/ref/barcode_whitelists/3M-february-2018_translation.tsv # 10x 3' v3
+# If 'cellranger_multi_options' not provided, defaults to
+# default Cell Ranger Multi options
+# Keys and values should be valid Cell Ranger Multi options
+# see https://www.10xgenomics.com/support/software/cell-ranger/latest/advanced/cr-multi-config-csv-opts
+# cellranger_multi_options:
+#   no-secondary: true

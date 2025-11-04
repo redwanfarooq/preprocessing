@@ -17,6 +17,7 @@ import hashlib
 from datetime import datetime
 import yaml
 import docopt
+import pandas as pd
 from loguru import logger
 
 
@@ -134,6 +135,14 @@ def _get_reverse_complement_flag(reverse_complement: bool) -> str:
     return "--reversecomplement" if reverse_complement else ""
 
 
+def _get_options_flags(options: dict) -> str:
+    return " ".join(
+        f"--{k}={v if isinstance(v, str) else str(v).lower()}"
+        for k, v in options.items()
+        if options
+    )
+
+
 def _get_cmd(update: bool = False) -> list[str]:
     if update:
         cmd = _cmd(
@@ -148,9 +157,8 @@ def _get_cmd(update: bool = False) -> list[str]:
             f"--module={MODULE}",
             "--template=resources/templates/wrapper.template",
         )
-        if "bcl2fastq" in RULES and INPUT_TYPE.lower() == "bcl":
+        if "bcl2fastq" in RULES and "BCL" in INPUT_FORMATS:
             cmd += _cmd(
-                f"mkdir -p {os.path.join(METADATA_DIR, 'bcl2fastq')} &&",
                 f"{SCRIPTS_DIR}/generate_bcl2fastq_csv.py",
                 f"--md={INPUT_TABLE}",
                 f"--outdir={os.path.join(METADATA_DIR, 'bcl2fastq')}",
@@ -160,21 +168,31 @@ def _get_cmd(update: bool = False) -> list[str]:
                 ),
                 _get_reverse_complement_flag(reverse_complement=REVERSE_COMPLEMENT),
             )
+        if "cellranger" in RULES:
+            cmd += _cmd(
+                f"{SCRIPTS_DIR}/generate_cellranger_csv.py",
+                f"--md={INPUT_TABLE}",
+                f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
+                f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
+            )
         if "cellranger_arc" in RULES:
             cmd += _cmd(
-                f"mkdir -p {os.path.join(METADATA_DIR, 'cellranger_arc')} &&",
                 f"{SCRIPTS_DIR}/generate_cellranger_arc_csv.py",
                 f"--md={INPUT_TABLE}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger_arc')}",
             )
-        if "cellranger" in RULES:
+        if "cellranger_multi" in RULES:
             cmd += _cmd(
-                f"mkdir -p {os.path.join(METADATA_DIR, 'cellranger')} &&",
-                f"{SCRIPTS_DIR}/generate_cellranger_csv.py",
+                f"{SCRIPTS_DIR}/generate_cellranger_multi_csv.py",
                 f"--md={INPUT_TABLE}",
                 f"--fastqdir={os.path.join(OUTPUT_DIR, 'fastqs')}",
                 f"--outdir={os.path.join(METADATA_DIR, 'cellranger')}",
+                f"--features={os.path.abspath(FEATURES)}" if FEATURES else "",
+                f"--hashes={os.path.abspath(HASHES)}" if HASHES else "",
+                f"--transcriptome={TRANSCRIPTOME}" if TRANSCRIPTOME else "",
+                f"--vdj={VDJ}" if VDJ else "",
+                _get_options_flags(options=CELLRANGER_MULTI_OPTIONS),
             )
         cmd += _cmd(
             f"{SCRIPTS_DIR}/generate_info_yaml.py",
@@ -207,26 +225,44 @@ with open(file=CONFIG, mode="r", encoding="UTF-8") as file:
     SCRIPTS_DIR = config.get("scripts_dir", "resources/scripts")
     METADATA_DIR = config.get("metadata_dir", "metadata")
     TAGS = (
-        os.path.join(METADATA_DIR, config["tags"]) if config.get("tags", None) else None
+        os.path.join(METADATA_DIR, config["tags"])
+        if config.get("tags", None)
+        else None
     )
     FEATURES = (
         os.path.join(METADATA_DIR, config["features"])
         if config.get("features", None)
         else None
     )
+    HASHES = (
+        os.path.join(METADATA_DIR, config["hashes"])
+        if config.get("hashes", None)
+        else None
+    )
     DUAL = config.get("dual_index_kits", None)
     SINGLE = config.get("single_index_kits", None)
     REVERSE_COMPLEMENT = config.get("reverse_complement", False)
+    TRANSCRIPTOME = config.get("cellranger_reference", None)
+    VDJ = config.get("cellranger_vdj_reference", None)
+    CELLRANGER_MULTI_OPTIONS = config.get("cellranger_multi_options", {})
     try:
-        INPUT_TYPE = config["input_type"]
         INPUT_TABLE = os.path.join(METADATA_DIR, config["runs"])
+        df = pd.read_csv(INPUT_TABLE, header=0, sep=None, engine="python")
+        assert "format" in df.columns
+        INPUT_FORMATS = set(df.format.dropna().str.upper().unique())
         OUTPUT_DIR = config["output_dir"]
         MODULE = config["module"]
     except KeyError as err:
         logger.exception("{} not specified in {}", err, file.name)
         raise KeyError from err
+    except FileNotFoundError as err:
+        logger.exception("Input table not found: {}", INPUT_TABLE)
+        raise FileNotFoundError from err
+    except AssertionError as err:
+        logger.exception("Input table does not contain 'format' column: {}", INPUT_TABLE)
+        raise AssertionError from err
 METADATA = [
-    _ for _ in [INPUT_TABLE, TAGS, FEATURES] if _ is not None and os.path.isfile(_)
+    _ for _ in [INPUT_TABLE, TAGS, FEATURES, HASHES] if _ is not None and os.path.isfile(_)
 ]
 
 with open(file="config/modules.yaml", mode="r", encoding="UTF-8") as file:

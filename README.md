@@ -20,7 +20,7 @@ git submodule update --remote preprocessing
 2. Specific modules
     - [bcl2fastq >=v2.20](https://sapac.support.illumina.com/sequencing/sequencing_software/bcl2fastq-conversion-software.html)
     - [Seqtk >= 1.3](https://github.com/lh3/seqtk)
-    - [Cell Ranger >=v8.0](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
+    - [Cell Ranger >=v9.0](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/installation)
     - [Cell Ranger ATAC >=v2.0](https://software.10xgenomics.com/single-cell-atac/software/pipelines/latest/installation)
     - [Cell Ranger ARC >=v2.0](https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/installation)
     - [STAR >=v2.7.11a](https://github.com/alexdobin/STAR)
@@ -77,11 +77,12 @@ Folder(s) containing input FASTQ files
 - FASTQ files should be named according to default convention e.g. **SampleID_Sx_Lxxx_Rx_001.fastq.gz**
 2. Runs summary table in delimited file format (e.g. TSV, CSV) with the following required fields (with headers):
 - **run**: run folder name
-- **lib_type**: library type (options: GEX, ATAC, ADT, HTO, CRISPR)
+- **format**: file type (options: BCL, FASTQ)
+- **lib_type**: library type (options: GEX, ATAC, ADT, HTO, CRISPR, BCR, TCR)
 - **sample_id**: sample ID
-- **sample_index**: *either* index name *or* literal i7 index sequence - only required if input type is BCL
-- **lane**: *either* lane number(s) (separated with spaces if more than one lane used) *or* * (for all lanes) - only required if input type is BCL
-- **sample_index2**: literal i5 index sequence (if applicable) - only required if input type is BCL, dual indexing used and **sample_index** is literal i7 index sequence
+- **sample_index**: *either* index name *or* literal i7 index sequence - only required if **format** is BCL
+- **lane**: *either* lane number(s) (separated with spaces if more than one lane used) *or* * (for all lanes) - only required if **format** is BCL
+- **sample_index2**: literal i5 index sequence (if applicable) - only required if **format** is BCL, dual indexing used and **sample_index** is literal i7 index sequence
 
 **OPTIONAL:**
 
@@ -165,6 +166,12 @@ Folder(s) containing input FASTQ files
 1. Reference files:
 - Cell Ranger genome reference package
 
+### vdj_cellranger: 10X 5' immune profiling protocol
+
+**REQUIRED:**
+1. Reference files:
+- Cell Ranger VDJ reference package
+
 ### tea_seq_cellranger: TEA-seq/DOGMA-seq protocol
 
 **REQUIRED:**
@@ -175,6 +182,18 @@ Folder(s) containing input FASTQ files
 2. Antibody tag list in CSV format with the following required fields (without headers):
 - Tag sequence (length 15nt) - must begin at first base in read 2 (if leading bases are present, FASTQ files must be trimmed e.g. TotalSeq-B and TotalSeq-C antibodies)
 - Tag name
+
+### gex_fb_vdj_cellranger: 10X GEX +/- feature barcoding +/- immune profiling protocol (with optional sample hashing)
+
+**REQUIRED:**
+1. Reference files:
+- Cell Ranger genome reference package
+- Cell Ranger VDJ reference package (if using immune profiling)
+2. Feature reference in CSV format - see [specifications](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref) (if using feature barcoding)
+3. Sample hashing table in in delimited file format (e.g. TSV, CSV) with the following required fields (with headers) (if using sample hashing):
+- **sample_id**: sample ID (must match **sample_id** field in runs summary table)
+- **hash_id**: hashed sample ID (must be unique for each hashed sample)
+- **ocm_barcode_ids/hashtag_ids/cmo_ids**: OCM barcode/hashtag/CMO IDs (if antibody hashtags are used, must match **id** field in feature reference CSV) 
 
 # Output
 Output directory will be created in specified location with subfolders containing the output of each software tool specified in the module.
@@ -190,7 +209,9 @@ Output directory will be created in specified location with subfolders containin
 - gex_fb_cellranger
 - atac_cellranger
 - gex_atac_cellranger
+- vdj_cellranger
 - tea_seq_cellranger
+- gex_fb_vdj_cellranger
 
 ## Adding new module
 1. Add entry to module rule specifications file **config/modules.yaml** with module name and list of rule names

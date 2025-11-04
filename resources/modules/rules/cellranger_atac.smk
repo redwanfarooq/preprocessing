@@ -7,7 +7,7 @@
 
 # Define rule
 rule cellranger_atac:
-	input: lambda wildcards: get_count_inputs(wildcards, input_type=config["input_type"], lib_types={"ATAC"}, info=info)
+	input: lambda wildcards: get_count_inputs(wildcards, lib_types={"ATAC"}, info=info, read_trim=True if "read_trim" in config.keys() else False),
 	output: os.path.abspath("stamps/cellranger_atac/{sample}.stamp")
 	log: os.path.abspath("logs/cellranger_atac/{sample}.log")
 	threads: 1

@@ -62,6 +62,8 @@ set-threads:
   cellranger: 48
   cellranger_atac: 48
   cellranger_arc: 48
+  cellranger_vdj: 48
+  cellranger_multi: 48
   starsolo: 16
   chromap: 16
   macs2: 16
@@ -106,6 +108,12 @@ set-resources:
     mem: 250GiB
     runtime: 6h
   cellranger_arc:
+    mem: 250GiB
+    runtime: 6h
+  cellranger_vdj:
+    mem: 250GiB
+    runtime: 6h
+  cellranger_multi:
     mem: 250GiB
     runtime: 6h
   starsolo:

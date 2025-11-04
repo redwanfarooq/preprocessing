@@ -98,6 +98,7 @@ def generate_library_sheet(
     )
 
     if filename is not None:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(file=filename, mode="w", encoding="UTF-8") as file:
             out.to_csv(path_or_buf=file, header=True, index=False)
 

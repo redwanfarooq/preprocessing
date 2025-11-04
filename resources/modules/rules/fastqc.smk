@@ -7,7 +7,7 @@
 
 # Define rule
 rule fastqc:
-	input: lambda wildcards: get_fastqc_inputs(wildcards, input_type=config["input_type"])
+	input: lambda wildcards: get_fastqc_inputs(wildcards, info=info, read_trim=True if "read_trim" in config.keys() else False)
 	output: os.path.abspath("stamps/fastqc/{lib}.stamp")
 	log: os.path.abspath("logs/fastqc/{lib}.log")
 	threads: 1
