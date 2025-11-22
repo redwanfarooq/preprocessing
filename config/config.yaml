@@ -240,12 +240,12 @@ bases_mask:
 # 'e' removes the specified number of bases from the 3' end
 # 'L' trims to the specified number of bases from the 5' end
 # All options are CASE-SENSITIVE
-# read_trim:
-#   GEX:
-#     R1:
-#       L: 28
-#     R2:
-#       L: 90
+read_trim:
+  GEX:
+    R1:
+      L: 28
+    R2:
+      L: 90
 #   ATAC:
 #     R1:
 #       L: 50
