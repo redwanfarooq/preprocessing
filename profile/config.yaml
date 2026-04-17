@@ -84,8 +84,8 @@ set-threads:
 # and years, respectively); converted to minutes
 set-resources:
   bcl2fastq:
-    mem: 20GiB
-    runtime: 3h
+    mem: 50GiB
+    runtime: 6h
   trimfastq:
     mem: 20GiB
     runtime: 3h
