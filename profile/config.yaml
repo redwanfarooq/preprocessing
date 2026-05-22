@@ -126,8 +126,8 @@ set-resources:
     mem: 50GiB
     runtime: 1h
   barcounter:
-    mem: 50GiB
-    runtime: 1h
+    mem: 100GiB
+    runtime: 2h
   barcode_translate:
     mem: 5GiB
     runtime: 1h

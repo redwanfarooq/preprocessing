@@ -74,7 +74,7 @@ module: cite_seq
 # Raw sequencing runs directory
 run_dir: /project/fuggerlab/shared/runs
 # Pipeline output directory
-output_dir: /project/fuggerlab/rfarooq/tonsil_organoid/data/raw
+output_dir: /project/fuggerlab/rfarooq/project/tonsil_organoid/data/raw
 
 # OPTIONAL
 # If 'scripts_dir' not specified, defaults to
@@ -181,23 +181,23 @@ bcl2fastq_args: >-
 #   --disable-ui
 # cellranger_vdj_args: >-
 #   --chain auto
-# starsolo_args: >-
-#   --sysShell /bin/bash
-#   --readFilesCommand zcat
-#   --clipAdapterType CellRanger4
-#   --outFilterScoreMin 30
-#   --outSAMtype BAM SortedByCoordinate
-#   --soloType CB_UMI_Simple
-#   --soloCellFilter None
-#   --soloFeatures GeneFull_Ex50pAS
-#   --soloStrand Forward
-#   --soloCBstart 1
-#   --soloCBlen 16
-#   --soloUMIstart 17
-#   --soloUMIlen 12
-#   --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
-#   --soloUMIfiltering MultiGeneUMI_CR
-#   --soloUMIdedup 1MM_CR  
+starsolo_args: >-
+  --sysShell /bin/bash
+  --readFilesCommand zcat
+  --clipAdapterType CellRanger4
+  --outFilterScoreMin 30
+  --outSAMtype None
+  --soloType CB_UMI_Simple
+  --soloCellFilter None
+  --soloFeatures GeneFull_Ex50pAS
+  --soloStrand Reverse
+  --soloCBstart 1
+  --soloCBlen 16
+  --soloUMIstart 17
+  --soloUMIlen 12
+  --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts
+  --soloUMIfiltering MultiGeneUMI_CR
+  --soloUMIdedup 1MM_CR  
 # chromap_args: >- # remove --barcode-translate flag if not 10X multiome (GEX + ATAC) protocol
 #   --preset atac
 #   --read-format bc:8:-1:-
